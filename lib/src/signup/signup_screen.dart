@@ -11,7 +11,7 @@ class SignupScreen extends StatelessWidget {
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 
-  final AuthService authService = AuthService('https://localhost:7276');
+  final AuthService authService = AuthService('https://10.0.2.2:7276');
 
   @override
   Widget build(BuildContext context) {
@@ -163,6 +163,15 @@ class SignupScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 14), // Spacing
+                    Text(
+                      'Địa Chỉ',
+                      style: GoogleFonts.lato(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: const Color.fromRGBO(4, 90, 208, 1),
+                      ),
+                    ),
                     const SizedBox(height: 5), // Spacing
                     Container(
                       decoration: BoxDecoration(
@@ -170,10 +179,10 @@ class SignupScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: TextField(
-                        controller: phoneNumberController,
+                        controller: addressController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Nhập số điện thoại của bạn.',
+                          hintText: 'Nhập địa chỉ của bạn.',
                           contentPadding: const EdgeInsets.all(10),
                         ),
                       ),
@@ -182,9 +191,28 @@ class SignupScreen extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          //TO DO : SignUp LOGIC
-                          // Handle login logic
+                        onPressed: () async {
+                          bool success = await authService.register(
+                            fullNameController.text,
+                            emailController.text,
+                            passwordController.text,
+                            phoneNumberController.text,
+                            addressController.text,
+                          );
+
+                          if (success) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'Đăng ký không thành công, vui lòng thử lại.')),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: StadiumBorder(),
