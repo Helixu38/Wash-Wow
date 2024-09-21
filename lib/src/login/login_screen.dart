@@ -115,7 +115,7 @@ class LoginScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 37), // Spacing
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
@@ -183,7 +183,7 @@ class LoginScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const SignupScreen(),
+                                      builder: (context) =>  SignupScreen(),
                                       ));
                                 },
                             ),
