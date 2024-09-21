@@ -204,7 +204,7 @@ class SignupScreen extends StatelessWidget {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginScreen()),
+                                  builder: (context) => LoginScreen()),
                             );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -276,7 +276,7 @@ class SignupScreen extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              const LoginScreen(),
+                                              LoginScreen(),
                                         ));
                                   },
                               ),

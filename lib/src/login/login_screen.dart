@@ -2,9 +2,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/src/signup/signup_screen.dart';
+import 'package:wash_wow/src/services/auth_service.dart'; 
+import 'package:wash_wow/src/home-page/home_page.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  final AuthService authService = AuthService('https://10.0.2.2:7276');
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +71,7 @@ class LoginScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextField(
+                      controller: emailController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'nguyenvana@gmail.com',
@@ -89,6 +95,7 @@ class LoginScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextField(
+                      controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -118,9 +125,25 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        //TO DO : LOGIN LOGIC
-                        // Handle login logic
+                      onPressed: () async {
+                        bool success = await authService.login(
+                          emailController.text,
+                          passwordController.text,
+                        );
+
+                        if (success) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                    'Đăng nhập không thành công, vui lòng thử lại.')),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         shape: StadiumBorder(),
@@ -181,9 +204,9 @@ class LoginScreen extends StatelessWidget {
                                   // Go to the registration page
                                   print("Đăng ký ngay clicked");
                                   Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>  SignupScreen(),
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SignupScreen(),
                                       ));
                                 },
                             ),
