@@ -1,10 +1,14 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
-import 'package:wash_wow/src/services/auth_service.dart'; //
+import 'package:wash_wow/src/services/auth_service.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
+  @override
+  _SignupScreenState createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -12,6 +16,15 @@ class SignupScreen extends StatelessWidget {
   final TextEditingController addressController = TextEditingController();
 
   final AuthService authService = AuthService('https://10.0.2.2:7276');
+
+  // Error message variables for each field
+  String fullNameError = '';
+  String emailError = '';
+  String passwordError = '';
+  String phoneNumberError = '';
+  String addressError = '';
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,249 +56,285 @@ class SignupScreen extends StatelessWidget {
                   color: const Color.fromRGBO(4, 90, 208, 1),
                 ),
               ),
-              Text(
-                'Điền thông tin của quý khách phía bên dưới,',
-                style: GoogleFonts.lato(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w200,
-                  color: const Color.fromARGB(255, 0, 0, 0),
-                ),
-              ),
-              Text(
-                'hoặc đăng nhập bằng tài khoản mạng xã hội',
-                style: GoogleFonts.lato(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w300,
-                  color: const Color.fromARGB(255, 0, 0, 0),
-                ),
-              ),
-              const SizedBox(height: 50), // Spacing
+              const SizedBox(height: 50),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Họ và tên',
-                      style: GoogleFonts.lato(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: const Color.fromRGBO(4, 90, 208, 1),
-                      ),
-                    ),
-                    const SizedBox(height: 5), // Spacing
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: const Color.fromARGB(255, 197, 197, 197)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextField(
-                        controller: fullNameController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Nguyễn Văn A',
-                          contentPadding: const EdgeInsets.all(10),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Full Name Field
+                      Text(
+                        'Họ và tên',
+                        style: GoogleFonts.lato(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: const Color.fromRGBO(4, 90, 208, 1),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 14), // Spacing
-                    Text(
-                      'Địa chỉ Email',
-                      style: GoogleFonts.lato(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: const Color.fromRGBO(4, 90, 208, 1),
-                      ),
-                    ),
-                    const SizedBox(height: 5), // Spacing
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: const Color.fromARGB(255, 197, 197, 197)),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextField(
-                        controller: emailController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'nguyenvana@gmail.com',
-                          contentPadding: const EdgeInsets.all(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 14), // Spacing
-                    Text(
-                      'Mật khẩu',
-                      style: GoogleFonts.lato(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: const Color.fromRGBO(4, 90, 208, 1),
-                      ),
-                    ),
-                    const SizedBox(height: 5), // Spacing
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextField(
-                        controller: passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Nhập mật khẩu của bạn.',
-                          contentPadding: const EdgeInsets.all(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 14), // Spacing
-                    Text(
-                      'Số điện thoại',
-                      style: GoogleFonts.lato(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: const Color.fromRGBO(4, 90, 208, 1),
-                      ),
-                    ),
-                    const SizedBox(height: 5), // Spacing
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextField(
-                        controller: phoneNumberController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Nhập số điện thoại của bạn.',
-                          contentPadding: const EdgeInsets.all(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 14), // Spacing
-                    Text(
-                      'Địa Chỉ',
-                      style: GoogleFonts.lato(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: const Color.fromRGBO(4, 90, 208, 1),
-                      ),
-                    ),
-                    const SizedBox(height: 5), // Spacing
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextField(
-                        controller: addressController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Nhập địa chỉ của bạn.',
-                          contentPadding: const EdgeInsets.all(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 23),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          bool success = await authService.register(
-                            fullNameController.text,
-                            emailController.text,
-                            passwordController.text,
-                            phoneNumberController.text,
-                            addressController.text,
-                          );
-
-                          if (success) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginScreen()),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      'Đăng ký không thành công, vui lòng thử lại.')),
-                            );
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: StadiumBorder(),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 15),
-                          backgroundColor: const Color.fromRGBO(4, 90, 208, 1),
-                        ),
-                        child: Text(
-                          'Đăng Ký',
-                          style: GoogleFonts.lato(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 56), // Spacing
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'hoặc đăng nhập bằng',
-                          textAlign: TextAlign.right,
-                          style: GoogleFonts.lato(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: const Color.fromRGBO(4, 90, 208, 1),
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 37), // Spacing
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: 'Bạn đã có tài khoản? ',
-                            style: GoogleFonts.lato(
+                      if (fullNameError.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            fullNameError,
+                            style: const TextStyle(
+                              color: Colors.red,
                               fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: const Color.fromRGBO(119, 119, 119, 1),
-                              fontStyle: FontStyle.italic,
                             ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: 'Đăng nhập ngay',
-                                style: const TextStyle(
-                                  color: Color.fromRGBO(4, 90, 208, 1),
-                                  decoration: TextDecoration.underline,
-                                  fontStyle: FontStyle.normal,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    // Go to the registration page
-                                    print("Đăng ký ngay clicked");
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              LoginScreen(),
-                                        ));
-                                  },
-                              ),
-                            ],
                           ),
                         ),
-                      ],
-                    )
-                  ],
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TextFormField(
+                          controller: fullNameController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Nguyễn Văn A',
+                            contentPadding: const EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Email Field
+                      Text(
+                        'Địa chỉ Email',
+                        style: GoogleFonts.lato(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: const Color.fromRGBO(4, 90, 208, 1),
+                        ),
+                      ),
+                      if (emailError.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            emailError,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TextFormField(
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'nguyenvana@gmail.com',
+                            contentPadding: const EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Password Field
+                      Text(
+                        'Mật khẩu',
+                        style: GoogleFonts.lato(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: const Color.fromRGBO(4, 90, 208, 1),
+                        ),
+                      ),
+                      if (passwordError.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            passwordError,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Nhập mật khẩu của bạn.',
+                            contentPadding: const EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Phone Number Field
+                      Text(
+                        'Số điện thoại',
+                        style: GoogleFonts.lato(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: const Color.fromRGBO(4, 90, 208, 1),
+                        ),
+                      ),
+                      if (phoneNumberError.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            phoneNumberError,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TextFormField(
+                          controller: phoneNumberController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Nhập số điện thoại của bạn.',
+                            contentPadding: const EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // Address Field
+                      Text(
+                        'Địa Chỉ',
+                        style: GoogleFonts.lato(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: const Color.fromRGBO(4, 90, 208, 1),
+                        ),
+                      ),
+                      if (addressError.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            addressError,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TextFormField(
+                          controller: addressController,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Nhập địa chỉ của bạn.',
+                            contentPadding: const EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 23),
+
+                      // Submit Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            // Clear previous error messages
+                            setState(() {
+                              fullNameError = '';
+                              emailError = '';
+                              passwordError = '';
+                              phoneNumberError = '';
+                              addressError = '';
+                            });
+
+                            // Validate and set error messages
+                            bool isValid = true;
+                            if (fullNameController.text.isEmpty) {
+                              fullNameError = 'Vui lòng nhập họ và tên';
+                              isValid = false;
+                            }
+                            if (emailController.text.isEmpty ||
+                                !RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                    .hasMatch(emailController.text)) {
+                              emailError = 'Vui lòng nhập địa chỉ email hợp lệ';
+                              isValid = false;
+                            }
+                            if (passwordController.text.isEmpty ||
+                                passwordController.text.length < 6) {
+                              passwordError =
+                                  'Mật khẩu phải có ít nhất 6 ký tự';
+                              isValid = false;
+                            }
+                            if (phoneNumberController.text.isEmpty ||
+                                !RegExp(r'^\d{10}$')
+                                    .hasMatch(phoneNumberController.text)) {
+                              phoneNumberError =
+                                  'Vui lòng nhập số điện thoại hợp lệ (10 chữ số)';
+                              isValid = false;
+                            }
+                            if (addressController.text.isEmpty) {
+                              addressError = 'Vui lòng nhập địa chỉ';
+                              isValid = false;
+                            }
+
+                            if (isValid) {
+                              bool success = await authService.register(
+                                fullNameController.text,
+                                emailController.text,
+                                passwordController.text,
+                                phoneNumberController.text,
+                                addressController.text,
+                              );
+
+                              if (success) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginScreen(),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Đăng ký không thành công, vui lòng thử lại.'),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: StadiumBorder(),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 15),
+                            backgroundColor:
+                                const Color.fromRGBO(4, 90, 208, 1),
+                          ),
+                          child: Text(
+                            'Đăng Ký',
+                            style: GoogleFonts.lato(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 23),
+                    ],
+                  ),
                 ),
               ),
             ],
