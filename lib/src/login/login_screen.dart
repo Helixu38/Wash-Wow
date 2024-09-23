@@ -5,11 +5,20 @@ import 'package:wash_wow/src/signup/signup_screen.dart';
 import 'package:wash_wow/src/services/auth_service.dart'; 
 import 'package:wash_wow/src/home-page/home_page.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   final AuthService authService = AuthService('https://10.0.2.2:7276');
+
+  // Error message variables for email and password
+  String emailError = '';
+  String passwordError = '';
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +72,17 @@ class LoginScreen extends StatelessWidget {
                       color: const Color.fromRGBO(4, 90, 208, 1),
                     ),
                   ),
-                  const SizedBox(height: 5), // Spacing
+                  if (emailError.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Text(
+                        emailError,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -88,7 +107,17 @@ class LoginScreen extends StatelessWidget {
                       color: const Color.fromRGBO(4, 90, 208, 1),
                     ),
                   ),
-                  const SizedBox(height: 5), // Spacing
+                  if (passwordError.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Text(
+                        passwordError,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
@@ -126,23 +155,54 @@ class LoginScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
-                        bool success = await authService.login(
-                          emailController.text,
-                          passwordController.text,
-                        );
+                        // Clear previous error messages
+                        setState(() {
+                          emailError = '';
+                          passwordError = '';
+                        });
 
-                        if (success) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage()),
+                        bool isValid = true;
+
+                        // Validate email
+                        if (emailController.text.isEmpty ||
+                            !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(emailController.text)) {
+                          emailError = 'Vui lòng nhập địa chỉ email hợp lệ';
+                          isValid = false;
+                        }
+
+                        // Validate password
+                        if (passwordController.text.isEmpty || passwordController.text.length < 6) {
+                          passwordError = 'Vui lòng nhập mật khẩu hợp lệ';
+                          isValid = false;
+                        }
+
+                        if (isValid) {
+                          bool success = await authService.login(
+                            emailController.text,
+                            passwordController.text,
                           );
+
+                          if (success) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'Đăng nhập thành công')),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'Đăng nhập không thành công, vui lòng thử lại.')),
+                            );
+                          }
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text(
-                                    'Đăng nhập không thành công, vui lòng thử lại.')),
-                          );
+                          // Rebuild to show error messages
+                          setState(() {});
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -201,8 +261,6 @@ class LoginScreen extends StatelessWidget {
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  // Go to the registration page
-                                  print("Đăng ký ngay clicked");
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
