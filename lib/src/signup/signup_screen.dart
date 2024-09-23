@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_google_maps_webservices/places.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
 import 'package:wash_wow/src/services/auth_service.dart';
+import 'package:wash_wow/src/services/google_map_service.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -15,7 +17,25 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 
+  final PlacesService placesService = PlacesService();
+  List<Prediction> predictions = [];
+
+  void fetchPlacePredictions(String query) async {
+    predictions = await placesService.fetchPlacePredictions(query);
+    setState(() {});
+  }
+
   final AuthService authService = AuthService('https://10.0.2.2:7276');
+
+  @override
+  void dispose() {
+    fullNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    phoneNumberController.dispose();
+    addressController.dispose();
+    super.dispose();
+  }
 
   // Error message variables for each field
   String fullNameError = '';
@@ -236,6 +256,15 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         child: TextFormField(
                           controller: addressController,
+                          onChanged: (value) {
+                            if (value.isNotEmpty && value.length >= 3) {
+                              fetchPlacePredictions(value);
+                            } else {
+                              setState(() {
+                                predictions = [];
+                              });
+                            }
+                          },
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nhập địa chỉ của bạn.',
@@ -244,7 +273,25 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       const SizedBox(height: 23),
-
+                      if (predictions.isNotEmpty)
+                        Container(
+                          height: 200,
+                          child: ListView.builder(
+                            itemCount: predictions.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(predictions[index].description!),
+                                onTap: () {
+                                  setState(() {
+                                    addressController.text =
+                                        predictions[index].description!;
+                                    predictions = [];
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
                       // Submit Button
                       SizedBox(
                         width: double.infinity,
