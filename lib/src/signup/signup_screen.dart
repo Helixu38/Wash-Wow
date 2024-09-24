@@ -46,6 +46,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String passwordError = '';
   String phoneNumberError = '';
   String addressError = '';
+  String termAndConditionError = '';
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -323,6 +324,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               passwordError = '';
                               phoneNumberError = '';
                               addressError = '';
+                              termAndConditionError = '';
                             });
 
                             // Validate and set error messages
@@ -352,6 +354,11 @@ class _SignupScreenState extends State<SignupScreen> {
                             }
                             if (addressController.text.isEmpty) {
                               addressError = 'Vui lòng nhập địa chỉ';
+                              isValid = false;
+                            }
+                            if (!isChecked) {
+                              termAndConditionError =
+                                  'Vui lòng chấp nhận điều khoản';
                               isValid = false;
                             }
 
@@ -402,6 +409,19 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       const SizedBox(height: 23),
+                      if (!isChecked)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Center(
+                            child: Text(
+                              termAndConditionError,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -434,6 +454,14 @@ class _SignupScreenState extends State<SignupScreen> {
                                   style: const TextStyle(
                                     color: Color.fromRGBO(4, 90, 208, 1),
                                     decoration: TextDecoration.underline,
+                                    decorationColor:
+                                        Color.fromRGBO(4, 90, 208, 1),
+                                    decorationStyle: TextDecorationStyle
+                                        .solid, // solid underline
+                                    decorationThickness:
+                                        1.5, // Makes the underline a bit thicker
+                                    height:
+                                        1.2, // Adds vertical spacing, indirectly pushing underline down
                                     fontStyle: FontStyle.normal,
                                     fontWeight: FontWeight.w700,
                                   ),

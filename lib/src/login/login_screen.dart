@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/src/signup/signup_screen.dart';
-import 'package:wash_wow/src/services/auth_service.dart'; 
+import 'package:wash_wow/src/services/auth_service.dart';
 import 'package:wash_wow/src/home-page/home_page.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -165,13 +165,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         // Validate email
                         if (emailController.text.isEmpty ||
-                            !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(emailController.text)) {
+                            !RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                .hasMatch(emailController.text)) {
                           emailError = 'Vui lòng nhập địa chỉ email hợp lệ';
                           isValid = false;
                         }
 
                         // Validate password
-                        if (passwordController.text.isEmpty || passwordController.text.length < 6) {
+                        if (passwordController.text.isEmpty ||
+                            passwordController.text.length < 6) {
                           passwordError = 'Vui lòng nhập mật khẩu hợp lệ';
                           isValid = false;
                         }
@@ -190,8 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: Text(
-                                      'Đăng nhập thành công')),
+                                  content: Text('Đăng nhập thành công')),
                             );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -256,6 +257,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: const TextStyle(
                                 color: Color.fromRGBO(4, 90, 208, 1),
                                 decoration: TextDecoration.underline,
+                                decorationColor: Color.fromRGBO(4, 90, 208, 1),
+                                decorationStyle: TextDecorationStyle
+                                    .solid, // solid underline
+                                decorationThickness:
+                                    1.5, // Makes the underline a bit thicker
+                                height:
+                                    1.2, // Adds vertical spacing, indirectly pushing underline down
                                 fontStyle: FontStyle.normal,
                                 fontWeight: FontWeight.w700,
                               ),
