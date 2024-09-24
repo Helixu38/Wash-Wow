@@ -76,6 +76,22 @@ class _SignupScreenState extends State<SignupScreen> {
                   color: const Color.fromRGBO(4, 90, 208, 1),
                 ),
               ),
+              Text(
+                'Điền thông tin của quý khách phía bên dưới,',
+                style: GoogleFonts.lato(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w200,
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                ),
+              ),
+              Text(
+                'hoặc đăng nhập bằng tài khoản mạng xã hội',
+                style: GoogleFonts.lato(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                  color: const Color.fromARGB(255, 0, 0, 0),
+                ),
+              ),
               const SizedBox(height: 50),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -323,10 +339,10 @@ class _SignupScreenState extends State<SignupScreen> {
                               passwordError =
                                   'Mật khẩu phải có ít nhất 6 ký tự';
                               isValid = false;
-                            }
-                            if (phoneNumberController.text.isEmpty ||
-                                !RegExp(r'^\d{10}$')
-                                    .hasMatch(phoneNumberController.text)) {
+                                }
+                                if (phoneNumberController.text.isEmpty ||
+                                    !RegExp(r'^\d{10}$')
+                                        .hasMatch(phoneNumberController.text)) {
                               phoneNumberError =
                                   'Vui lòng nhập số điện thoại hợp lệ (10 chữ số)';
                               isValid = false;
