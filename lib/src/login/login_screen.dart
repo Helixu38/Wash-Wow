@@ -90,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextField(
+                      cursorColor: const Color.fromRGBO(4, 90, 208, 1),
                       controller: emailController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -124,6 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextField(
+                      cursorColor: const Color.fromRGBO(4, 90, 208, 1),
                       controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
@@ -185,14 +187,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
 
                           if (success) {
+                            // Display welcome toast on successful login
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Row(
+                                  children: [
+                                    Icon(Icons.check_circle,
+                                        color: Colors.white),
+                                    SizedBox(width: 10),
+                                    Text(
+                                        'Chào mừng trở lại, ${emailController.text}!'),
+                                  ],
+                                ),
+                                backgroundColor: Colors.green,
+                                duration: const Duration(
+                                    seconds: 3), // How long the toast lasts
+                              ),
+                            );
+
+                            //Navigate to the homepage
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const HomePage()),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Đăng nhập thành công')),
                             );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(

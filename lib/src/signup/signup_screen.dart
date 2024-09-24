@@ -130,6 +130,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: TextFormField(
+                          cursorColor: const Color.fromRGBO(4, 90, 208, 1),
                           controller: fullNameController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -166,6 +167,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: TextFormField(
+                          cursorColor: const Color.fromRGBO(4, 90, 208, 1),
                           controller: emailController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -202,6 +204,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: TextFormField(
+                          cursorColor: const Color.fromRGBO(4, 90, 208, 1),
                           controller: passwordController,
                           obscureText: true,
                           decoration: InputDecoration(
@@ -239,6 +242,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: TextFormField(
+                          cursorColor: const Color.fromRGBO(4, 90, 208, 1),
                           controller: phoneNumberController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -275,6 +279,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: TextFormField(
+                          cursorColor: const Color.fromRGBO(4, 90, 208, 1),
                           controller: addressController,
                           onChanged: (value) {
                             if (value.isNotEmpty && value.length >= 3) {
