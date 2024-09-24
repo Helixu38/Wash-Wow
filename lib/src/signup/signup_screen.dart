@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,6 +20,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final PlacesService placesService = PlacesService();
   List<Prediction> predictions = [];
+
+  bool isChecked = false; //checkbox
 
   void fetchPlacePredictions(String query) async {
     predictions = await placesService.fetchPlacePredictions(query);
@@ -339,10 +342,10 @@ class _SignupScreenState extends State<SignupScreen> {
                               passwordError =
                                   'Mật khẩu phải có ít nhất 6 ký tự';
                               isValid = false;
-                                }
-                                if (phoneNumberController.text.isEmpty ||
-                                    !RegExp(r'^\d{10}$')
-                                        .hasMatch(phoneNumberController.text)) {
+                            }
+                            if (phoneNumberController.text.isEmpty ||
+                                !RegExp(r'^\d{10}$')
+                                    .hasMatch(phoneNumberController.text)) {
                               phoneNumberError =
                                   'Vui lòng nhập số điện thoại hợp lệ (10 chữ số)';
                               isValid = false;
@@ -379,7 +382,10 @@ class _SignupScreenState extends State<SignupScreen> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            shape: StadiumBorder(),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  12), // Adjust the radius as needed
+                            ),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 15),
                             backgroundColor:
@@ -396,6 +402,155 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       const SizedBox(height: 23),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Transform.scale(
+                            scale: 1.5,
+                            child: Checkbox(
+                              side: BorderSide(
+                                  color: Color.fromRGBO(4, 90, 208, 1)),
+                              activeColor: Color.fromRGBO(4, 90, 208, 1),
+                              checkColor: Colors.white,
+                              value: isChecked,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  isChecked = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          RichText(
+                            text: TextSpan(
+                              text: 'Đồng ý với ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                color: Color.fromRGBO(4, 90, 208, 1),
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Điều khoản & Điều kiện',
+                                  style: const TextStyle(
+                                    color: Color.fromRGBO(4, 90, 208, 1),
+                                    decoration: TextDecoration.underline,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            Dialog.fullscreen(
+                                          backgroundColor: Colors.white,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                const Text(
+                                                  'Điều khoản & Điều kiện',
+                                                  style: TextStyle(
+                                                    fontSize: 24,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Color.fromRGBO(
+                                                        4, 90, 208, 1),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 20),
+                                                Expanded(
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: const [
+                                                        Text(
+                                                          '1. Người dùng đồng ý tuân thủ các quy định về bảo mật thông tin và không chia sẻ tài khoản của mình cho người khác.',
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              height: 1.5),
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                        Text(
+                                                          '2. Người dùng chịu trách nhiệm về thông tin cá nhân đã cung cấp và các hoạt động thực hiện trên nền tảng.',
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              height: 1.5),
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                        Text(
+                                                          '3. Công ty có quyền cập nhật các điều khoản này mà không cần thông báo trước. Người dùng cần thường xuyên kiểm tra các điều khoản để đảm bảo nắm rõ các thay đổi mới nhất.',
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              height: 1.5),
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                        Text(
+                                                          '4. Nếu người dùng vi phạm các điều khoản và điều kiện, công ty có quyền tạm ngừng hoặc chấm dứt tài khoản của người dùng mà không cần thông báo trước.',
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              height: 1.5),
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                        Text(
+                                                          '5. Người dùng đồng ý rằng công ty không chịu trách nhiệm về bất kỳ thiệt hại nào phát sinh từ việc sử dụng dịch vụ của chúng tôi.',
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              height: 1.5),
+                                                        ),
+                                                        SizedBox(height: 20),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 20),
+                                                Center(
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                      ),
+                                                      backgroundColor:
+                                                          Color.fromRGBO(
+                                                              4, 90, 208, 1),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 30,
+                                                        vertical: 10,
+                                                      ),
+                                                    ),
+                                                    child: const Text(
+                                                      'Đóng',
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
