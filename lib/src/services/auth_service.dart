@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/io_client.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService {
   final String baseUrl;
+  final FlutterSecureStorage storage = FlutterSecureStorage();
 
   AuthService(this.baseUrl);
 
@@ -18,9 +20,7 @@ class AuthService {
     try {
       final response = await ioClient.post(
         Uri.parse('$baseUrl/register'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'fullName': fullName,
           'email': email,
@@ -31,13 +31,12 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
-        // Handle successful registration
         print('Registration successful');
         return true;
       } else {
-        // Handle registration error
         print('Registration failed: ${response.body}');
-        return false;
+        throw Exception(
+            'Registration failed with status: ${response.statusCode}');
       }
     } catch (error) {
       print('Error during registration: $error');
@@ -45,7 +44,7 @@ class AuthService {
     }
   }
 
-  Future<bool> login(String email, String password) async {
+  Future<String?> login(String email, String password) async {
     HttpClient client = HttpClient()
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
@@ -55,9 +54,7 @@ class AuthService {
     try {
       final response = await ioClient.post(
         Uri.parse('$baseUrl/login'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'user': {
             'email': email,
@@ -67,17 +64,29 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
-        // Handle successful registration
-        print('Login successful');
-        return true;
+        final data = jsonDecode(response.body);
+        print('Response data: $data'); // Debugging line
+
+        // Accessing token and role directly from the root level
+        final token = data['token'];
+        final role = data['role'];
+
+        if (token != null && role != null) {
+          // Store the token securely
+          await storage.write(key: 'token', value: token);
+          print('Login successful, token: $token');
+          return role;
+        } else {
+          print('Token or role is missing in the response: $data');
+          return null;
+        }
       } else {
-        // Handle registration error
         print('Login failed: ${response.body}');
-        return false;
+        throw Exception('Login failed with status: ${response.statusCode}');
       }
     } catch (error) {
       print('Error during login: $error');
-      return false;
+      return null;
     }
   }
 }
