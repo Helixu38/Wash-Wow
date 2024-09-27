@@ -183,13 +183,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           if (role != null) {
                             // Navigate to the appropriate screen based on user role
-                            if (role == Role.ShopOwner) {
+                            if (role == "ShopOwner") {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => HomePage(role: role)),
                               );
-                            } else if (role == Role.Customer) {
+                            } else if (role == "Customer") {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
