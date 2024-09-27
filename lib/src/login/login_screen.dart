@@ -187,6 +187,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
 
                           if (success) {
+                            //Navigate to the homepage
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()),
+                            );
                             // Display welcome toast on successful login
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -203,13 +209,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 duration: const Duration(
                                     seconds: 3), // How long the toast lasts
                               ),
-                            );
-
-                            //Navigate to the homepage
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()),
                             );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
