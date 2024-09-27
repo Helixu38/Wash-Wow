@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:wash_wow/src/account/account_screen.dart';
-import 'package:wash_wow/src/home/home_screen.dart';
+import 'package:wash_wow/src/home/admin_home_screen.dart';
+import 'package:wash_wow/src/home/user_home_screen.dart';
 import 'package:wash_wow/src/notification/notification_screen.dart';
 import 'package:wash_wow/src/order/order_screen.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String role;
+  const HomePage({super.key, required this.role});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -17,9 +19,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Widget currentScreen;
+
+    // Determine which home screen to display based on user role
     switch (currentPageIndex) {
       case 0:
-        currentScreen = HomeScreen();
+        if (widget.role == 'Customer') {
+          currentScreen = UserHomeScreen();
+        } else if (widget.role == 'Admin') {
+          currentScreen = AdminHomeScreen(); // Add this line
+        } else {
+          currentScreen = UserHomeScreen(); // Fallback if the role is unknown
+        }
         break;
       case 1:
         currentScreen = OrderScreen();
@@ -31,11 +41,11 @@ class _HomePageState extends State<HomePage> {
         currentScreen = AccountScreen();
         break;
       default:
-        currentScreen = HomeScreen();
+        currentScreen = UserHomeScreen();
     }
 
     return Scaffold(
-      body: currentScreen, // Show the current screen based on the index
+      body: currentScreen,
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
@@ -53,7 +63,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Theme.of(context).primaryColor,
           indicatorColor: Colors.lightBlueAccent,
           selectedIndex: currentPageIndex,
-          destinations: const <Widget>[
+          destinations: const <NavigationDestination>[
             NavigationDestination(
               selectedIcon: Icon(Icons.home),
               icon: Icon(Icons.home_outlined, color: Colors.white),
@@ -65,11 +75,13 @@ class _HomePageState extends State<HomePage> {
               label: 'Đơn hàng',
             ),
             NavigationDestination(
-              icon: Badge(child: Icon(Icons.notifications_sharp, color: Colors.white)),
+              icon: Badge(
+                  child: Icon(Icons.notifications_sharp, color: Colors.white)),
               label: 'Thông báo',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.account_circle_outlined, color: Colors.white),
+              selectedIcon:
+                  Icon(Icons.account_circle_outlined, color: Colors.white),
               icon: Icon(Icons.account_circle_outlined, color: Colors.white),
               label: 'Tài khoản',
             ),

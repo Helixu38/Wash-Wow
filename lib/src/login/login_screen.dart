@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wash_wow/src/home/user_home_screen.dart';
 import 'package:wash_wow/src/signup/signup_screen.dart';
 import 'package:wash_wow/src/services/auth_service.dart';
 import 'package:wash_wow/src/home-page/home_page.dart';
@@ -26,9 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
+        decoration: BoxDecoration(color: Colors.white),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,10 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.only(bottom: 5),
                       child: Text(
                         emailError,
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 12,
-                        ),
+                        style: const TextStyle(color: Colors.red, fontSize: 12),
                       ),
                     ),
                   Container(
@@ -113,10 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.only(bottom: 5),
                       child: Text(
                         passwordError,
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontSize: 12,
-                        ),
+                        style: const TextStyle(color: Colors.red, fontSize: 12),
                       ),
                     ),
                   Container(
@@ -181,18 +174,27 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
 
                         if (isValid) {
-                          bool success = await authService.login(
+                          String? role = await authService.login(
                             emailController.text,
                             passwordController.text,
                           );
 
-                          if (success) {
-                            //Navigate to the homepage
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()),
-                            );
+                          if (role != null) {
+                            // Navigate to the appropriate screen based on user role
+                            if (role == 'admin') {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage(role: role)),
+                              );
+                            } else if (role == 'Customer') {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage(role: role)),
+                              );
+                            }
+
                             // Display welcome toast on successful login
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -207,7 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 backgroundColor: Colors.green,
                                 duration: const Duration(
-                                    seconds: 3), // How long the toast lasts
+                                    seconds: 3), // Duration of the toast
                               ),
                             );
                           } else {
