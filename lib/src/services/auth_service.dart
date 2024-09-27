@@ -91,4 +91,15 @@ class AuthService {
       return null;
     }
   }
+
+  Future<void> logout() async {
+    try {
+      // Clear the stored token and user data
+      await storage.delete(key: 'token');
+      await storage.delete(key: 'fullName');
+      print('Logout successful');
+    } catch (error) {
+      print('Error during logout: $error');
+    }
+  }
 }
