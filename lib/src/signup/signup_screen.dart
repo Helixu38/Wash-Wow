@@ -135,6 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nguyễn Văn A',
+                            hintStyle: TextStyle(color: Colors.grey),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -172,6 +173,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'nguyenvana@gmail.com',
+                            hintStyle: TextStyle(color: Colors.grey),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -210,6 +212,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nhập mật khẩu của bạn.',
+                            hintStyle: TextStyle(color: Colors.grey),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -247,6 +250,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nhập số điện thoại của bạn.',
+                            hintStyle: TextStyle(color: Colors.grey),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -293,6 +297,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nhập địa chỉ của bạn.',
+                            hintStyle: TextStyle(color: Colors.grey),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -583,7 +588,53 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                           ),
                         ],
-                      )
+                      ),
+                      const SizedBox(height: 37), // Spacing
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: 'Bạn đã có tài khoản? ',
+                              style: GoogleFonts.lato(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: const Color.fromRGBO(119, 119, 119, 1),
+                                fontStyle: FontStyle.italic,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Đăng nhập ngay',
+                                  style: const TextStyle(
+                                    color: Color.fromRGBO(4, 90, 208, 1),
+                                    decoration: TextDecoration.underline,
+                                    decorationColor:
+                                        Color.fromRGBO(4, 90, 208, 1),
+                                    decorationStyle: TextDecorationStyle
+                                        .solid, // solid underline
+                                    decorationThickness:
+                                        1.5, // Makes the underline a bit thicker
+                                    height:
+                                        1.2, // Adds vertical spacing, indirectly pushing underline down
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginScreen(),
+                                          ));
+                                    },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 37),
                     ],
                   ),
                 ),
