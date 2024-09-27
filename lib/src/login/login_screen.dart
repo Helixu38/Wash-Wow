@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wash_wow/enums/enums.dart';
 import 'package:wash_wow/src/home/user_home_screen.dart';
 import 'package:wash_wow/src/signup/signup_screen.dart';
 import 'package:wash_wow/src/services/auth_service.dart';
@@ -181,13 +182,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           if (role != null) {
                             // Navigate to the appropriate screen based on user role
-                            if (role == 'admin') {
+                            if (role == Role.ShopOwner) {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => HomePage(role: role)),
                               );
-                            } else if (role == 'Customer') {
+                            } else if (role == Role.Customer) {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
