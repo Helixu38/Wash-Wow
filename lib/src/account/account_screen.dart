@@ -5,10 +5,16 @@ import 'package:profile_photo/profile_photo.dart';
 import 'dart:math' as math;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class AccountScreen extends StatelessWidget {
-  final FlutterSecureStorage storage = FlutterSecureStorage();
+class AccountScreen extends StatefulWidget {
 
   AccountScreen({super.key});
+
+  @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  final FlutterSecureStorage storage = FlutterSecureStorage();
 
   Future<String?> getUserName() async {
     return await storage.read(key: 'fullName'); // Retrieve full name from storage
