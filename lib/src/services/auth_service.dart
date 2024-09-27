@@ -92,14 +92,21 @@ class AuthService {
     }
   }
 
-  Future<void> logout() async {
+  Future<bool> logout() async {
     try {
       // Clear the stored token and user data
       await storage.delete(key: 'token');
       await storage.delete(key: 'fullName');
       print('Logout successful');
+      return true; // Return true to indicate successful logout
     } catch (error) {
       print('Error during logout: $error');
+      return false; // Return false to indicate failure
     }
+  }
+
+  Future<String?> getUserName() async {
+    return await storage.read(
+        key: 'fullName'); // Retrieve full name from storage
   }
 }

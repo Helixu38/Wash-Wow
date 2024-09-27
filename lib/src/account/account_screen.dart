@@ -4,9 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:profile_photo/profile_photo.dart';
 import 'dart:math' as math;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wash_wow/src/login/login_screen.dart';
+import 'package:wash_wow/src/services/auth_service.dart';
 
 class AccountScreen extends StatefulWidget {
-
   AccountScreen({super.key});
 
   @override
@@ -15,16 +16,13 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   final FlutterSecureStorage storage = FlutterSecureStorage();
-
-  Future<String?> getUserName() async {
-    return await storage.read(key: 'fullName'); // Retrieve full name from storage
-  }
-
+  final AuthService authService = AuthService('https://10.0.2.2:7276');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<String?>(
-        future: getUserName(), // Fetch the user's name asynchronously
+        future:
+            authService.getUserName(), // Fetch the user's name asynchronously
         builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for data, show a loading spinner
@@ -34,7 +32,8 @@ class _AccountScreenState extends State<AccountScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             // Data has been fetched successfully
-            String userName = snapshot.data ?? 'Unknown User'; // Fallback to a default value
+            String userName =
+                snapshot.data ?? 'Unknown User'; // Fallback to a default value
 
             return Container(
               width: double.infinity,
@@ -140,8 +139,24 @@ class _AccountScreenState extends State<AccountScreen> {
                         context,
                         Icons.logout,
                         "Đăng xuất",
-                        () {
-                          print("Đăng xuất tapped");
+                        () async {
+                          bool success = await authService.logout();
+                          if (success) {
+                            // Navigate to the login screen upon successful logout
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                              )
+                            );
+                          } else {
+                            // Optionally, you could show an error message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text('Logout failed. Please try again.')),
+                            );
+                          }
                         },
                       ),
                     ],
@@ -156,7 +171,8 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 }
 
-Widget _buildRowItem(BuildContext context, IconData icon, String text, VoidCallback onTap) {
+Widget _buildRowItem(
+    BuildContext context, IconData icon, String text, VoidCallback onTap) {
   return GestureDetector(
     onTap: onTap, // Call the onTap function when tapped
     child: Padding(
