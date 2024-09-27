@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/enums/enums.dart';
-import 'package:wash_wow/src/home/user_home_screen.dart';
 import 'package:wash_wow/src/signup/signup_screen.dart';
 import 'package:wash_wow/src/services/auth_service.dart';
 import 'package:wash_wow/src/home-page/home_page.dart';
