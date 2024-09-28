@@ -21,6 +21,8 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   profile_photo: ^1.0.3
   flutter_spinbox: ^0.13.1
+  image_picker: ^1.1.2
+  image_field: ^0.0.10
 
 dev_dependencies:
   flutter_test:

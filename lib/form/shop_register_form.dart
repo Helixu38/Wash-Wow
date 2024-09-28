@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinbox/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:wash_wow/src/account/account_screen.dart';
 
 class ShopRegisterForm extends StatefulWidget {
   const ShopRegisterForm({super.key});
@@ -14,6 +18,29 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
   final PageController _pageController = PageController();
   int activeIndex = 0;
   List<bool> isChecked = [false, false, false, false, false, false, false];
+  //Image
+  List<File> _images = []; // List to hold selected images
+  final ImagePicker _picker = ImagePicker();
+  // Function to pick images from gallery or camera
+  Future<void> _pickImage() async {
+    if (_images.length >= 3) {
+      _showImageLimitWarning(); // Show warning if more than 3 images are selected
+      return;
+    }
+
+    final List<XFile>? selectedImages = await _picker.pickMultiImage();
+
+    if (selectedImages != null) {
+      // Limit the number of selected images to 3
+      setState(() {
+        int availableSlots = 3 - _images.length;
+        _images.addAll(
+          selectedImages.take(availableSlots).map((file) => File(file.path)),
+        );
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -236,8 +263,9 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
 
   Widget imageDetails() {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ListView(children: [
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ListView(
+        children: [
           Center(
             child: Text(
               'Thông tin cửa hàng',
@@ -266,12 +294,90 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
               color: const Color.fromRGBO(4, 90, 208, 1),
             ),
           ),
-          
-              buildNavigationButtons(),
-              const SizedBox(height: 42),
-            ],
-          )
+          const SizedBox(height: 15),
+
+          // Button to pick images
+          ElevatedButton.icon(
+            onPressed: _pickImage,
+            icon: const Icon(Icons.add_a_photo),
+            label: const Text("Chọn ảnh"),
+          ),
+          const SizedBox(height: 20),
+
+          // Display selected images in a grid
+          _images.isNotEmpty
+              ? buildImageGrid()
+              : Text(
+                  'Chưa có ảnh nào được chọn',
+                  style: GoogleFonts.lato(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.grey,
+                  ),
+                ),
+          const SizedBox(height: 42),
+
+          // Build navigation buttons
+          buildNavigationButtons(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildImageGrid() {
+    return GridView.builder(
+      shrinkWrap: true,
+      itemCount: _images.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 5,
+        mainAxisSpacing: 5,
+      ),
+      itemBuilder: (context, index) {
+        return Stack(
+          children: [
+            Image.file(
+              _images[index],
+              fit: BoxFit.cover,
+            ),
+            Positioned(
+              right: 0,
+              child: IconButton(
+                icon: Icon(
+                  Icons.remove_circle,
+                  color: Colors.red,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _images.removeAt(index);
+                  });
+                },
+              ),
+            ),
+          ],
         );
+      },
+    );
+  }
+
+  void _showImageLimitWarning() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Giới hạn ảnh đã vượt quá'),
+          content: Text('Bạn chỉ có thể chọn tối đa 3 ảnh.'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget buildDeviceRow(String device, String label) {
@@ -330,40 +436,65 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
   }
 
   Widget confirmationPage() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Xác nhận thông tin',
-            style: GoogleFonts.lato(
-              fontSize: 24,
-              fontWeight: FontWeight.w400,
-              color: const Color.fromRGBO(4, 90, 208, 1),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                // Handle submission here
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                backgroundColor: const Color.fromRGBO(4, 90, 208, 1),
-              ),
-              child: const Text(
-                'Gửi thông tin',
-                style: TextStyle(fontSize: 16, color: Colors.white),
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            Text(
+              'Đăng ký thành công',
+              style: GoogleFonts.lato(
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+                color: const Color.fromRGBO(4, 90, 208, 1),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 11),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Cảm ơn bạn đã \n tin tưởng hợp tác',
+                    style: GoogleFonts.lato(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w400,
+                      color: const Color.fromRGBO(4, 90, 208, 1),
+                    ),
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 48),
+            Icon(
+              Icons.check_circle_outline,
+              size: 188,
+              color: Theme.of(context).primaryColor,
+            ),
+            const SizedBox(height: 48),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text:
+                        'Bạn sẽ nhận được email xác nhận \n trong vòng 3 đến 5 ngày làm việc.',
+                    style: GoogleFonts.lato(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      color: const Color.fromRGBO(4, 90, 208, 1),
+                    ),
+                  ),
+                ],
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: buildNavigationButtons(),
+            ),
+            const SizedBox(height: 42),
+          ],
+        ),
       ),
     );
   }
@@ -407,9 +538,10 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
             },
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(8), // Adjust the radius as needed
-                  side: BorderSide(color: Theme.of(context).primaryColor)),
+                borderRadius:
+                    BorderRadius.circular(8), // Adjust the radius as needed
+                side: BorderSide(color: Theme.of(context).primaryColor),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               backgroundColor: Colors.white,
             ),
@@ -434,6 +566,12 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
                     curve: Curves.easeIn,
                   );
                 });
+              } else {
+                // Navigate to the AccountScreen on the last page
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => AccountScreen()),
+                );
               }
             },
             style: ElevatedButton.styleFrom(
@@ -452,43 +590,44 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
       ],
     );
   }
-}
+
 // Make sure to import the SpinBox package
 
-Widget buildNumberSpinner() {
-  return Column(
-    children: [
-      Container(
-        width: 200,
-        decoration: BoxDecoration(
-          border:
-              Border.all(color: Colors.grey), // Match the button border color
-          borderRadius:
-              BorderRadius.circular(8), // Match the button border radius
+  Widget buildNumberSpinner() {
+    return Column(
+      children: [
+        Container(
+          width: 200,
+          decoration: BoxDecoration(
+            border:
+                Border.all(color: Colors.grey), // Match the button border color
+            borderRadius:
+                BorderRadius.circular(8), // Match the button border radius
+          ),
+          child: SpinBox(
+            min: 1,
+            max: 100,
+            value: 0,
+            onChanged: (value) => print(value),
+            textStyle: GoogleFonts.lato(
+              color: const Color.fromRGBO(4, 90, 208, 1), // Text color
+              fontSize: 16,
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none, // Remove the default border
+              contentPadding: const EdgeInsets.all(10),
+            ),
+            incrementIcon: Icon(
+              Icons.add,
+              color: const Color.fromRGBO(4, 90, 208, 1),
+            ),
+            decrementIcon: Icon(
+              Icons.remove,
+              color: const Color.fromRGBO(4, 90, 208, 1),
+            ),
+          ),
         ),
-        child: SpinBox(
-          min: 1,
-          max: 100,
-          value: 0,
-          onChanged: (value) => print(value),
-          textStyle: GoogleFonts.lato(
-            color: const Color.fromRGBO(4, 90, 208, 1), // Text color
-            fontSize: 16,
-          ),
-          decoration: InputDecoration(
-            border: InputBorder.none, // Remove the default border
-            contentPadding: const EdgeInsets.all(10),
-          ),
-          incrementIcon: Icon(
-            Icons.add,
-            color: const Color.fromRGBO(4, 90, 208, 1),
-          ),
-          decrementIcon: Icon(
-            Icons.remove,
-            color: const Color.fromRGBO(4, 90, 208, 1),
-          ),
-        ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }
