@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,27 +31,32 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
       return;
     }
 
-    // Use the ImagePicker to select multiple images
-    final pickedFiles = await ImagePicker().pickMultiImage();
+    // Use the ImagePicker to select a single image
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
-    if (pickedFiles != null) {
-      // Check if the selected images combined with already selected ones exceed the limit
-      int remainingSlots = 3 - _images.length;
-      List<XFile> selectedFiles =
-          pickedFiles.take(remainingSlots).toList(); // Limit to 3 images
+    if (pickedFile != null) {
+      // Create a File object from the picked file
+      File imageFile = File(pickedFile.path);
+
+      // Upload the image to Firebase Storage
+      String fileName = Uri.parse(imageFile.path).pathSegments.last;
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child('images/$fileName');
+
+      // Upload the file
+      UploadTask uploadTask = storageReference.putFile(imageFile);
+      await uploadTask.whenComplete(() {});
+
+      // Get the download URL
+      String downloadUrl = await storageReference.getDownloadURL();
 
       setState(() {
-        for (var pickedFile in selectedFiles) {
-          _images.add(File(pickedFile.path)); // Add the file to _images
-          storeDetails.images
-              .add(pickedFile.path); // Store the image path in StoreDetails
-        }
+        // Add the file to _images
+        _images.add(imageFile);
+        storeDetails.images
+            .add(downloadUrl); // Add the download URL to StoreDetails
       });
-
-      // If more images were picked than allowed, show the warning
-      if (pickedFiles.length > remainingSlots) {
-        _showImageLimitWarning();
-      }
     }
   }
 
