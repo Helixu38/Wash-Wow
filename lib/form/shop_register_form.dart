@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinbox/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wash_wow/src/account/account_screen.dart';
+import 'package:wash_wow/src/services/model/store_details.dart';
 
 class ShopRegisterForm extends StatefulWidget {
   const ShopRegisterForm({super.key});
@@ -23,24 +24,48 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
   final ImagePicker _picker = ImagePicker();
   // Function to pick images from gallery or camera
   Future<void> _pickImage() async {
+    // Check if the current number of images is already 3
     if (_images.length >= 3) {
       _showImageLimitWarning(); // Show warning if more than 3 images are selected
       return;
     }
 
-    final List<XFile>? selectedImages = await _picker.pickMultiImage();
+    // Use the ImagePicker to select multiple images
+    final pickedFiles = await ImagePicker().pickMultiImage();
 
-    if (selectedImages != null) {
-      // Limit the number of selected images to 3
+    if (pickedFiles != null) {
+      // Check if the selected images combined with already selected ones exceed the limit
+      int remainingSlots = 3 - _images.length;
+      List<XFile> selectedFiles =
+          pickedFiles.take(remainingSlots).toList(); // Limit to 3 images
+
       setState(() {
-        int availableSlots = 3 - _images.length;
-        _images.addAll(
-          selectedImages.take(availableSlots).map((file) => File(file.path)),
-        );
+        for (var pickedFile in selectedFiles) {
+          _images.add(File(pickedFile.path)); // Add the file to _images
+          storeDetails.images
+              .add(pickedFile.path); // Store the image path in StoreDetails
+        }
       });
+
+      // If more images were picked than allowed, show the warning
+      if (pickedFiles.length > remainingSlots) {
+        _showImageLimitWarning();
+      }
     }
   }
 
+  StoreDetails storeDetails = StoreDetails(
+    storeName: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    services: [],
+    deviceTypes: [],
+    images: [],
+  );
+
+  List<int> deviceCounts = [0, 0];
+  List<bool> serviceSelections = List.filled(7, false);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +119,11 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
             ),
           ),
           const SizedBox(height: 5),
-          buildTextField('Nguyễn Văn A', 'Tên cửa hàng'),
+          buildTextField('Nguyễn Văn A', 'Tên cửa hàng', (value) {
+            setState(() {
+              storeDetails.storeName = value; // Update model
+            });
+          }),
           const SizedBox(height: 25),
           Text(
             'Địa chỉ cửa hàng',
@@ -105,7 +134,11 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
             ),
           ),
           const SizedBox(height: 5),
-          buildTextField('Nhập địa chỉ cửa hàng', 'Địa chỉ cửa hàng'),
+          buildTextField('Nhập địa chỉ cửa hàng', 'Địa chỉ cửa hàng', (value) {
+            setState(() {
+              storeDetails.address = value; // Update model
+            });
+          }),
           const SizedBox(height: 25),
           Text(
             'Số điện thoại cửa hàng',
@@ -116,7 +149,12 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
             ),
           ),
           const SizedBox(height: 5),
-          buildTextField('Nhập số điện thoại', 'Số điện thoại cửa hàng'),
+          buildTextField('Nhập số điện thoại', 'Số điện thoại cửa hàng',
+              (value) {
+            setState(() {
+              storeDetails.phoneNumber = value; // Update model
+            });
+          }),
           const SizedBox(height: 25),
           Text(
             'Email cửa hàng',
@@ -127,7 +165,11 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
             ),
           ),
           const SizedBox(height: 5),
-          buildTextField('Têncửahàng@email.com', 'Email cửa hàng'),
+          buildTextField('Têncửahàng@email.com', 'Email cửa hàng', (value) {
+            setState(() {
+              storeDetails.email = value; // Update model
+            });
+          }),
           const SizedBox(height: 25),
           buildNavigationButtons(),
         ],
@@ -137,128 +179,124 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
 
   Widget additionalDetails() {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ListView(children: [
-          Center(
-            child: Text(
-              'Thông tin cửa hàng',
-              style: GoogleFonts.lato(
-                fontSize: 24,
-                fontWeight: FontWeight.w400,
-                color: const Color.fromRGBO(4, 90, 208, 1),
-              ),
-            ),
-          ),
-          const SizedBox(height: 35),
-          Text(
-            'Các thiết bị tại cửa hàng',
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ListView(children: [
+        Center(
+          child: Text(
+            'Thông tin cửa hàng',
             style: GoogleFonts.lato(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+              fontSize: 24,
+              fontWeight: FontWeight.w400,
               color: const Color.fromRGBO(4, 90, 208, 1),
             ),
           ),
-          const SizedBox(height: 25),
-          Text(
-            'Máy giặt',
-            style: GoogleFonts.lato(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: const Color.fromRGBO(4, 90, 208, 1),
-            ),
+        ),
+        const SizedBox(height: 35),
+        Text(
+          'Các thiết bị tại cửa hàng',
+          style: GoogleFonts.lato(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: const Color.fromRGBO(4, 90, 208, 1),
           ),
-          const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  'Cửa trên',
-                  style: GoogleFonts.lato(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: const Color.fromRGBO(4, 90, 208, 1),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                  width: 10), // Add some space between the text and spinner
-              buildNumberSpinner(),
-            ],
+        ),
+        const SizedBox(height: 25),
+        Text(
+          'Máy giặt',
+          style: GoogleFonts.lato(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: const Color.fromRGBO(4, 90, 208, 1),
           ),
-          const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  'Cửa trước',
-                  style: GoogleFonts.lato(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: const Color.fromRGBO(4, 90, 208, 1),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                  width: 10), // Add some space between the text and spinner
-              buildNumberSpinner(),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 43),
-              Text(
-                'Các loại dịch vụ',
+        ),
+        const SizedBox(height: 15),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                'Cửa trên',
                 style: GoogleFonts.lato(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: const Color.fromRGBO(4, 90, 208, 1),
                 ),
               ),
-              const SizedBox(height: 20),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Left Column
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildRow('Giặt thường', 0),
-                        const SizedBox(height: 15),
-                        _buildRow('Giặt khô', 1),
-                        const SizedBox(height: 15),
-                        _buildRow('Sửa quần áo', 2),
-                        const SizedBox(height: 15),
-                        _buildRow('Giặt nặng (chăn mền)', 3),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(width: 20), // Space between two columns
-
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildRow('Giặt hấp', 4),
-                        const SizedBox(height: 15),
-                        _buildRow('Tẩy vết bẩn', 5),
-                        const SizedBox(height: 15),
-                        _buildRow('Ủi quần áo', 6),
-                      ],
-                    ),
-                  ),
-                ],
+            ),
+            const SizedBox(width: 10),
+            buildNumberSpinner(0), // Pass index to track the device count
+          ],
+        ),
+        const SizedBox(height: 15),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                'Cửa trước',
+                style: GoogleFonts.lato(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: const Color.fromRGBO(4, 90, 208, 1),
+                ),
               ),
-              buildNavigationButtons(),
-              const SizedBox(height: 42),
-            ],
-          )
-        ]));
+            ),
+            const SizedBox(width: 10),
+            buildNumberSpinner(1), // Pass index to track the device count
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 43),
+            Text(
+              'Các loại dịch vụ',
+              style: GoogleFonts.lato(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: const Color.fromRGBO(4, 90, 208, 1),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildRow('Giặt thường', 0),
+                      const SizedBox(height: 15),
+                      buildRow('Giặt khô', 1),
+                      const SizedBox(height: 15),
+                      buildRow('Sửa quần áo', 2),
+                      const SizedBox(height: 15),
+                      buildRow('Giặt nặng (chăn mền)', 3),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildRow('Giặt hấp', 4),
+                      const SizedBox(height: 15),
+                      buildRow('Tẩy vết bẩn', 5),
+                      const SizedBox(height: 15),
+                      buildRow('Ủi quần áo', 6),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            buildNavigationButtons(),
+            const SizedBox(height: 42),
+          ],
+        )
+      ]),
+    );
   }
 
   Widget imageDetails() {
@@ -327,18 +365,24 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
   Widget buildImageGrid() {
     return GridView.builder(
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(), // Disable scrolling
       itemCount: _images.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 5,
+        crossAxisCount: 3, // Change this to 2 for wider images
+        crossAxisSpacing: 10, // Increase spacing if needed
+        mainAxisSpacing: 10, // Increase spacing if needed
+        childAspectRatio: 1, // Aspect ratio to control height/width
       ),
       itemBuilder: (context, index) {
         return Stack(
           children: [
-            Image.file(
-              _images[index],
-              fit: BoxFit.cover,
+            ClipRRect(
+              borderRadius:
+                  BorderRadius.circular(8), // Optional: Add rounded corners
+              child: Image.file(
+                _images[index],
+                fit: BoxFit.cover, // Use BoxFit.cover for full coverage
+              ),
             ),
             Positioned(
               right: 0,
@@ -380,27 +424,7 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
     );
   }
 
-  Widget buildDeviceRow(String device, String label) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            style: GoogleFonts.lato(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: const Color.fromRGBO(4, 90, 208, 1),
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        buildNumberSpinner(),
-      ],
-    );
-  }
-
-  Widget _buildRow(String text, int index) {
+  Widget buildRow(String text, int index) {
     return Row(
       children: [
         Expanded(
@@ -413,7 +437,32 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
             ),
           ),
         ),
-        buildCheckBox(index),
+        Transform.scale(
+          scale: 1.5,
+          child: Checkbox(
+            side: BorderSide(color: Color.fromRGBO(4, 90, 208, 1)),
+            activeColor: Color.fromRGBO(4, 90, 208, 1),
+            checkColor: Colors.white,
+            value: serviceSelections[index],
+            onChanged: (bool? value) {
+              if (value != null) {
+                setState(() {
+                  serviceSelections[index] = value;
+
+                  if (value) {
+                    // Add service to StoreDetails if it's not already in the list
+                    if (!storeDetails.services.contains(text)) {
+                      storeDetails.services.add(text);
+                    }
+                  } else {
+                    // Remove service from StoreDetails
+                    storeDetails.services.remove(text);
+                  }
+                });
+              }
+            },
+          ),
+        ),
       ],
     );
   }
@@ -499,7 +548,8 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
     );
   }
 
-  Widget buildTextField(String hintText, String labelText) {
+  Widget buildTextField(
+      String hintText, String labelText, Function(String) onChanged) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
@@ -512,8 +562,9 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.grey),
           contentPadding: const EdgeInsets.all(10),
-          labelStyle: TextStyle(color: Colors.grey), // Optional label style
+          labelStyle: TextStyle(color: Colors.grey),
         ),
+        onChanged: onChanged,
       ),
     );
   }
@@ -557,6 +608,12 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
+              storeDetails.deviceTypes = [
+                'Cửa trên: ${deviceCounts[0]}',
+                'Cửa trước: ${deviceCounts[1]}'
+              ];
+              print(storeDetails.images); // Store device types and counts
+              print(storeDetails.services);
               if (activeIndex < 3) {
                 // Adjust based on the number of steps
                 setState(() {
@@ -591,9 +648,7 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
     );
   }
 
-// Make sure to import the SpinBox package
-
-  Widget buildNumberSpinner() {
+  Widget buildNumberSpinner(int index) {
     return Column(
       children: [
         Container(
@@ -605,10 +660,16 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
                 BorderRadius.circular(8), // Match the button border radius
           ),
           child: SpinBox(
-            min: 1,
+            min: 0,
             max: 100,
-            value: 0,
-            onChanged: (value) => print(value),
+            value: deviceCounts[index]
+                .toDouble(), // Use the value from deviceCounts
+            onChanged: (value) {
+              deviceCounts[index] =
+                  value.toInt(); // Update the deviceCounts array
+              print(
+                  'Updated device count for index $index: ${deviceCounts[index]}');
+            },
             textStyle: GoogleFonts.lato(
               color: const Color.fromRGBO(4, 90, 208, 1), // Text color
               fontSize: 16,
