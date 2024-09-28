@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:profile_photo/profile_photo.dart';
 import 'dart:math' as math;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wash_wow/form/shop_register_form.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
 import 'package:wash_wow/src/services/auth_service.dart';
 
@@ -38,130 +39,143 @@ class _AccountScreenState extends State<AccountScreen> {
             return Container(
               width: double.infinity,
               height: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 42),
-                  Text(
-                    'Tài khoản',
-                    style: GoogleFonts.lato(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 42),
+                    Text(
+                      'Tài khoản',
+                      style: GoogleFonts.lato(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 42),
-                  ProfilePhoto(
-                    totalWidth: 87,
-                    cornerRadius: 66.5,
-                    outlineWidth: 0,
-                    outlineColor: Colors.transparent,
-                    color: Colors.transparent,
-                    image: const AssetImage(
-                        'assets/images/avatar/placeholderavatar.png'),
-                  ),
-                  Text(
-                    userName,
-                    style: GoogleFonts.lato(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                      color: Theme.of(context).primaryColor,
+                    const SizedBox(height: 42),
+                    ProfilePhoto(
+                      totalWidth: 87,
+                      cornerRadius: 66.5,
+                      outlineWidth: 0,
+                      outlineColor: Colors.transparent,
+                      color: Colors.transparent,
+                      image: const AssetImage(
+                          'assets/images/avatar/placeholderavatar.png'),
                     ),
-                  ),
-                  const SizedBox(height: 33),
-                  Column(
-                    children: [
-                      _buildRowItem(
-                        context,
-                        Icons.manage_accounts,
-                        "Thông tin cá nhân",
-                        () {
-                          print("Thông tin cá nhân tapped");
-                        },
+                    Text(
+                      userName,
+                      style: GoogleFonts.lato(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
+                        color: Theme.of(context).primaryColor,
                       ),
-                      const SizedBox(height: 30),
-                      _buildRowItem(
-                        context,
-                        Icons.location_on,
-                        "Quản lý địa chỉ",
-                        () {
-                          print("Quản lý địa chỉ tapped");
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      _buildRowItem(
-                        context,
-                        Icons.wallet,
-                        "Phương thức thanh toán",
-                        () {
-                          print("Phương thức thanh toán tapped");
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      _buildRowItem(
-                        context,
-                        Icons.calendar_month,
-                        "Đơn hàng của tôi",
-                        () {
-                          print("Đơn hàng của tôi tapped");
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      _buildRowItem(
-                        context,
-                        Icons.settings,
-                        "Cài đặt",
-                        () {
-                          print("Cài đặt tapped");
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      _buildRowItem(
-                        context,
-                        CupertinoIcons.exclamationmark_circle,
-                        "Trung tâm trợ giúp",
-                        () {
-                          print("Trung tâm trợ giúp tapped");
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      _buildRowItem(
-                        context,
-                        CupertinoIcons.lock,
-                        "Quyền riêng tư",
-                        () {
-                          print("Quyền riêng tư tapped");
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      _buildRowItem(
-                        context,
-                        Icons.logout,
-                        "Đăng xuất",
-                        () async {
-                          bool success = await authService.logout();
-                          if (success) {
-                            // Navigate to the login screen upon successful logout
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginScreen(),
-                              )
-                            );
-                          } else {
-                            // Optionally, you could show an error message
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content:
-                                      Text('Logout failed. Please try again.')),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                    const SizedBox(height: 33),
+                    Column(
+                      children: [
+                        _buildRowItem(
+                          context,
+                          Icons.manage_accounts,
+                          "Thông tin cá nhân",
+                          () {
+                            print("Thông tin cá nhân tapped");
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        _buildRowItem(
+                          context,
+                          Icons.local_laundry_service_outlined,
+                          "Đăng ký hoạt động cửa hàng",
+                          () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ShopRegisterForm()));
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        _buildRowItem(
+                          context,
+                          Icons.location_on,
+                          "Quản lý địa chỉ",
+                          () {
+                            print("Quản lý địa chỉ tapped");
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        _buildRowItem(
+                          context,
+                          Icons.wallet,
+                          "Phương thức thanh toán",
+                          () {
+                            print("Phương thức thanh toán tapped");
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        _buildRowItem(
+                          context,
+                          Icons.calendar_month,
+                          "Đơn hàng của tôi",
+                          () {
+                            print("Đơn hàng của tôi tapped");
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        _buildRowItem(
+                          context,
+                          Icons.settings,
+                          "Cài đặt",
+                          () {
+                            print("Cài đặt tapped");
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        _buildRowItem(
+                          context,
+                          CupertinoIcons.exclamationmark_circle,
+                          "Trung tâm trợ giúp",
+                          () {
+                            print("Trung tâm trợ giúp tapped");
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        _buildRowItem(
+                          context,
+                          CupertinoIcons.lock,
+                          "Quyền riêng tư",
+                          () {
+                            print("Quyền riêng tư tapped");
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        _buildRowItem(
+                          context,
+                          Icons.logout,
+                          "Đăng xuất",
+                          () async {
+                            bool success = await authService.logout();
+                            if (success) {
+                              // Navigate to the login screen upon successful logout
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginScreen(),
+                                  ));
+                            } else {
+                              // Optionally, you could show an error message
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        'Logout failed. Please try again.')),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           }

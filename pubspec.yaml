@@ -20,6 +20,7 @@ dependencies:
   flutter_google_maps_webservices: ^1.1.1
   flutter_secure_storage: ^9.2.2
   profile_photo: ^1.0.3
+  flutter_spinbox: ^0.13.1
 
 dev_dependencies:
   flutter_test:
