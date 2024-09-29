@@ -46,7 +46,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
             const SizedBox(height: 10),
             Text(
-              'ĐĂNG NHẬP',
+              'QUÊN MẬT KHẨU',
               style: GoogleFonts.lato(
                 fontSize: 30,
                 fontWeight: FontWeight.w800,
