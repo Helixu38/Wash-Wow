@@ -94,7 +94,6 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
             NeverScrollableScrollPhysics(), // Disable swipe for manual control
         children: [
           basicDetails(),
-          additionalDetails(),
           imageDetails(),
           confirmationPage(),
           // Add more pages as needed
