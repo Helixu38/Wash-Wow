@@ -575,6 +575,7 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
 
       // Call your auth service's post method here
       await authService.submitForm(1, storeDetails.images, storeDetailsMap);
+      print(storeDetails.images);
       print(storeDetailsMap);
 
       // Display success message

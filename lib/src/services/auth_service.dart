@@ -105,6 +105,69 @@ class AuthService {
     }
   }
 
+  Future<String> resetPassword(String token, String newPassword) async {
+    HttpClient client = HttpClient()
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+
+    final ioClient = IOClient(client);
+
+    try {
+      final response = await ioClient.put(
+        Uri.parse('$baseUrl/reset-password'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'token': token,
+          'newPassword': newPassword,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print('Response data: $data'); // Debugging line
+
+        return data['value'] ?? 'No value returned';
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+        return 'Failed to reset password';
+      }
+    } catch (error) {
+      print('Error during forget password request: $error');
+      return 'Error occurred';
+    }
+  }
+
+  Future<String> forgetPassword(String email) async {
+    HttpClient client = HttpClient()
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+
+    final ioClient = IOClient(client);
+
+    try {
+      final response = await ioClient.post(
+        Uri.parse('$baseUrl/forgot-password'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print('Response data: $data'); // Debugging line
+
+        return data['value'] ?? 'No value returned';
+      } else {
+        print('Request failed with status: ${response.statusCode}');
+        return 'Failed to reset password';
+      }
+    } catch (error) {
+      print('Error during forget password request: $error');
+      return 'Error occurred';
+    }
+  }
+
   Future<String?> getUserName() async {
     return await storage.read(
         key: 'fullName'); // Retrieve full name from storage
