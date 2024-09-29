@@ -86,7 +86,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         _buildRowItem(
                           context,
                           Icons.local_laundry_service_outlined,
-                          "Đăng ký hoạt động cửa hàng",
+                          "Đăng ký trở thành đối tác",
                           () {
                             Navigator.push(
                                 context,
