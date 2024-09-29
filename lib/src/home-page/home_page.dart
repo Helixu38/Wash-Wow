@@ -25,8 +25,8 @@ class _HomePageState extends State<HomePage> {
       case 0:
         if (widget.role == 'Customer') {
           currentScreen = UserHomeScreen();
-        } else if (widget.role == 'Admin') {
-          currentScreen = AdminHomeScreen(); // Add this line
+        } else if (widget.role == 'ShopOwner') {
+          currentScreen = ShopOwnerHomeScreen(); // Add this line
         } else {
           currentScreen = UserHomeScreen(); // Fallback if the role is unknown
         }
