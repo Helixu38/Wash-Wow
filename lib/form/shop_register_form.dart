@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinbox/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wash_wow/src/account/account_screen.dart';
+import 'package:wash_wow/src/services/auth_service.dart';
 import 'package:wash_wow/src/services/model/store_details.dart';
 
 class ShopRegisterForm extends StatefulWidget {
@@ -17,6 +19,7 @@ class ShopRegisterForm extends StatefulWidget {
 }
 
 class _ShopRegisterFormState extends State<ShopRegisterForm> {
+  final AuthService authService = AuthService('https://10.0.2.2:7276');
   final PageController _pageController = PageController();
   int activeIndex = 0;
   List<bool> isChecked = [false, false, false, false, false, false, false];
@@ -491,67 +494,101 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
   }
 
   Widget confirmationPage() {
-    return SingleChildScrollView(
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Text(
-              'Đăng ký thành công',
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ListView(
+        children: [
+          Center(
+            child: Text(
+              'Xác nhận thông tin',
               style: GoogleFonts.lato(
-                fontSize: 30,
-                fontWeight: FontWeight.w800,
+                fontSize: 24,
+                fontWeight: FontWeight.w400,
                 color: const Color.fromRGBO(4, 90, 208, 1),
               ),
             ),
-            const SizedBox(height: 11),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Cảm ơn bạn đã \n tin tưởng hợp tác',
-                    style: GoogleFonts.lato(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w400,
-                      color: const Color.fromRGBO(4, 90, 208, 1),
-                    ),
-                  ),
-                ],
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 48),
-            Icon(
-              Icons.check_circle_outline,
-              size: 188,
-              color: Theme.of(context).primaryColor,
-            ),
-            const SizedBox(height: 48),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text:
-                        'Bạn sẽ nhận được email xác nhận \n trong vòng 3 đến 5 ngày làm việc.',
-                    style: GoogleFonts.lato(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      color: const Color.fromRGBO(4, 90, 208, 1),
-                    ),
-                  ),
-                ],
-              ),
-              textAlign: TextAlign.center,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: buildNavigationButtons(),
-            ),
-            const SizedBox(height: 42),
-          ],
-        ),
+          ),
+          const SizedBox(height: 35),
+          Text(
+            'Tên cửa hàng: ${storeDetails.storeName}',
+            style: GoogleFonts.lato(fontSize: 16),
+          ),
+          Text(
+            'Địa chỉ: ${storeDetails.address}',
+            style: GoogleFonts.lato(fontSize: 16),
+          ),
+          Text(
+            'Số điện thoại: ${storeDetails.phoneNumber}',
+            style: GoogleFonts.lato(fontSize: 16),
+          ),
+          Text(
+            'Email: ${storeDetails.email}',
+            style: GoogleFonts.lato(fontSize: 16),
+          ),
+          Text(
+            'Image: ${storeDetails.images}',
+            style: GoogleFonts.lato(fontSize: 16),
+          ),
+          Text(
+            'Service: ${storeDetails.services}',
+            style: GoogleFonts.lato(fontSize: 16),
+          ),
+          Text(
+            'Device: ${storeDetails.deviceTypes}',
+            style: GoogleFonts.lato(fontSize: 16),
+          ),
+          // Add any additional details to confirm...
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              submitStoreDetails(); // Call the method to submit details
+            },
+            child: Text('Gửi thông tin'),
+          ),
+        ],
       ),
     );
+  }
+
+  Future<void> submitStoreDetails() async {
+    try {
+      // Construct the store details map with required field IDs and values
+      List<Map<String, dynamic>> storeDetailsMap = [
+        {
+          'fieldID': 1, // ID for storeName
+          'value': storeDetails.storeName,
+        },
+        {
+          'fieldID': 2, // ID for address
+          'value': storeDetails.address,
+        },
+        {
+          'fieldID': 3, // ID for storeEmail
+          'value': storeDetails.phoneNumber,
+        },
+        {
+          'fieldID': 4, // ID for phoneNumber
+          'value': storeDetails.email,
+        },
+      ];
+
+
+      // Call your auth service's post method here
+      await authService.submitForm(1, storeDetails.images, storeDetailsMap);
+      print(storeDetailsMap);
+
+      // Display success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Đăng ký thành công!')),
+      );
+
+      // Optionally, navigate to a different screen or reset the form
+      Navigator.pop(context); // Go back to the previous screen or reset
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Đã xảy ra lỗi: $e')),
+      );
+    }
   }
 
   Widget buildTextField(
@@ -618,6 +655,7 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
                 'Cửa trên: ${deviceCounts[0]}',
                 'Cửa trước: ${deviceCounts[1]}'
               ];
+              print(storeDetails.address);
               print(storeDetails.images); // Store device types and counts
               print(storeDetails.services);
               if (activeIndex < 3) {

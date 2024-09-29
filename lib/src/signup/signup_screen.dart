@@ -21,8 +21,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final PlacesService placesService = PlacesService();
   List<Prediction> predictions = [];
 
-  bool isChecked = false; //checkbox
-
   void fetchPlacePredictions(String query) async {
     predictions = await placesService.fetchPlacePredictions(query);
     setState(() {});

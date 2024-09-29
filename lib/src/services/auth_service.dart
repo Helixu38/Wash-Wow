@@ -109,4 +109,48 @@ class AuthService {
     return await storage.read(
         key: 'fullName'); // Retrieve full name from storage
   }
+
+  Future<bool> submitForm(int formTemplateID, List<String> imageUrls,
+      List<Map<String, dynamic>> fieldValues) async {
+    HttpClient client = HttpClient()
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+
+    final token = await storage.read(key: 'token');
+    print(token);
+
+    if (token == null) {
+      print('No token found, please log in again');
+      return false; // Token is missing, handle this case appropriately
+    }
+
+    final ioClient = IOClient(client);
+
+    try {
+      final response = await ioClient.post(
+        Uri.parse('$baseUrl/form'), // Replace with your actual endpoint
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'formTemplateID': formTemplateID,
+          'imageUrl': imageUrls,
+          'fieldValues': fieldValues,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Form submitted successfully');
+        return true;
+      } else {
+        print('Form submission failed: ${response.body}');
+        throw Exception(
+            'Form submission failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error during form submission: $error');
+      return false;
+    }
+  }
 }
