@@ -1,25 +1,28 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wash_wow/enums/enums.dart';
-import 'package:wash_wow/src/forget-password/forget_password.dart';
-import 'package:wash_wow/src/signup/signup_screen.dart';
-import 'package:wash_wow/src/services/auth_service.dart';
+import 'package:wash_wow/src/forget-password/reset_password.dart';
 import 'package:wash_wow/src/home-page/home_page.dart';
+import 'package:wash_wow/src/services/auth_service.dart';
+import 'package:wash_wow/src/signup/signup_screen.dart';
 
-class LoginScreen extends StatefulWidget {
+class ForgotPasswordScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
 
   final AuthService authService = AuthService('https://10.0.2.2:7276');
 
   // Error message variables for email and password
   String emailError = '';
+
   String passwordError = '';
 
   @override
@@ -98,71 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 34), // Spacing
-                  Text(
-                    'Mật khẩu',
-                    style: GoogleFonts.lato(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: const Color.fromRGBO(4, 90, 208, 1),
-                    ),
-                  ),
-                  if (passwordError.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        passwordError,
-                        style: const TextStyle(color: Colors.red, fontSize: 12),
-                      ),
-                    ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextField(
-                      cursorColor: const Color.fromRGBO(4, 90, 208, 1),
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Nhập mật khẩu của bạn.',
-                        hintStyle: TextStyle(
-                            color: const Color.fromRGBO(208, 207, 207, 1)),
-                        contentPadding: const EdgeInsets.all(10),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      RichText(
-                        textAlign: TextAlign.right,
-                        text: TextSpan(
-                          text: 'Quên mật khẩu?',
-                          style: GoogleFonts.lato(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: const Color.fromRGBO(4, 90, 208, 1),
-                            fontStyle: FontStyle.italic,
-                            decoration: TextDecoration.underline,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Handle tap action, such as navigating to the "Forgot Password" screen
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        ForgotPasswordScreen()), // Replace with your target screen
-                              );
-                            },
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 37), // Spacing
+                  const SizedBox(height: 10), // Spacing
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -170,11 +109,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         // Clear previous error messages
                         setState(() {
                           emailError = '';
-                          passwordError = '';
                         });
 
                         bool isValid = true;
-
                         // Validate email
                         if (emailController.text.isEmpty ||
                             !RegExp(r'^[^@]+@[^@]+\.[^@]+')
@@ -182,37 +119,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           emailError = 'Vui lòng nhập địa chỉ email hợp lệ';
                           isValid = false;
                         }
-
-                        // Validate password
-                        if (passwordController.text.isEmpty ||
-                            passwordController.text.length < 6) {
-                          passwordError = 'Vui lòng nhập mật khẩu hợp lệ';
-                          isValid = false;
-                        }
-
                         if (isValid) {
-                          String? role = await authService.login(
+                          // Call the forgetPassword function from authService
+                          String? result = await authService.forgetPassword(
                             emailController.text,
-                            passwordController.text,
                           );
 
-                          if (role != null) {
-                            // Navigate to the appropriate screen based on user role
-                            if (role == "ShopOwner") {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage(role: role)),
-                              );
-                            } else if (role == "Customer") {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage(role: role)),
-                              );
-                            }
-
-                            // Display welcome toast on successful login
+                          if (result == "Success. Please check your mail") {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Row(
@@ -221,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: Colors.white),
                                     SizedBox(width: 10),
                                     Text(
-                                        'Chào mừng trở lại, ${emailController.text}!'),
+                                        'Đã gửi yêu cầu đặt lại mật khẩu đến \n ${emailController.text}!'),
                                   ],
                                 ),
                                 backgroundColor: Colors.green,
@@ -229,11 +142,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                     seconds: 3), // Duration of the toast
                               ),
                             );
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ResetPasswordScreen()),
+                            );
+                            // Optionally navigate or reset the form here
                           } else {
+                            // Handle error scenario
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: Text(
-                                      'Đăng nhập không thành công, vui lòng thử lại.')),
+                                content: Text(
+                                    'Yêu cầu không thành công, vui lòng thử lại.'),
+                              ),
                             );
                           }
                         } else {

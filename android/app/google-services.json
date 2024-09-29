@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1069743980031",
+    "project_id": "wash-wow-upload-image",
+    "storage_bucket": "wash-wow-upload-image.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069743980031:android:99afd95e8bab6144e3bbca",
+        "android_client_info": {
+          "package_name": "com.example.wash_wow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtXC7cgXQrdafRn0Lggk07o_KzGtBEAzo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

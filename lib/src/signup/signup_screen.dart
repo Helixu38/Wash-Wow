@@ -21,8 +21,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final PlacesService placesService = PlacesService();
   List<Prediction> predictions = [];
 
-  bool isChecked = false; //checkbox
-
   void fetchPlacePredictions(String query) async {
     predictions = await placesService.fetchPlacePredictions(query);
     setState(() {});
@@ -46,7 +44,6 @@ class _SignupScreenState extends State<SignupScreen> {
   String passwordError = '';
   String phoneNumberError = '';
   String addressError = '';
-  String termAndConditionError = '';
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -135,7 +132,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nguyễn Văn A',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(
+                                color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -173,7 +171,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'nguyenvana@gmail.com',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(
+                                color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -189,6 +188,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           color: const Color.fromRGBO(4, 90, 208, 1),
                         ),
                       ),
+                      //TO DO : add re-enter password field
                       if (passwordError.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(bottom: 5),
@@ -212,7 +212,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nhập mật khẩu của bạn.',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(
+                                color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -250,7 +251,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nhập số điện thoại của bạn.',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(
+                                color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -297,7 +299,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nhập địa chỉ của bạn.',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(
+                                color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -334,7 +337,6 @@ class _SignupScreenState extends State<SignupScreen> {
                               passwordError = '';
                               phoneNumberError = '';
                               addressError = '';
-                              termAndConditionError = '';
                             });
 
                             // Validate and set error messages
@@ -364,11 +366,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             }
                             if (addressController.text.isEmpty) {
                               addressError = 'Vui lòng nhập địa chỉ';
-                              isValid = false;
-                            }
-                            if (!isChecked) {
-                              termAndConditionError =
-                                  'Vui lòng chấp nhận điều khoản';
                               isValid = false;
                             }
 
@@ -419,40 +416,13 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       const SizedBox(height: 23),
-                      if (!isChecked)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Center(
-                            child: Text(
-                              termAndConditionError,
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Transform.scale(
-                            scale: 1.5,
-                            child: Checkbox(
-                              side: BorderSide(
-                                  color: Color.fromRGBO(4, 90, 208, 1)),
-                              activeColor: Color.fromRGBO(4, 90, 208, 1),
-                              checkColor: Colors.white,
-                              value: isChecked,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  isChecked = value!;
-                                });
-                              },
-                            ),
-                          ),
                           RichText(
+                            textAlign: TextAlign.center,
                             text: TextSpan(
-                              text: 'Đồng ý với ',
+                              text: 'Bằng cách nhấp vào đăng kí bạn đồng ý với\n',
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14,
@@ -508,40 +478,203 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: const [
                                                         Text(
-                                                          '1. Người dùng đồng ý tuân thủ các quy định về bảo mật thông tin và không chia sẻ tài khoản của mình cho người khác.',
+                                                          'Chào mừng bạn đến với Wash&Wow! Khi bạn sử dụng dịch vụ của chúng tôi, bạn đồng ý với các điều khoản sử dụng dưới đây. Chúng tôi khuyến khích bạn đọc kỹ trước khi sử dụng để đảm bảo quyền lợi của bạn.',
                                                           style: TextStyle(
                                                               fontSize: 16,
                                                               height: 1.5),
                                                         ),
-                                                        SizedBox(height: 10),
-                                                        Text(
-                                                          '2. Người dùng chịu trách nhiệm về thông tin cá nhân đã cung cấp và các hoạt động thực hiện trên nền tảng.',
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              height: 1.5),
+                                                        TermSection(
+                                                          title:
+                                                              '1. Trách Nhiệm Của Wash&Wow',
+                                                          content: [
+                                                            SubSection(
+                                                                title:
+                                                                    '1.1 Cam Kết Cung Cấp Dịch Vụ'),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Text(
+                                                              'Wash&Wow cam kết cung cấp nền tảng đặt lịch giặt sấy và các dịch vụ liên quan đúng hạn và đảm bảo chất lượng. Chúng tôi cố gắng hết sức để đảm bảo sự chính xác trong thông tin dịch vụ và cửa hàng.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            SubSection(
+                                                                title:
+                                                                    '1.2 Không Chịu Trách Nhiệm Về Hành Vi Của Các Đối Tác'),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Text(
+                                                              'Chúng tôi không can thiệp vào quá trình vận hành và chất lượng dịch vụ của các cửa hàng giặt sấy đối tác. Wash&Wow không chịu trách nhiệm cho các vấn đề phát sinh do cửa hàng đối tác cung cấp dịch vụ không đạt yêu cầu.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            SubSection(
+                                                                title:
+                                                                    '1.3 Hỗ Trợ Khách Hàng'),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Text(
+                                                              'Chúng tôi cung cấp kênh hỗ trợ thông qua ứng dụng và trang web để giải đáp mọi thắc mắc và hỗ trợ kịp thời cho người dùng.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                          ],
                                                         ),
-                                                        SizedBox(height: 10),
-                                                        Text(
-                                                          '3. Công ty có quyền cập nhật các điều khoản này mà không cần thông báo trước. Người dùng cần thường xuyên kiểm tra các điều khoản để đảm bảo nắm rõ các thay đổi mới nhất.',
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              height: 1.5),
+                                                        TermSection(
+                                                          title:
+                                                              '2. Trách Nhiệm Của Khách Hàng',
+                                                          content: [
+                                                            SubSection(
+                                                                title:
+                                                                    '2.1 Tuân Thủ Pháp Luật'),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Text(
+                                                              'Khách hàng phải tuân thủ các quy định của pháp luật Việt Nam trong suốt quá trình sử dụng dịch vụ của Wash&Wow.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            SubSection(
+                                                                title:
+                                                                    '2.2 Cung Cấp Thông Tin Chính Xác'),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Text(
+                                                              'Khách hàng có trách nhiệm cung cấp thông tin chính xác khi đăng ký tài khoản và đặt dịch vụ, bao gồm họ tên, địa chỉ, và thông tin liên lạc. Nếu có sự thay đổi, khách hàng cần cập nhật kịp thời để đảm bảo không gián đoạn dịch vụ.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            SubSection(
+                                                                title:
+                                                                    '2.3 Bảo Quản Dữ Liệu Và Bảo Mật Thông Tin'),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Text(
+                                                              'Khách hàng chịu trách nhiệm bảo mật thông tin đăng nhập và tài khoản của mình. Nếu phát hiện có truy cập trái phép, vui lòng thông báo ngay cho chúng tôi để được hỗ trợ kịp thời.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                          ],
                                                         ),
-                                                        SizedBox(height: 10),
-                                                        Text(
-                                                          '4. Nếu người dùng vi phạm các điều khoản và điều kiện, công ty có quyền tạm ngừng hoặc chấm dứt tài khoản của người dùng mà không cần thông báo trước.',
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              height: 1.5),
+                                                        TermSection(
+                                                          title:
+                                                              '3. Các Hình Thức Sử Dụng Không Được Chấp Nhận',
+                                                          content: [
+                                                            Text(
+                                                              'Khách hàng không được phép:\nSử dụng dịch vụ của Wash&Wow để gây tổn hại, xâm nhập trái phép hệ thống của chúng tôi hoặc các đối tác.\nPhát tán các mã độc, virus hay thực hiện các hành vi phá hoại khác.\nCung cấp hoặc phát tán nội dung vi phạm pháp luật.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                          ],
                                                         ),
-                                                        SizedBox(height: 10),
-                                                        Text(
-                                                          '5. Người dùng đồng ý rằng công ty không chịu trách nhiệm về bất kỳ thiệt hại nào phát sinh từ việc sử dụng dịch vụ của chúng tôi.',
-                                                          style: TextStyle(
-                                                              fontSize: 16,
-                                                              height: 1.5),
+                                                        TermSection(
+                                                          title:
+                                                              '4. Thanh Toán Và Hoàn Trả',
+                                                          content: [
+                                                            SubSection(
+                                                                title:
+                                                                    '4.1 Thanh Toán'),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Text(
+                                                              'Khách hàng phải thanh toán đầy đủ các khoản phí theo quy định khi sử dụng dịch vụ. Thông tin chi phí sẽ được hiển thị rõ ràng trước khi đặt lịch giặt sấy.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            SubSection(
+                                                                title:
+                                                                    '4.2 Chính Sách Hoàn Trả'),
+                                                            SizedBox(
+                                                                height: 10),
+                                                            Text(
+                                                              'Chúng tôi sẽ hoàn tiền trong các trường hợp sau:\nWash&Wow ngừng cung cấp dịch vụ sau khi khách hàng đã thanh toán.\nDịch vụ không được cung cấp trong vòng 48 giờ kể từ khi đặt hàng.\nTrường hợp lỗi không thuộc về Wash&Wow hoặc do cửa hàng đối tác cung cấp không đảm bảo, chúng tôi không chịu trách nhiệm hoàn tiền.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                          ],
                                                         ),
-                                                        SizedBox(height: 20),
+                                                        TermSection(
+                                                          title:
+                                                              '5. Ngừng Cung Cấp Dịch Vụ',
+                                                          content: [
+                                                            Text(
+                                                              'Wash&Wow có quyền ngừng cung cấp dịch vụ nếu khách hàng vi phạm các điều khoản sau:\nCung cấp thông tin sai lệch, gây tổn hại cho hệ thống hoặc đối tác.\nVi phạm các quy định liên quan đến an toàn và bảo mật dịch vụ.\nKhông thanh toán chi phí sau khi đã quá hạn.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                          ],
+                                                        ),
+                                                        TermSection(
+                                                          title:
+                                                              '6. Thay Đổi Điều Khoản Sử Dụng',
+                                                          content: [
+                                                            Text(
+                                                              'Chúng tôi có thể điều chỉnh và cập nhật điều khoản sử dụng khi cần thiết. Mọi thay đổi sẽ được công bố trên trang web và ứng dụng của Wash&Wow, và có hiệu lực ngay sau khi công bố.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                          ],
+                                                        ),
+                                                        TermSection(
+                                                          title:
+                                                              '7. Chính Sách Bảo Mật Thông Tin',
+                                                          content: [
+                                                            Text(
+                                                              'Chúng tôi cam kết bảo vệ thông tin cá nhân của khách hàng và không chia sẻ cho bất kỳ bên thứ ba nào mà không có sự đồng ý của bạn, trừ trường hợp pháp luật yêu cầu.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                          ],
+                                                        ),
+                                                        TermSection(
+                                                          title:
+                                                              '8. Hỗ Trợ Và Khiếu Nại',
+                                                          content: [
+                                                            Text(
+                                                              'Mọi thắc mắc hoặc khiếu nại liên quan đến việc sử dụng dịch vụ của Wash&Wow, xin vui lòng liên hệ với chúng tôi qua hello.washnwow@gmail.com. Chúng tôi cam kết phản hồi trong vòng 24 giờ làm việc.',
+                                                              style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  height: 1.5),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 10),
+                                                          ],
+                                                        ),
                                                       ],
                                                     ),
                                                   ),
@@ -624,8 +757,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                LoginScreen(),
+                                            builder: (context) => LoginScreen(),
                                           ));
                                     },
                                 ),
@@ -642,6 +774,60 @@ class _SignupScreenState extends State<SignupScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class TermSection extends StatelessWidget {
+  final String title;
+  final List<Widget> content;
+
+  const TermSection({
+    Key? key,
+    required this.title,
+    required this.content,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            height: 1.5,
+            color: Color.fromRGBO(4, 90, 208, 1),
+          ),
+        ),
+        const SizedBox(height: 10),
+        ...content,
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+}
+
+class SubSection extends StatelessWidget {
+  final String title;
+
+  const SubSection({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        height: 1.5,
+        color: Color.fromRGBO(4, 90, 208, 1),
       ),
     );
   }
