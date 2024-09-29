@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'nguyenvana@gmail.com',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(color: const Color.fromRGBO(208, 207, 207, 1)),
                         contentPadding: const EdgeInsets.all(10),
                       ),
                     ),
@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Nhập mật khẩu của bạn.',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(color: const Color.fromRGBO(208, 207, 207, 1)),
                         contentPadding: const EdgeInsets.all(10),
                       ),
                     ),

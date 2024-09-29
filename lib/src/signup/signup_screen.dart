@@ -135,7 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nguyễn Văn A',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -173,7 +173,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'nguyenvana@gmail.com',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -212,7 +212,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nhập mật khẩu của bạn.',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -250,7 +250,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nhập số điện thoại của bạn.',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
@@ -297,7 +297,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Nhập địa chỉ của bạn.',
-                            hintStyle: TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
                           ),
                         ),
