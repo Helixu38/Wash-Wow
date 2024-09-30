@@ -197,7 +197,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
 
                           if (role != null) {
-                            // Navigate to the appropriate screen based on user role
                             if (role == "ShopOwner") {
                               Navigator.pushReplacement(
                                 context,

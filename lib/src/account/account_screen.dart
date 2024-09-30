@@ -23,7 +23,7 @@ class _AccountScreenState extends State<AccountScreen> {
     return Scaffold(
       body: FutureBuilder<String?>(
         future:
-            authService.getUserName(), // Fetch the user's name asynchronously
+            authService.getUserName(), 
         builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for data, show a loading spinner
