@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:profile_photo/profile_photo.dart';
 import 'package:wash_wow/src/services/auth_service.dart';
 import 'dart:math' as math;
+import "../services/extension/string_extension.dart";
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({super.key});
@@ -78,7 +79,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                userName,
+                userName.capitalize(),
                 style: GoogleFonts.lato(
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
