@@ -28,7 +28,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   //Widget for top app bar
   PreferredSizeWidget buildTopNavBar() {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(100.0),
+      preferredSize: const Size.fromHeight(80.0),
       child: FutureBuilder<String?>(
         future: authService.getUserName(),
         builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
@@ -114,10 +114,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   //Widget for content
   Widget buildContent() {
-    return Column(
-      children: [
-        buildListViewImage("Khuyến Mãi"),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      child: Column(
+        children: [
+          const SizedBox(height: 10),
+          buildListViewImage("Khuyến Mãi"),
+          const SizedBox(height: 20),
+          buildListServices("Dịch vụ"),
+          const SizedBox(height: 20),
+          buildListServices("Dịch vụ"),
+        ],
+      ),
     );
   }
 
@@ -202,5 +210,90 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       ),
     );
   }
+
+  //Services List View
+  Widget buildListServices(String title) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.lato(
+                fontWeight: FontWeight.w900,
+                fontSize: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    print('Xem thêm clicked');
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        "xem thêm",
+                        style: GoogleFonts.lato(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Transform.rotate(
+                        angle: 270 * math.pi / 180, // Rotating icon
+                        child: Icon(
+                          Icons.expand_more,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 100,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: <Widget>[
+              const SizedBox(width: 15),
+              buildListViewContentImage(146, 214, "test"),
+              const SizedBox(width: 15),
+              buildListViewContentImage(46, 214, "test"),
+              const SizedBox(width: 15),
+              buildListViewContentImage(146, 214, "test"),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildListViewServicesContent(
+      double height, double width, String content) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(
+        top: Radius.circular(30),
+        bottom: Radius.circular(30),
+      ),
+      child: Container(
+        height: height,
+        width: width,
+        color: Colors.amber[600],
+        child: Center(
+          child: Text(content, style: const TextStyle(color: Colors.white)),
+        ),
+      ),
+    );
+  }
+  //Services List View
+
   //Widget for content
 }
