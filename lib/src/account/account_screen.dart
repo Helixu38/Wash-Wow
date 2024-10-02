@@ -22,8 +22,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<String?>(
-        future:
-            authService.getUserName(), 
+        future: authService.getUserName(),
         builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for data, show a loading spinner
@@ -172,6 +171,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             }
                           },
                         ),
+                        const SizedBox(height: 30),
                       ],
                     ),
                   ],
