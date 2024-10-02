@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:profile_photo/profile_photo.dart';
 import 'package:wash_wow/src/services/auth_service.dart';
 import 'dart:math' as math;
@@ -265,12 +266,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: <Widget>[
-              const SizedBox(width: 15),
-              buildListViewServicesContent("Giặt thường", Icons.local_laundry_service),
-              const SizedBox(width: 15),
-              buildListViewServicesContent("Giặt sấy" , Icons.dry_cleaning),
-              const SizedBox(width: 15),
-              buildListViewServicesContent("Giặt giày" , FontAwesomeIcons.shoePrints),
+              const SizedBox(width: 20),
+              buildListViewServicesContent("Giặt thường", MdiIcons.cupWater),
+              const SizedBox(width: 20),
+              buildListViewServicesContent("Giặt sấy", MdiIcons.tumbleDryer),
+              const SizedBox(width: 20),
+              buildListViewServicesContent("Giặt giày", MdiIcons.shoeFormal),
+              const SizedBox(width: 20),
+              buildListViewServicesContent("Giặt chăn", MdiIcons.bedEmpty),
+              const SizedBox(width: 20),
+              buildListViewServicesContent("Giặt khô", MdiIcons.hairDryerOutline),
+              const SizedBox(width: 20),
+              buildListViewServicesContent("Giặt tẩy", MdiIcons.washingMachine),
             ],
           ),
         ),
@@ -282,7 +289,16 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Widget buildListViewServicesContent(String content, IconData icon) {
     return Column(
       children: [
-        Icon(icon), // Use the provided icon argument
+        Container(
+          width: 70, 
+          height: 70, 
+          child: Icon(
+            icon,
+            size: 70, 
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        SizedBox(height: 8), 
         Text(
           content,
           style: GoogleFonts.lato(
@@ -290,6 +306,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             fontSize: 14,
             color: Colors.black,
           ),
+          textAlign: TextAlign.center, // Center align the text
         ),
       ],
     );
