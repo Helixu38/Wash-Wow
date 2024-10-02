@@ -122,17 +122,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       child: Column(
         children: [
           const SizedBox(height: 10),
-          buildListViewImage("Khuyến Mãi"),
+          buildListViewDiscount("Khuyến Mãi"),
           const SizedBox(height: 20),
           buildListServices("Dịch vụ"),
           const SizedBox(height: 20),
-          buildListViewImage("Cửa hàng gần bạn"),
+          buildListViewStore("Cửa hàng gần bạn"),
         ],
       ),
     );
   }
 
-  Widget buildListViewImage(String title) {
+  Widget buildListViewDiscount(String title) {
     return Column(
       children: [
         Row(
@@ -213,7 +213,90 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       ),
     );
   }
+  //Store list view
 
+  //Store list view
+  Widget buildListViewStore(String title) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.lato(
+                fontWeight: FontWeight.w900,
+                fontSize: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    print('Xem thêm clicked');
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        "xem thêm",
+                        style: GoogleFonts.lato(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Transform.rotate(
+                        angle: 270 * math.pi / 180, // Rotating icon
+                        child: Icon(
+                          Icons.expand_more,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 100,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: <Widget>[
+              const SizedBox(width: 15),
+              buildListViewContentStore(146, 214, "test"),
+              const SizedBox(width: 15),
+              buildListViewContentStore(46, 214, "test"),
+              const SizedBox(width: 15),
+              buildListViewContentStore(146, 214, "test"),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildListViewContentStore(
+      double height, double width, String content) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(
+        top: Radius.circular(30),
+        bottom: Radius.circular(30),
+      ),
+      child: Container(
+        height: height,
+        width: width,
+        color: Colors.amber[600],
+        child: Center(
+          child: Text(content, style: const TextStyle(color: Colors.white)),
+        ),
+      ),
+    );
+  }
   //Services List View
   Widget buildListServices(String title) {
     return Column(
@@ -275,7 +358,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               const SizedBox(width: 20),
               buildListViewServicesContent("Giặt chăn", MdiIcons.bedEmpty),
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt khô", MdiIcons.hairDryerOutline),
+              buildListViewServicesContent(
+                  "Giặt khô", MdiIcons.hairDryerOutline),
               const SizedBox(width: 20),
               buildListViewServicesContent("Giặt tẩy", MdiIcons.washingMachine),
             ],
@@ -285,20 +369,19 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  //TO DO : Update service to match with design
   Widget buildListViewServicesContent(String content, IconData icon) {
     return Column(
       children: [
         Container(
-          width: 70, 
-          height: 70, 
+          width: 70,
+          height: 70,
           child: Icon(
             icon,
-            size: 70, 
+            size: 70,
             color: Theme.of(context).primaryColor,
           ),
         ),
-        SizedBox(height: 8), 
+        SizedBox(height: 8),
         Text(
           content,
           style: GoogleFonts.lato(
