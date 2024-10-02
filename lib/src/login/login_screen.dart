@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/src/forget-password/forget_password.dart';
 import 'package:wash_wow/src/signup/signup_screen.dart';
-import 'package:wash_wow/src/services/auth_service.dart';
+import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/home-page/home_page.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -149,7 +149,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              // Handle tap action, such as navigating to the "Forgot Password" screen
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

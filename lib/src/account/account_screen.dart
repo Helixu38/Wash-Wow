@@ -6,7 +6,7 @@ import 'dart:math' as math;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wash_wow/form/shop_register_form.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
-import 'package:wash_wow/src/services/auth_service.dart';
+import 'package:wash_wow/src/utility/auth_service.dart';
 
 class AccountScreen extends StatefulWidget {
   AccountScreen({super.key});
@@ -22,8 +22,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<String?>(
-        future:
-            authService.getUserName(), 
+        future: authService.getUserName(),
         builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for data, show a loading spinner
@@ -172,6 +171,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             }
                           },
                         ),
+                        const SizedBox(height: 30),
                       ],
                     ),
                   ],

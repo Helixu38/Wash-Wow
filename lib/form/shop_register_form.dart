@@ -8,8 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_spinbox/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wash_wow/src/account/account_screen.dart';
-import 'package:wash_wow/src/services/auth_service.dart';
-import 'package:wash_wow/src/services/model/store_details.dart';
+import 'package:wash_wow/src/utility/auth_service.dart';
+import 'package:wash_wow/src/utility/model/store_details.dart';
 
 class ShopRegisterForm extends StatefulWidget {
   const ShopRegisterForm({super.key});
