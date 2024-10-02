@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/extension/string_extension.dart';
 
+
 class ShopOwnerHomeScreen extends StatefulWidget {
   const ShopOwnerHomeScreen({super.key});
 
@@ -91,7 +92,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
         children: [
           buildShopBalance(10000),
           const SizedBox(height: 20),
-          buildShopRevenue(120000),
+          buildShopRevenue(1500000,1250000),
         ],
       ),
     );
@@ -137,78 +138,129 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
     );
   }
 
-  Widget buildShopRevenue(double shopRevenue) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.vertical(
-        top: Radius.circular(13),
-        bottom: Radius.circular(13),
+  Widget buildShopRevenue(double shopRevenue , double shopPastRevenue) {
+    final formattedRevenue = formatCurrency(shopRevenue);
+    final formattedPastRevenue = formatCurrency(shopPastRevenue);
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(12),
       ),
-      child: SizedBox(
-        height: 103, // Height of the main container
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-          decoration: BoxDecoration(
-            color:
-                Theme.of(context).primaryColor.withOpacity(0.25), // 25% opacity
-          ),
-          child: Stack(
-            children: [
-              // Main content
-              Row(
-                children: [
-                  Icon(MdiIcons.walletBifold,
-                      color: Theme.of(context).primaryColor),
-                  const SizedBox(width: 5),
-                  Text(
-                    "$shopRevenueđ",
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor, // Text color
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Transform.rotate(
-                    angle: 270 * math.pi / 180, // Rotating icon
-                    child: Icon(
-                      Icons.expand_more,
-                      color: Theme.of(context).primaryColor,
-                      size: 30,
-                    ),
-                  ),
-                ],
+      width: double.maxFinite,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              elevation: 0,
+              margin: EdgeInsets.zero,
+              color: Color(0XFF0255C7),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
               ),
-              // Pattern containers
-              Positioned(
-                bottom: 0, // Align them at the bottom
-                child: Row(
-                  children: [
-                    Container(
-                      height: 103, // Match the height of the parent
-                      width: 30, // Slightly smaller width
-                      color: Colors.red
-                          .withOpacity(0.5), // Color for the first container
-                    ),
-                    const SizedBox(width: 5), // Space between containers
-                    Container(
-                      height: 103, // Match the height of the parent
-                      width: 35, // Slightly smaller width
-                      color: Colors.green
-                          .withOpacity(0.5), // Color for the second container
-                    ),
-                    const SizedBox(width: 5), // Space between containers
-                    Container(
-                      height: 103, // Match the height of the parent
-                      width: 40, // Slightly smaller width
-                      color: Colors.blue
-                          .withOpacity(0.5), // Color for the third container
-                    ),
-                  ],
+              child: Container(
+                  height: 114,
+                  padding: EdgeInsets.symmetric(horizontal: 6),
+                  decoration: BoxDecoration(
+                    color: Color(0XFF0255C7),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 22,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Color(0XFF0853BB),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 8),
+                            Text(
+                              "Doanh thu hôm nay",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 4),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "đ",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(width: 6),
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 2),
+                                      child: Text(
+                                        formattedRevenue,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 28,
+                                          ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.only(left:10,top: 36),
+                        child: Icon(
+                          size:30,
+                          MdiIcons.walletBifold,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+          ),
+          Text(
+            "đ",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Hôm qua",
+                style: TextStyle(
+                  color: Colors.white,
                 ),
               ),
+              Text(
+                formattedPastRevenue,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              )
             ],
           ),
-        ),
+          const SizedBox(width: 10),
+        ],
       ),
     );
   }
