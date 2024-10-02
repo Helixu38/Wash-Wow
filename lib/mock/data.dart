@@ -59,7 +59,7 @@ final List<Service> services = [
     content: 'Giặt khô',
     icon: MdiIcons.hairDryerOutline,
     onTap: (context) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ServicesScreen()),
       );
@@ -70,7 +70,7 @@ final List<Service> services = [
     content: 'Giặt tẩy',
     icon: MdiIcons.washingMachine,
     onTap: (context) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ServicesScreen()),
       );
