@@ -124,7 +124,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           const SizedBox(height: 20),
           buildListServices("Dịch vụ"),
           const SizedBox(height: 20),
-          buildListServices("Dịch vụ"),
+          buildListViewImage("Cửa hàng gần bạn"),
         ],
       ),
     );
@@ -265,11 +265,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               const SizedBox(width: 15),
-              buildListViewContentImage(146, 214, "test"),
+              buildListViewServicesContent("Giặt thường", Icons.local_laundry_service),
               const SizedBox(width: 15),
-              buildListViewContentImage(46, 214, "test"),
+              buildListViewServicesContent("Giặt sấy" , Icons.dry_cleaning),
               const SizedBox(width: 15),
-              buildListViewContentImage(146, 214, "test"),
+              buildListViewServicesContent("Giặt giày" , FontAwesomeIcons.shoePrints),
             ],
           ),
         ),
@@ -277,23 +277,23 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  Widget buildListViewServicesContent(
-      double height, double width, String content) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.vertical(
-        top: Radius.circular(30),
-        bottom: Radius.circular(30),
-      ),
-      child: Container(
-        height: height,
-        width: width,
-        color: Colors.amber[600],
-        child: Center(
-          child: Text(content, style: const TextStyle(color: Colors.white)),
+  //TO DO : Update service to match with design
+  Widget buildListViewServicesContent(String content, IconData icon) {
+    return Column(
+      children: [
+        Icon(icon), // Use the provided icon argument
+        Text(
+          content,
+          style: GoogleFonts.lato(
+            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            color: Colors.black,
+          ),
         ),
-      ),
+      ],
     );
   }
+
   //Services List View
 
   //Widget for content
