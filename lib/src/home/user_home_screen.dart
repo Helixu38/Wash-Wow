@@ -61,8 +61,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  Widget buildUserProfile(
-      String userName, double userPoint) {
+  Widget buildUserProfile(String userName, double userPoint) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -283,37 +282,61 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         height: height,
         width: width,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(imageUrl),
-            fit: BoxFit.cover,
-          ),
+          color: Colors.grey[300], 
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: Stack(
+          fit: StackFit.expand,
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                margin: const EdgeInsets.only(left: 5),
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(MdiIcons.star, color: Colors.yellow),
-                    Text(
-                      rating.toString(),
-                      style: const TextStyle(
-                        color: Colors.black, // Text color
-                        fontSize: 14,
-                      ),
+            Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) {
+                  return child; // Image loaded
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              (loadingProgress.expectedTotalBytes ?? 1)
+                          : null,
                     ),
-                    const SizedBox(width: 10)
-                  ],
-                ).frosted(
-                blur: 5,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              ),
+                  ); // Show loading indicator
+                }
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Center(child: Icon(Icons.error)); // Error widget
+              },
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(MdiIcons.star, color: Colors.yellow),
+                        Text(
+                          rating.toString(),
+                          style: const TextStyle(
+                            color: Colors.black, // Text color
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(width: 10)
+                      ],
+                    ).frosted(
+                      blur: 5,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
