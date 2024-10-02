@@ -87,8 +87,11 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           buildShopBalance(10000),
+          const SizedBox(height: 20),
+          buildShopRevenue(120000),
         ],
       ),
     );
@@ -109,7 +112,8 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(MdiIcons.walletBifold, color: Theme.of(context).primaryColor),
+              Icon(MdiIcons.walletBifold,
+                  color: Theme.of(context).primaryColor),
               const SizedBox(width: 5),
               Text(
                 "$shopBalanceđ",
@@ -130,6 +134,82 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
               ),
             ],
           )),
+    );
+  }
+
+  Widget buildShopRevenue(double shopRevenue) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(
+        top: Radius.circular(13),
+        bottom: Radius.circular(13),
+      ),
+      child: SizedBox(
+        height: 103, // Height of the main container
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+          decoration: BoxDecoration(
+            color:
+                Theme.of(context).primaryColor.withOpacity(0.25), // 25% opacity
+          ),
+          child: Stack(
+            children: [
+              // Main content
+              Row(
+                children: [
+                  Icon(MdiIcons.walletBifold,
+                      color: Theme.of(context).primaryColor),
+                  const SizedBox(width: 5),
+                  Text(
+                    "$shopRevenueđ",
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor, // Text color
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Transform.rotate(
+                    angle: 270 * math.pi / 180, // Rotating icon
+                    child: Icon(
+                      Icons.expand_more,
+                      color: Theme.of(context).primaryColor,
+                      size: 30,
+                    ),
+                  ),
+                ],
+              ),
+              // Pattern containers
+              Positioned(
+                bottom: 0, // Align them at the bottom
+                child: Row(
+                  children: [
+                    Container(
+                      height: 103, // Match the height of the parent
+                      width: 30, // Slightly smaller width
+                      color: Colors.red
+                          .withOpacity(0.5), // Color for the first container
+                    ),
+                    const SizedBox(width: 5), // Space between containers
+                    Container(
+                      height: 103, // Match the height of the parent
+                      width: 35, // Slightly smaller width
+                      color: Colors.green
+                          .withOpacity(0.5), // Color for the second container
+                    ),
+                    const SizedBox(width: 5), // Space between containers
+                    Container(
+                      height: 103, // Match the height of the parent
+                      width: 40, // Slightly smaller width
+                      color: Colors.blue
+                          .withOpacity(0.5), // Color for the third container
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
