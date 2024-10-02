@@ -149,7 +149,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              // Handle tap action, such as navigating to the "Forgot Password" screen
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:profile_photo/profile_photo.dart';
+import 'package:wash_wow/src/service/services_screen.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'dart:math' as math;
 import "../utility/extension/string_extension.dart";
@@ -253,49 +254,49 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               const SizedBox(width: 15),
-          buildListViewContentStore(
-            118,
-            116,
-            4.9,
-            'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
-            () {
-              // Define the action when the item is tapped
-              print('Store 1 clicked');
-            },
-          ),
-          const SizedBox(width: 15),
-          buildListViewContentStore(
-            118,
-            116,
-            4.7,
-            'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
-            () {
-              // Define the action when the item is tapped
-              print('Store 2 clicked');
-            },
-          ),
-          const SizedBox(width: 15),
-          buildListViewContentStore(
-            118,
-            116,
-            3.6,
-            'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
-            () {
-              // Define the action when the item is tapped
-              print('Store 3 clicked');
-            },
-          ),
-          const SizedBox(width: 15),
-          buildListViewContentStore(
-            118,
-            116,
-            2.2,
-            'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
-            () {
-              // Define the action when the item is tapped
-              print('Store 4 clicked');
-            },
-          ),
+              buildListViewContentStore(
+                118,
+                116,
+                4.9,
+                'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+                () {
+                  // Define the action when the item is tapped
+                  print('Store 1 clicked');
+                },
+              ),
+              const SizedBox(width: 15),
+              buildListViewContentStore(
+                118,
+                116,
+                4.7,
+                'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+                () {
+                  // Define the action when the item is tapped
+                  print('Store 2 clicked');
+                },
+              ),
+              const SizedBox(width: 15),
+              buildListViewContentStore(
+                118,
+                116,
+                3.6,
+                'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+                () {
+                  // Define the action when the item is tapped
+                  print('Store 3 clicked');
+                },
+              ),
+              const SizedBox(width: 15),
+              buildListViewContentStore(
+                118,
+                116,
+                2.2,
+                'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+                () {
+                  // Define the action when the item is tapped
+                  print('Store 4 clicked');
+                },
+              ),
             ],
           ),
         ),
@@ -303,83 +304,80 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-Widget buildListViewContentStore(
-    double height, double width, double rating, String imageUrl, VoidCallback onTap) {
-  return GestureDetector(
-    onTap: onTap, 
-    child: ClipRRect(
-      borderRadius: const BorderRadius.vertical(
-        top: Radius.circular(18),
-        bottom: Radius.circular(18),
-      ),
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
+  Widget buildListViewContentStore(double height, double width, double rating,
+      String imageUrl, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(18),
+          bottom: Radius.circular(18),
         ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent? loadingProgress) {
-                if (loadingProgress == null) {
-                  return child; // Image loaded
-                } else {
-                  return Center(
-                    child: CircularProgressIndicator(
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child; // Image loaded
+                  } else {
+                    return Center(
+                        child: CircularProgressIndicator(
                       value: loadingProgress.expectedTotalBytes != null
                           ? loadingProgress.cumulativeBytesLoaded /
                               (loadingProgress.expectedTotalBytes ?? 1)
                           : null,
-                    )
-                   ); // Show loading indicator
-                }
-              },
-              errorBuilder: (context, error, stackTrace) {
-                return Center(child: Icon(Icons.error)); // Error widget
-              },
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 5),
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(MdiIcons.star, color: Colors.yellow),
-                        Text(
-                          rating.toString(),
-                          style: const TextStyle(
-                            color: Colors.black, // Text color
-                            fontSize: 14,
+                    )); // Show loading indicator
+                  }
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Center(child: Icon(Icons.error)); // Error widget
+                },
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(MdiIcons.star, color: Colors.yellow),
+                          Text(
+                            rating.toString(),
+                            style: const TextStyle(
+                              color: Colors.black, // Text color
+                              fontSize: 14,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                      ],
-                    ).frosted(
-                      blur: 5,
-                      borderRadius: BorderRadius.circular(8.0),
+                          const SizedBox(width: 10),
+                        ],
+                      ).frosted(
+                        blur: 5,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
-
-
+    );
+  }
 
   //Services List View
   Widget buildListServices(String title) {
@@ -434,29 +432,51 @@ Widget buildListViewContentStore(
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt thường", MdiIcons.cupWater, (){
-                print("Giặt thường is pressed");
+              buildListViewServicesContent("Giặt thường", MdiIcons.cupWater,
+                  () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ServicesScreen()),
+                );
               }),
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt sấy", MdiIcons.tumbleDryer,(){
-                print("Giặt sấy is pressed");
+              buildListViewServicesContent("Giặt sấy", MdiIcons.tumbleDryer,
+                  () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ServicesScreen()),
+                );
               }),
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt giày", MdiIcons.shoeFormal,(){
-                print("Giặt giày is pressed");
+              buildListViewServicesContent("Giặt giày", MdiIcons.shoeFormal,
+                  () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ServicesScreen()),
+                );
               }),
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt chăn", MdiIcons.bedEmpty,(){
-                print("Giặt chăn is pressed");
+              buildListViewServicesContent("Giặt chăn", MdiIcons.bedEmpty, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ServicesScreen()),
+                );
               }),
               const SizedBox(width: 20),
               buildListViewServicesContent(
-                  "Giặt khô", MdiIcons.hairDryerOutline,(){
-                print("Giặt khô is pressed");
+                  "Giặt khô", MdiIcons.hairDryerOutline, () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => ServicesScreen()),
+                );
               }),
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt tẩy", MdiIcons.washingMachine,(){
-                print("Giặt tẩy is pressed");
+              buildListViewServicesContent("Giặt tẩy", MdiIcons.washingMachine,
+                  () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => ServicesScreen()),
+                );
               }),
             ],
           ),
@@ -465,7 +485,8 @@ Widget buildListViewContentStore(
     );
   }
 
-  Widget buildListViewServicesContent(String content, IconData icon , VoidCallback onTap) {
+  Widget buildListViewServicesContent(
+      String content, IconData icon, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
