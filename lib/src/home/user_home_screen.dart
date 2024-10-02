@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:profile_photo/profile_photo.dart';
+import 'package:wash_wow/mock/data.dart';
 import 'package:wash_wow/src/service/services_screen.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'dart:math' as math;
 import "../utility/extension/string_extension.dart";
 import 'package:blur/blur.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({super.key});
@@ -322,26 +324,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.network(
-                imageUrl,
+              CachedNetworkImage(
+                imageUrl: imageUrl,
                 fit: BoxFit.cover,
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child; // Image loaded
-                  } else {
-                    return Center(
-                        child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              (loadingProgress.expectedTotalBytes ?? 1)
-                          : null,
-                    )); // Show loading indicator
-                  }
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Center(child: Icon(Icons.error)); // Error widget
-                },
+                placeholder: (context, url) =>
+                    Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                    Center(child: Icon(Icons.error)),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -430,55 +419,16 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           height: 100,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt thường", MdiIcons.cupWater,
-                  () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ServicesScreen()),
-                );
-              }),
-              const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt sấy", MdiIcons.tumbleDryer,
-                  () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ServicesScreen()),
-                );
-              }),
-              const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt giày", MdiIcons.shoeFormal,
-                  () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ServicesScreen()),
-                );
-              }),
-              const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt chăn", MdiIcons.bedEmpty, () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ServicesScreen()),
-                );
-              }),
-              const SizedBox(width: 20),
-              buildListViewServicesContent(
-                  "Giặt khô", MdiIcons.hairDryerOutline, () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => ServicesScreen()),
-                );
-              }),
-              const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt tẩy", MdiIcons.washingMachine,
-                  () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => ServicesScreen()),
-                );
-              }),
-            ],
+            children: services.map((service) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: GestureDetector(
+                  onTap: () => service.onTap(context), 
+                  child: buildListViewServicesContent(
+                      service.content, service.icon, service.onTap),
+                ),
+              );
+            }).toList(),
           ),
         ),
       ],
@@ -486,9 +436,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Widget buildListViewServicesContent(
-      String content, IconData icon, VoidCallback onTap) {
+      String content, IconData icon, void Function(BuildContext) onTap) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => onTap(context),
       child: Column(
         children: [
           Container(
