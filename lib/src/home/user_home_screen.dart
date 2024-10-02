@@ -253,17 +253,49 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               const SizedBox(width: 15),
-              buildListViewContentStore(118, 116, 4.9,
-                  'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035'),
-              const SizedBox(width: 15),
-              buildListViewContentStore(118, 116, 4.7,
-                  'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035'),
-              const SizedBox(width: 15),
-              buildListViewContentStore(118, 116, 3.6,
-                  'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035'),
-              const SizedBox(width: 15),
-              buildListViewContentStore(118, 116, 2.2,
-                  'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035'),
+          buildListViewContentStore(
+            118,
+            116,
+            4.9,
+            'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+            () {
+              // Define the action when the item is tapped
+              print('Store 1 clicked');
+            },
+          ),
+          const SizedBox(width: 15),
+          buildListViewContentStore(
+            118,
+            116,
+            4.7,
+            'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+            () {
+              // Define the action when the item is tapped
+              print('Store 2 clicked');
+            },
+          ),
+          const SizedBox(width: 15),
+          buildListViewContentStore(
+            118,
+            116,
+            3.6,
+            'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+            () {
+              // Define the action when the item is tapped
+              print('Store 3 clicked');
+            },
+          ),
+          const SizedBox(width: 15),
+          buildListViewContentStore(
+            118,
+            116,
+            2.2,
+            'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+            () {
+              // Define the action when the item is tapped
+              print('Store 4 clicked');
+            },
+          ),
             ],
           ),
         ),
@@ -271,9 +303,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  Widget buildListViewContentStore(
-      double height, double width, double rating, String imageUrl) {
-    return ClipRRect(
+Widget buildListViewContentStore(
+    double height, double width, double rating, String imageUrl, VoidCallback onTap) {
+  return GestureDetector(
+    onTap: onTap, 
+    child: ClipRRect(
       borderRadius: const BorderRadius.vertical(
         top: Radius.circular(18),
         bottom: Radius.circular(18),
@@ -282,7 +316,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         height: height,
         width: width,
         decoration: BoxDecoration(
-          color: Colors.grey[300], 
+          color: Colors.grey[300],
         ),
         child: Stack(
           fit: StackFit.expand,
@@ -301,8 +335,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           ? loadingProgress.cumulativeBytesLoaded /
                               (loadingProgress.expectedTotalBytes ?? 1)
                           : null,
-                    ),
-                  ); // Show loading indicator
+                    )
+                   ); // Show loading indicator
                 }
               },
               errorBuilder: (context, error, stackTrace) {
@@ -328,7 +362,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             fontSize: 14,
                           ),
                         ),
-                        const SizedBox(width: 10)
+                        const SizedBox(width: 10),
                       ],
                     ).frosted(
                       blur: 5,
@@ -341,8 +375,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 
   //Services List View
   Widget buildListServices(String title) {
@@ -397,18 +434,30 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt thường", MdiIcons.cupWater),
+              buildListViewServicesContent("Giặt thường", MdiIcons.cupWater, (){
+                print("Giặt thường is pressed");
+              }),
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt sấy", MdiIcons.tumbleDryer),
+              buildListViewServicesContent("Giặt sấy", MdiIcons.tumbleDryer,(){
+                print("Giặt sấy is pressed");
+              }),
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt giày", MdiIcons.shoeFormal),
+              buildListViewServicesContent("Giặt giày", MdiIcons.shoeFormal,(){
+                print("Giặt giày is pressed");
+              }),
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt chăn", MdiIcons.bedEmpty),
+              buildListViewServicesContent("Giặt chăn", MdiIcons.bedEmpty,(){
+                print("Giặt chăn is pressed");
+              }),
               const SizedBox(width: 20),
               buildListViewServicesContent(
-                  "Giặt khô", MdiIcons.hairDryerOutline),
+                  "Giặt khô", MdiIcons.hairDryerOutline,(){
+                print("Giặt khô is pressed");
+              }),
               const SizedBox(width: 20),
-              buildListViewServicesContent("Giặt tẩy", MdiIcons.washingMachine),
+              buildListViewServicesContent("Giặt tẩy", MdiIcons.washingMachine,(){
+                print("Giặt tẩy is pressed");
+              }),
             ],
           ),
         ),
@@ -416,29 +465,32 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  Widget buildListViewServicesContent(String content, IconData icon) {
-    return Column(
-      children: [
-        Container(
-          width: 70,
-          height: 70,
-          child: Icon(
-            icon,
-            size: 70,
-            color: Theme.of(context).primaryColor,
+  Widget buildListViewServicesContent(String content, IconData icon , VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            width: 70,
+            height: 70,
+            child: Icon(
+              icon,
+              size: 70,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
-        ),
-        SizedBox(height: 8),
-        Text(
-          content,
-          style: GoogleFonts.lato(
-            fontWeight: FontWeight.w400,
-            fontSize: 14,
-            color: Colors.black,
+          SizedBox(height: 8),
+          Text(
+            content,
+            style: GoogleFonts.lato(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center, // Center align the text
           ),
-          textAlign: TextAlign.center, // Center align the text
-        ),
-      ],
+        ],
+      ),
     );
   }
 
