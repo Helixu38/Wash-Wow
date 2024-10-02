@@ -6,7 +6,7 @@ import 'dart:math' as math;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wash_wow/form/shop_register_form.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
-import 'package:wash_wow/src/services/auth_service.dart';
+import 'package:wash_wow/src/utility/auth_service.dart';
 
 class AccountScreen extends StatefulWidget {
   AccountScreen({super.key});

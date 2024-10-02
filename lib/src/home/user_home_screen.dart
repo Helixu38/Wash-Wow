@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:profile_photo/profile_photo.dart';
-import 'package:wash_wow/src/services/auth_service.dart';
+import 'package:wash_wow/src/utility/auth_service.dart';
 import 'dart:math' as math;
-import "../services/extension/string_extension.dart";
+import "../utility/extension/string_extension.dart";
 import 'package:blur/blur.dart';
 
 class UserHomeScreen extends StatefulWidget {

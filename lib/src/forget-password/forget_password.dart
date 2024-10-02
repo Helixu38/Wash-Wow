@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/src/forget-password/reset_password.dart';
 import 'package:wash_wow/src/home-page/home_page.dart';
-import 'package:wash_wow/src/services/auth_service.dart';
+import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/signup/signup_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {

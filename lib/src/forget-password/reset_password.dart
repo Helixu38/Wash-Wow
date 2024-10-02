@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
-import 'package:wash_wow/src/services/auth_service.dart';
+import 'package:wash_wow/src/utility/auth_service.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
