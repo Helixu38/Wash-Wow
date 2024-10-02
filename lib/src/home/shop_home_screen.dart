@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:profile_photo/profile_photo.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'dart:math' as math;
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/extension/string_extension.dart';
 
@@ -18,6 +18,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildTopShopInformation(),
+      body: buildContent(),
     );
   }
 
@@ -57,7 +58,6 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(width: 10), // Space between image and name
         Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,5 +83,53 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
     );
   }
 
-  
+  Widget buildContent() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      child: Column(
+        children: [
+          buildShopBalance(10000),
+        ],
+      ),
+    );
+  }
+
+  Widget buildShopBalance(double shopBalance) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(
+        top: Radius.circular(30),
+        bottom: Radius.circular(30),
+      ),
+      child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+          decoration: BoxDecoration(
+            color:
+                Theme.of(context).primaryColor.withOpacity(0.25), // 25% opacity
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(MdiIcons.walletBifold, color: Theme.of(context).primaryColor),
+              const SizedBox(width: 5),
+              Text(
+                "$shopBalanceđ",
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor, // Text color
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Transform.rotate(
+                angle: 270 * math.pi / 180, // Rotating icon
+                child: Icon(
+                  Icons.expand_more,
+                  color: Theme.of(context).primaryColor,
+                  size: 30,
+                ),
+              ),
+            ],
+          )),
+    );
+  }
 }
