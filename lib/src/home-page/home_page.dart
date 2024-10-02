@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:wash_wow/src/account/account_screen.dart';
 import 'package:wash_wow/src/home/shop_home_screen.dart';
 import 'package:wash_wow/src/home/user_home_screen.dart';
+import 'package:wash_wow/src/notification/chat_screen.dart';
 import 'package:wash_wow/src/notification/notification_screen.dart';
+import 'package:wash_wow/src/order/finance_screen.dart';
 import 'package:wash_wow/src/order/order_screen.dart';
 
-class HomePage extends StatefulWidget {     
+class HomePage extends StatefulWidget {
   final String role;
   const HomePage({super.key, required this.role});
 
@@ -26,16 +29,28 @@ class _HomePageState extends State<HomePage> {
         if (widget.role == 'Customer') {
           currentScreen = UserHomeScreen();
         } else if (widget.role == 'ShopOwner') {
-          currentScreen = ShopOwnerHomeScreen(); // Add this line
+          currentScreen = ShopOwnerHomeScreen();
         } else {
-          currentScreen = UserHomeScreen(); // Fallback if the role is unknown
+          currentScreen = UserHomeScreen(); // Fallback
         }
         break;
       case 1:
-        currentScreen = OrderScreen();
+        if (widget.role == 'Customer') {
+          currentScreen = OrderScreen();
+        } else if (widget.role == 'ShopOwner') {
+          currentScreen = FinanceScreen();
+        } else {
+          currentScreen = OrderScreen(); // Fallback
+        }
         break;
       case 2:
-        currentScreen = NotificationScreen();
+        if (widget.role == 'Customer') {
+          currentScreen = NotificationScreen();
+        } else if (widget.role == 'ShopOwner') {
+          currentScreen = ChatScreen();
+        } else {
+          currentScreen = ChatScreen(); // Fallback
+        }
         break;
       case 3:
         currentScreen = AccountScreen();
@@ -65,32 +80,62 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Theme.of(context).primaryColor,
             indicatorColor: Colors.lightBlueAccent,
             selectedIndex: currentPageIndex,
-            destinations: const <NavigationDestination>[
-              NavigationDestination(
-                selectedIcon: Icon(Icons.home),
-                icon: Icon(Icons.home_outlined, color: Colors.white),
-                label: 'Trang chủ',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.notes, color: Colors.white),
-                selectedIcon: Icon(Icons.notes_outlined, color: Colors.white),
-                label: 'Đơn hàng',
-              ),
-              NavigationDestination(
-                icon: Badge(
-                    child: Icon(Icons.notifications_sharp, color: Colors.white)),
-                label: 'Thông báo',
-              ),
-              NavigationDestination(
-                selectedIcon:
-                    Icon(Icons.account_circle_outlined, color: Colors.white),
-                icon: Icon(Icons.account_circle_outlined, color: Colors.white),
-                label: 'Tài khoản',
-              ),
-            ],
+            destinations: _buildNavigationDestinations(widget.role),
           ),
         ),
       ),
     );
+  }
+
+  // Build navigation destinations based on the role
+  List<NavigationDestination> _buildNavigationDestinations(String role) {
+    if (role == 'Customer') {
+      return const [
+        NavigationDestination(
+          selectedIcon: Icon(Icons.home),
+          icon: Icon(Icons.home_outlined, color: Colors.white),
+          label: 'Trang chủ',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.notes, color: Colors.white),
+          selectedIcon: Icon(Icons.notes_outlined, color: Colors.white),
+          label: 'Đơn hàng',
+        ),
+        NavigationDestination(
+          icon: Badge(
+              child: Icon(Icons.notifications_sharp, color: Colors.white)),
+          label: 'Thông báo',
+        ),
+        NavigationDestination(
+          selectedIcon:
+              Icon(Icons.account_circle_outlined, color: Colors.white),
+          icon: Icon(Icons.account_circle_outlined, color: Colors.white),
+          label: 'Tài khoản',
+        ),
+      ];
+    } else if (role == 'ShopOwner') {
+      return [
+        const NavigationDestination(
+          selectedIcon: Icon(Icons.store),
+          icon: Icon(Icons.store_outlined, color: Colors.white),
+          label: 'Cửa hàng',
+        ),
+        NavigationDestination(
+          icon: Icon(MdiIcons.finance, color: Colors.white),
+          label: 'Tài chính',
+        ),
+        const NavigationDestination(
+          icon: Badge(child: Icon(Icons.mail, color: Colors.white)),
+          label: 'Hộp thư',
+        ),
+        const NavigationDestination(
+          selectedIcon:
+              Icon(Icons.account_circle_outlined, color: Colors.white),
+          icon: Icon(Icons.account_circle_outlined, color: Colors.white),
+          label: 'Tài khoản',
+        ),
+      ];
+    }
+    return const [];
   }
 }

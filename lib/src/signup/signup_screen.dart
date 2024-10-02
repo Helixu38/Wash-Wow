@@ -71,7 +71,7 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(height: 10),
               Text(
                 'ĐĂNG KÝ',
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
                   color: const Color.fromRGBO(4, 90, 208, 1),
@@ -79,17 +79,17 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               Text(
                 'Điền thông tin của quý khách phía bên dưới,',
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w200,
+                  fontWeight: FontWeight.w400,
                   color: const Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
               Text(
                 'hoặc đăng nhập bằng tài khoản mạng xã hội',
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                   color: const Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
@@ -104,7 +104,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       // Full Name Field
                       Text(
                         'Họ và tên',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -143,7 +143,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       // Email Field
                       Text(
                         'Địa chỉ Email',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -182,7 +182,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       // Password Field
                       Text(
                         'Mật khẩu',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -223,7 +223,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       // Phone Number Field
                       Text(
                         'Số điện thoại',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -262,7 +262,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       // Address Field
                       Text(
                         'Địa Chỉ',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -407,7 +407,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           child: Text(
                             'Đăng Ký',
-                            style: GoogleFonts.lato(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
@@ -729,7 +729,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           RichText(
                             text: TextSpan(
                               text: 'Bạn đã có tài khoản? ',
-                              style: GoogleFonts.lato(
+                              style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
                                 color: const Color.fromRGBO(119, 119, 119, 1),

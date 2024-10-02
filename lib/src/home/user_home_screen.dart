@@ -82,7 +82,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             children: [
               Text(
                 userName.capitalize(),
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
@@ -90,7 +90,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               ),
               Text(
                 'Điểm: $userPoint',
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
@@ -127,7 +127,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           children: [
             Text(
               title,
-              style: GoogleFonts.lato(
+              style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 20,
                 color: Theme.of(context).primaryColor,
@@ -143,7 +143,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     children: [
                       Text(
                         "xem thêm",
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
                           fontStyle: FontStyle.italic,
@@ -211,7 +211,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           children: [
             Text(
               title,
-              style: GoogleFonts.lato(
+              style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 20,
                 color: Theme.of(context).primaryColor,
@@ -227,7 +227,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     children: [
                       Text(
                         "xem thêm",
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
                           fontStyle: FontStyle.italic,
@@ -376,7 +376,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           children: [
             Text(
               title,
-              style: GoogleFonts.lato(
+              style: TextStyle(
                 fontWeight: FontWeight.w900,
                 fontSize: 20,
                 color: Theme.of(context).primaryColor,
@@ -392,7 +392,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     children: [
                       Text(
                         "xem thêm",
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
                           fontStyle: FontStyle.italic,
@@ -452,7 +452,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           SizedBox(height: 8),
           Text(
             content,
-            style: GoogleFonts.lato(
+            style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14,
               color: Colors.black,
