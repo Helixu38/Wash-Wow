@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:profile_photo/profile_photo.dart';
 import 'package:wash_wow/src/services/auth_service.dart';
 import 'dart:math' as math;
 import "../services/extension/string_extension.dart";
+import 'package:blur/blur.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({super.key});
@@ -48,10 +48,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           } else {
             String userName = snapshot.data ?? 'Unknown User';
             double userPoint = 2.222;
-            int notificationAmount = 1;
 
             return AppBar(
-              title: buildUserProfile(userName, userPoint, notificationAmount),
+              title: buildUserProfile(userName, userPoint),
               centerTitle: true,
               backgroundColor: Theme.of(context).primaryColor,
               shape: roundedRectangleBorder,
@@ -63,7 +62,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Widget buildUserProfile(
-      String userName, double userPoint, int notificationAmount) {
+      String userName, double userPoint) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -97,19 +96,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 ),
               ),
             ]),
-        Spacer(),
-        IconButton(
-          icon: Badge(
-            label: Text('$notificationAmount'),
-            child: const Icon(
-              Icons.notifications_none_sharp,
-              color: Colors.white,
-            ),
-          ),
-          onPressed: () {
-            print("Notification have been pressed");
-          },
-        )
       ],
     );
   }
@@ -121,11 +107,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Column(
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
           buildListViewDiscount("Khuyến Mãi"),
-          const SizedBox(height: 20),
+          const SizedBox(height: 25),
           buildListServices("Dịch vụ"),
-          const SizedBox(height: 20),
+          const SizedBox(height: 25),
           buildListViewStore("Cửa hàng gần bạn"),
         ],
       ),
@@ -268,11 +254,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               const SizedBox(width: 15),
-              buildListViewContentStore(146, 214, "test"),
+              buildListViewContentStore(118, 116, 4.9,
+                  'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035'),
               const SizedBox(width: 15),
-              buildListViewContentStore(46, 214, "test"),
+              buildListViewContentStore(118, 116, 4.7,
+                  'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035'),
               const SizedBox(width: 15),
-              buildListViewContentStore(146, 214, "test"),
+              buildListViewContentStore(118, 116, 3.6,
+                  'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035'),
+              const SizedBox(width: 15),
+              buildListViewContentStore(118, 116, 2.2,
+                  'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035'),
             ],
           ),
         ),
@@ -281,22 +273,54 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Widget buildListViewContentStore(
-      double height, double width, String content) {
+      double height, double width, double rating, String imageUrl) {
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(
-        top: Radius.circular(30),
-        bottom: Radius.circular(30),
+        top: Radius.circular(18),
+        bottom: Radius.circular(18),
       ),
       child: Container(
         height: height,
         width: width,
-        color: Colors.amber[600],
-        child: Center(
-          child: Text(content, style: const TextStyle(color: Colors.white)),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                margin: const EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(MdiIcons.star, color: Colors.yellow),
+                    Text(
+                      rating.toString(),
+                      style: const TextStyle(
+                        color: Colors.black, // Text color
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(width: 10)
+                  ],
+                ).frosted(
+                blur: 5,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
   //Services List View
   Widget buildListServices(String title) {
     return Column(
