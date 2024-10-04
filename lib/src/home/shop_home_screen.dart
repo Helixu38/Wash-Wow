@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/extension/string_extension.dart';
 
-
 class ShopOwnerHomeScreen extends StatefulWidget {
   const ShopOwnerHomeScreen({super.key});
 
@@ -92,7 +91,9 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
         children: [
           buildShopBalance(10000),
           const SizedBox(height: 20),
-          buildShopRevenue(1500000,1250000),
+          buildShopRevenue(1500000, 1250000),
+          buildContentCard(
+              height: 64, width: 65, color: Colors.blue, icon: Icon(Icons.add_ic_call_outlined)),
         ],
       ),
     );
@@ -138,7 +139,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
     );
   }
 
-  Widget buildShopRevenue(double shopRevenue , double shopPastRevenue) {
+  Widget buildShopRevenue(double shopRevenue, double shopPastRevenue) {
     final formattedRevenue = formatCurrency(shopRevenue);
     final formattedPastRevenue = formatCurrency(shopPastRevenue);
     return Container(
@@ -213,7 +214,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
                                           fontSize: 28,
-                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -225,9 +226,9 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                       ),
                       Container(
                         alignment: Alignment.topLeft,
-                        margin: EdgeInsets.only(left:10,top: 36),
+                        margin: EdgeInsets.only(left: 10, top: 36),
                         child: Icon(
-                          size:30,
+                          size: 30,
                           MdiIcons.walletBifold,
                           color: Colors.white,
                         ),
@@ -262,6 +263,30 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
           const SizedBox(width: 10),
         ],
       ),
+    );
+  }
+  Widget buildContentCard({
+    required double height,
+    required double width,
+    required Color color,
+    required Icon icon ,
+  }) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Color(0X00000040).withOpacity(0.25),
+            spreadRadius: 0,
+            blurRadius: 4,
+            offset: Offset(0, 4),
+          )
+        ],
+        color: color,
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+      ),
+      child: icon,
     );
   }
 }

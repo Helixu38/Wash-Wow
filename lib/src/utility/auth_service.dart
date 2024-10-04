@@ -65,18 +65,18 @@ class AuthService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        print('Response data: $data'); // Debugging line
 
-        // Accessing token and role directly from the root level
         final token = data['token'];
         final role = data['role'];
         final fullName = data['username'];
+        final id = data['id'];
 
         if (token != null && role != null) {
           // Store the token securely
           await storage.write(key: 'token', value: token);
           await storage.write(key: 'fullName', value: fullName);
-          print('Login successful, token: $token , fullName: $fullName');
+          await storage.write(key: 'id', value: id); 
+          print('Login Successfully !! id: $id'); // Debugging line
           return role;
         } else {
           print('Token or role is missing in the response: $data');
