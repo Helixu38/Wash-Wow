@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/google_map_service.dart';
@@ -15,6 +14,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordAgainController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 

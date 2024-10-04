@@ -17,6 +17,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   final AuthService authService = AuthService('https://10.0.2.2:7276');
 
+  @override
+  void dispose() {
+    tokenController.dispose();
+    passwordAgainController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   String passwordError = '';
   String passwordAgainError = '';
   String tokenError = '';
