@@ -75,8 +75,9 @@ class AuthService {
           // Store the token securely
           await storage.write(key: 'token', value: token);
           await storage.write(key: 'fullName', value: fullName);
-          await storage.write(key: 'id', value: id); 
-          print('Login Successfully !! id: $id'); // Debugging line
+          await storage.write(key: 'id', value: id);
+          await storage.write(key: 'role', value:  role);
+          print('Login Successfully !! id: $id role: $role'); // Debugging line
           return role;
         } else {
           print('Token or role is missing in the response: $data');
@@ -168,9 +169,14 @@ class AuthService {
     }
   }
 
-  Future<String?> getUserName() async {
-    return await storage.read(
-        key: 'fullName'); // Retrieve full name from storage
+  Future<Map<String, String?>> getUserInfo() async {
+    final fullName = await storage.read(key: 'fullName');
+    final role = await storage.read(key: 'role');
+
+    return {
+      'fullName': fullName,
+      'role': role,
+    };
   }
 
   Future<bool> submitForm(int formTemplateID, List<String> imageUrls,

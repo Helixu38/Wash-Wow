@@ -385,11 +385,37 @@ class _SignupScreenState extends State<SignupScreen> {
                                     builder: (context) => LoginScreen(),
                                   ),
                                 );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(Icons.check_circle,
+                                            color: Colors.white),
+                                        SizedBox(width: 10),
+                                        Text(
+                                            'Đăng ký thành công ! Vui lòng đăng nhập lại'),
+                                      ],
+                                    ),
+                                    backgroundColor: Colors.green,
+                                    duration: const Duration(
+                                        seconds: 3), // Duration of the toast
+                                  ),
+                                );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Đăng ký không thành công, vui lòng thử lại.'),
+                                  SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(Icons.error_outline,
+                                            color: Colors.white),
+                                        SizedBox(width: 10),
+                                        Text(
+                                            'Đăng ký không thành công, vui lòng thử lại.'),
+                                      ],
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    duration: const Duration(
+                                        seconds: 2), // Duration of the toast
                                   ),
                                 );
                               }
@@ -422,7 +448,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
-                              text: 'Bằng cách nhấp vào đăng kí bạn đồng ý với\n',
+                              text:
+                                  'Bằng cách nhấp vào đăng kí bạn đồng ý với\n',
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14,

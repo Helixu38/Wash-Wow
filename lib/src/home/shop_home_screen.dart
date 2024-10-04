@@ -25,9 +25,9 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
   PreferredSizeWidget buildTopShopInformation() {
     return PreferredSize(
       preferredSize: const Size.fromHeight(80.0),
-      child: FutureBuilder<String?>(
-        future: authService.getUserName(),
-        builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+      child: FutureBuilder<Map<String, String?>>(
+        future: authService.getUserInfo(),
+        builder: (BuildContext context, AsyncSnapshot<Map<String, String?>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return AppBar(
               automaticallyImplyLeading: false,
@@ -40,7 +40,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
               centerTitle: true,
             );
           } else {
-            String shopName = snapshot.data ?? 'Unknown User';
+            String shopName = snapshot.data?['fullName'] ?? 'Unknown Shop';
             String shopLocation = "Lê Văn Việt, Hiệp Phú";
 
             return AppBar(

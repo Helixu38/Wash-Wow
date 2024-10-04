@@ -34,9 +34,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   PreferredSizeWidget buildTopNavBar() {
     return PreferredSize(
       preferredSize: const Size.fromHeight(80.0),
-      child: FutureBuilder<String?>(
-        future: authService.getUserName(),
-        builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+      child: FutureBuilder<Map<String, String?>>(
+        future: authService.getUserInfo(),
+        builder: (BuildContext context, AsyncSnapshot<Map<String, String?>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return AppBar(
               title: const Text('Loading...'),
@@ -48,7 +48,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               centerTitle: true,
             );
           } else {
-            String userName = snapshot.data ?? 'Unknown User';
+            String userName = snapshot.data?['fullName'] ?? 'Unknown Shop';
             double userPoint = 2.222;
 
             return AppBar(

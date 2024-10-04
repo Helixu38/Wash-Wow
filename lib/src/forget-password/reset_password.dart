@@ -40,7 +40,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ),
             const SizedBox(height: 10),
             Text(
-              'MẬT KHẨU MỚI',
+              'QUÊN MẬT KHẨU',
               style: GoogleFonts.lato(
                 fontSize: 30,
                 fontWeight: FontWeight.w800,
@@ -128,7 +128,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 87),
 
                   // Submit Button
                   SizedBox(
@@ -198,7 +198,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         backgroundColor: const Color.fromRGBO(4, 90, 208, 1),
                       ),
                       child: Text(
-                        'Đặt lại mật khẩu',
+                        'Đổi mật khẩu',
                         style: GoogleFonts.lato(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
