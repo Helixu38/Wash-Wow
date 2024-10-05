@@ -571,20 +571,30 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
         },
       ];
 
-
       // Call your auth service's post method here
-      await authService.submitForm(1, storeDetails.images, storeDetailsMap);
-      print(storeDetails.images);
-      print(storeDetailsMap);
-
-      // Display success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đăng ký thành công!')),
+      final isSuccess = await authService.submitForm(
+        1,
+        storeDetails.images,
+        storeDetailsMap,
       );
 
-      // Optionally, navigate to a different screen or reset the form
-      Navigator.pop(context); // Go back to the previous screen or reset
+      if (isSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Đăng ký thành công!')),
+        );
+
+        // Optionally, navigate to a different screen or reset the form
+        Navigator.pop(context); // Go back to the previous screen or reset
+      } else {
+        // Handle unsuccessful response
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Đã xảy ra lỗi khi gửi biểu mẫu.'),
+          ),
+        );
+      }
     } catch (e) {
+      // Handle any exceptions
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Đã xảy ra lỗi: $e')),
       );

@@ -30,6 +30,10 @@ dependencies:
   material_design_icons_flutter: ^7.0.7296
   blur: ^4.0.0
   cached_network_image: ^3.4.1
+  intl: ^0.19.0
+  flutter_pannable_rating_bar: ^2.7.2+1
+  geolocator: ^13.0.1
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +45,34 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Lato-BlackItalic.ttf
+          weight: 900
+          style: italic
+        - asset: assets/fonts/Lato-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Lato-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Lato-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Lato-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Lato-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/Lato-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Lato-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Lato-ThinItalic.ttf
+          weight: 100
+          style: italic
 
   assets:
     - assets/images/logos/Logomarkwhite.png
