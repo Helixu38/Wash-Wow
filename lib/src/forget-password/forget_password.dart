@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/src/forget-password/reset_password.dart';
+import 'package:wash_wow/src/home-page/home_page.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/signup/signup_screen.dart';
 
@@ -51,6 +53,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 color: const Color.fromRGBO(4, 90, 208, 1),
               ),
             ),
+            Text(
+              'Xin chào quý khách',
+              style: GoogleFonts.lato(
+                fontSize: 16,
+                fontWeight: FontWeight.w300,
+                color: const Color.fromARGB(255, 0, 0, 0),
+              ),
+            ),
             const SizedBox(height: 50), // Spacing
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -91,7 +101,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 113), // Spacing
+                  const SizedBox(height: 10), // Spacing
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -141,19 +151,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           } else {
                             // Handle error scenario
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Row(
-                                  children: [
-                                    Icon(Icons.error_outline,
-                                        color: Colors.white),
-                                    SizedBox(width: 10),
-                                    Text(
-                                        'Yêu cầu không thành công, vui lòng thử lại.'),
-                                  ],
-                                ),
-                                backgroundColor: Colors.red,
-                                duration: const Duration(
-                                    seconds: 3), // Duration of the toast
+                              const SnackBar(
+                                content: Text(
+                                    'Yêu cầu không thành công, vui lòng thử lại.'),
                               ),
                             );
                           }
@@ -169,7 +169,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         backgroundColor: const Color.fromRGBO(4, 90, 208, 1),
                       ),
                       child: Text(
-                        'Gửi link xác nhận đổi mật khẩu',
+                        'Đăng Nhập',
                         style: GoogleFonts.lato(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -178,6 +178,65 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 56), // Spacing
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'hoặc đăng nhập bằng',
+                        textAlign: TextAlign.right,
+                        style: GoogleFonts.lato(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: const Color.fromRGBO(4, 90, 208, 1),
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 37), // Spacing
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          text: 'Bạn chưa có tài khoản? ',
+                          style: GoogleFonts.lato(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: const Color.fromRGBO(119, 119, 119, 1),
+                            fontStyle: FontStyle.italic,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'Đăng ký ngay',
+                              style: const TextStyle(
+                                color: Color.fromRGBO(4, 90, 208, 1),
+                                decoration: TextDecoration.underline,
+                                decorationColor: Color.fromRGBO(4, 90, 208, 1),
+                                decorationStyle: TextDecorationStyle
+                                    .solid, // solid underline
+                                decorationThickness:
+                                    1.5, // Makes the underline a bit thicker
+                                height:
+                                    1.2, // Adds vertical spacing, indirectly pushing underline down
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SignupScreen(),
+                                      ));
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
