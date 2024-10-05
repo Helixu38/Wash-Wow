@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 10),
             Text(
               'ĐĂNG NHẬP',
-              style: TextStyle(
+              style: GoogleFonts.lato(
                 fontSize: 30,
                 fontWeight: FontWeight.w800,
                 color: const Color.fromRGBO(4, 90, 208, 1),
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Text(
               'Xin chào quý khách',
-              style: TextStyle(
+              style: GoogleFonts.lato(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
                 color: const Color.fromARGB(255, 0, 0, 0),
@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Text(
                     'Địa chỉ Email',
-                    style: TextStyle(
+                    style: GoogleFonts.lato(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: const Color.fromRGBO(4, 90, 208, 1),
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 34), // Spacing
                   Text(
                     'Mật khẩu',
-                    style: TextStyle(
+                    style: GoogleFonts.lato(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                       color: const Color.fromRGBO(4, 90, 208, 1),
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         textAlign: TextAlign.right,
                         text: TextSpan(
                           text: 'Quên mật khẩu?',
-                          style: TextStyle(
+                          style: GoogleFonts.lato(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: const Color.fromRGBO(4, 90, 208, 1),
@@ -246,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: Text(
                         'Đăng Nhập',
-                        style: TextStyle(
+                        style: GoogleFonts.lato(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -261,7 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         'hoặc đăng nhập bằng',
                         textAlign: TextAlign.right,
-                        style: TextStyle(
+                        style: GoogleFonts.lato(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -277,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       RichText(
                         text: TextSpan(
                           text: 'Bạn chưa có tài khoản? ',
-                          style: TextStyle(
+                          style: GoogleFonts.lato(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: const Color.fromRGBO(119, 119, 119, 1),

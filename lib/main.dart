@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'Lato',
         primaryColor: const Color.fromRGBO(4, 90, 209, 1),
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: const Color.fromRGBO(4, 90, 209, 1),

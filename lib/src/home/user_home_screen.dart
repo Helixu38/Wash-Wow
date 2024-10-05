@@ -34,9 +34,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   PreferredSizeWidget buildTopNavBar() {
     return PreferredSize(
       preferredSize: const Size.fromHeight(80.0),
-      child: FutureBuilder<Map<String, String?>>(
-        future: authService.getUserInfo(),
-        builder: (BuildContext context, AsyncSnapshot<Map<String, String?>> snapshot) {
+      child: FutureBuilder<String?>(
+        future: authService.getUserName(),
+        builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return AppBar(
               title: const Text('Loading...'),
@@ -48,7 +48,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               centerTitle: true,
             );
           } else {
-            String userName = snapshot.data?['fullName'] ?? 'Unknown Shop';
+            String userName = snapshot.data ?? 'Unknown User';
             double userPoint = 2.222;
 
             return AppBar(
@@ -82,7 +82,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             children: [
               Text(
                 userName.capitalize(),
-                style: TextStyle(
+                style: GoogleFonts.lato(
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
@@ -90,7 +90,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               ),
               Text(
                 'Điểm: $userPoint',
-                style: TextStyle(
+                style: GoogleFonts.lato(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
@@ -127,7 +127,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           children: [
             Text(
               title,
-              style: TextStyle(
+              style: GoogleFonts.lato(
                 fontWeight: FontWeight.w900,
                 fontSize: 20,
                 color: Theme.of(context).primaryColor,
@@ -143,7 +143,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     children: [
                       Text(
                         "xem thêm",
-                        style: TextStyle(
+                        style: GoogleFonts.lato(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
                           fontStyle: FontStyle.italic,
@@ -211,7 +211,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           children: [
             Text(
               title,
-              style: TextStyle(
+              style: GoogleFonts.lato(
                 fontWeight: FontWeight.w900,
                 fontSize: 20,
                 color: Theme.of(context).primaryColor,
@@ -227,7 +227,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     children: [
                       Text(
                         "xem thêm",
-                        style: TextStyle(
+                        style: GoogleFonts.lato(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
                           fontStyle: FontStyle.italic,
@@ -376,7 +376,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           children: [
             Text(
               title,
-              style: TextStyle(
+              style: GoogleFonts.lato(
                 fontWeight: FontWeight.w900,
                 fontSize: 20,
                 color: Theme.of(context).primaryColor,
@@ -392,7 +392,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     children: [
                       Text(
                         "xem thêm",
-                        style: TextStyle(
+                        style: GoogleFonts.lato(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
                           fontStyle: FontStyle.italic,
@@ -422,7 +422,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: GestureDetector(
-                  onTap: () => service.onTap(context , service.content), 
+                  onTap: () => service.onTap(context), 
                   child: buildListViewServicesContent(
                       service.content, service.icon, service.onTap),
                 ),
@@ -435,9 +435,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Widget buildListViewServicesContent(
-      String content, IconData icon, void Function(BuildContext , String) onTap) {
+      String content, IconData icon, void Function(BuildContext) onTap) {
     return GestureDetector(
-      onTap: () => onTap(context , content),
+      onTap: () => onTap(context),
       child: Column(
         children: [
           Container(
@@ -452,7 +452,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           SizedBox(height: 8),
           Text(
             content,
-            style: TextStyle(
+            style: GoogleFonts.lato(
               fontWeight: FontWeight.w400,
               fontSize: 14,
               color: Colors.black,

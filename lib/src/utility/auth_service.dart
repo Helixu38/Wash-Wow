@@ -65,19 +65,18 @@ class AuthService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print('Response data: $data'); // Debugging line
 
+        // Accessing token and role directly from the root level
         final token = data['token'];
         final role = data['role'];
         final fullName = data['username'];
-        final id = data['id'];
 
         if (token != null && role != null) {
           // Store the token securely
           await storage.write(key: 'token', value: token);
           await storage.write(key: 'fullName', value: fullName);
-          await storage.write(key: 'id', value: id);
-          await storage.write(key: 'role', value:  role);
-          print('Login Successfully !! id: $id role: $role'); // Debugging line
+          print('Login successful, token: $token , fullName: $fullName');
           return role;
         } else {
           print('Token or role is missing in the response: $data');
@@ -169,14 +168,9 @@ class AuthService {
     }
   }
 
-  Future<Map<String, String?>> getUserInfo() async {
-    final fullName = await storage.read(key: 'fullName');
-    final role = await storage.read(key: 'role');
-
-    return {
-      'fullName': fullName,
-      'role': role,
-    };
+  Future<String?> getUserName() async {
+    return await storage.read(
+        key: 'fullName'); // Retrieve full name from storage
   }
 
   Future<bool> submitForm(int formTemplateID, List<String> imageUrls,
