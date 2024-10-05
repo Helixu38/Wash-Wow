@@ -33,6 +33,7 @@ dependencies:
   intl: ^0.19.0
   flutter_pannable_rating_bar: ^2.7.2+1
   geolocator: ^13.0.1
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:

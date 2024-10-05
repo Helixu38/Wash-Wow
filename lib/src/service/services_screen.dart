@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class ServicesScreen extends StatefulWidget {
   final String serviceName;
@@ -15,55 +16,55 @@ class ServicesScreen extends StatefulWidget {
 }
 
 class _ServicesScreenState extends State<ServicesScreen> {
-  String? _locationText = "Fetching location...";
+  String locationName = "Getting location...";
 
   @override
   void initState() {
     super.initState();
-    _determinePosition(); // Fetch location on init
+    _getLocationAndAddress(); // Fetch location on init
   }
 
-  Future<void> _determinePosition() async {
+  Future<void> _getLocationAndAddress() async {
+    try {
+      Position position = await _determinePosition();
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      Placemark place = placemarks[0];
+
+      setState(() {
+        locationName =
+            "${place.street}, ${place.administrativeArea}"; 
+      });
+      print(locationName);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      setState(() {
-        _locationText = "Location services are disabled.";
-      });
-      return;
+      return Future.error('Location services are disabled.');
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        setState(() {
-          _locationText = "Location permissions are denied";
-        });
-        return;
+        return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      setState(() {
-        _locationText =
-            "Location permissions are permanently denied, we cannot request permissions.";
-      });
-      return;
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can get the location.
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    print(position);
-
-    setState(() {
-      _locationText =
-          "${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}";
-    });
+    return await Geolocator.getCurrentPosition();
   }
 
   @override
@@ -185,7 +186,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   ),
                   const SizedBox(width: 4), // Space between icon and text
                   Text(
-                    _locationText ?? "Unknown location", // Display fetched location
+                    locationName, // Display fetched location
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
