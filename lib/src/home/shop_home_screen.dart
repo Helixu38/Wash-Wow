@@ -1,3 +1,5 @@
+import 'package:blur/blur.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'dart:math' as math;
@@ -27,7 +29,8 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
       preferredSize: const Size.fromHeight(80.0),
       child: FutureBuilder<Map<String, String?>>(
         future: authService.getUserInfo(),
-        builder: (BuildContext context, AsyncSnapshot<Map<String, String?>> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<Map<String, String?>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return AppBar(
               automaticallyImplyLeading: false,
@@ -84,17 +87,65 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
   }
 
   Widget buildContent() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          buildShopBalance(10000),
-          const SizedBox(height: 20),
-          buildShopRevenue(1500000, 1250000),
-          buildContentCard(
-              height: 64, width: 65, color: Colors.blue, icon: Icon(Icons.add_ic_call_outlined)),
-        ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildShopBalance(10000),
+            const SizedBox(height: 20),
+            buildShopRevenue(1500000, 1250000),
+            buildContentShop(
+              card1: buildContentCard(
+                height: 65,
+                width: 65,
+                icon: MdiIcons.briefcase,
+                text: "Đơn hàng",
+              ),
+              card2: buildContentCard(
+                height: 65,
+                width: 65,
+                icon: MdiIcons.washingMachine,
+                text: "Tình trạng",
+              ),
+              card3: buildContentCard(
+                height: 65,
+                width: 65,
+                icon: Icons.local_offer,
+                text: "Khuyến mãi",
+              ),
+              card4: buildContentCard(
+                height: 65,
+                width: 65,
+                icon: MdiIcons.bullhorn,
+                text: "Quảng cáo",
+              ),
+              card5: buildContentCard(
+                height: 65,
+                width: 65,
+                icon: MdiIcons.finance,
+                text: "Tài chính",
+              ),
+              card6: buildContentCard(
+                height: 65,
+                width: 65,
+                icon: MdiIcons.accountMultiple,
+                text: "Nhân viên",
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Divider(
+              height: 20,
+              thickness: 0.2,
+              indent: 0,
+              endIndent: 0,
+              color: Colors.black,
+            ),
+            buildListViewNews("Có gì mới?"),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
@@ -265,28 +316,232 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
       ),
     );
   }
+
+  Widget buildContentShop({
+    required Widget card1,
+    required Widget card2,
+    required Widget card3,
+    required Widget card4,
+    required Widget card5,
+    required Widget card6,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: GridView.count(
+        crossAxisCount: 3,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        shrinkWrap: true,
+        children: [
+          card1,
+          card2,
+          card3,
+          card4,
+          card5,
+          card6,
+        ],
+      ),
+    );
+  }
+
   Widget buildContentCard({
     required double height,
     required double width,
-    required Color color,
-    required Icon icon ,
+    required IconData icon,
+    required String text,
   }) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Color(0X00000040).withOpacity(0.25),
-            spreadRadius: 0,
-            blurRadius: 4,
-            offset: Offset(0, 4),
-          )
-        ],
-        color: color,
-        borderRadius: const BorderRadius.all(Radius.circular(12)),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Color(0X00000040).withOpacity(0.25),
+                spreadRadius: 0,
+                blurRadius: 4,
+                offset: Offset(0, 4),
+              )
+            ],
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
+          ),
+          child: Icon(
+            icon,
+            size: 32,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        const SizedBox(height: 8), // Spacing between the card and the text
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
+
+  //Store list view
+  Widget buildListViewNews(String title) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Theme.of(context).primaryColor,
+                    width: 1.5,
+                  ),
+                ),
+              ),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 20,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    print('Xem thêm clicked');
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        "xem thêm",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w300,
+                          fontSize: 14,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      Transform.rotate(
+                        angle: 270 * math.pi / 180, // Rotating icon
+                        child: Icon(
+                          Icons.expand_more,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 100,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: <Widget>[
+              const SizedBox(width: 15),
+              buildListViewNewsContent(
+                'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+                "Khuyến mãi",
+                () {
+                  // Define the action when the item is tapped
+                  print('Discount 1 clicked');
+                },
+              ),
+              const SizedBox(width: 15),
+              buildListViewNewsContent(
+                'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+                "Khuyến mãi",
+                () {
+                  // Define the action when the item is tapped
+                  print('Discount 2 clicked');
+                },
+              ),
+              const SizedBox(width: 15),
+              buildListViewNewsContent(
+                'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+                "Khuyến mãi",
+                () {
+                  // Define the action when the item is tapped
+                  print('Discount 3 clicked');
+                },
+              ),
+              const SizedBox(width: 15),
+              buildListViewNewsContent(
+                'https://firebasestorage.googleapis.com/v0/b/wash-wow-upload-image.appspot.com/o/images%2F90ffc8691501c6a60e1fe7d40eb7cd54.png?alt=media&token=a06b7771-b4de-4052-8a79-8d6936051035',
+                "Khuyến mãi",
+                () {
+                  // Define the action when the item is tapped
+                  print('Discount 4 clicked');
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  //What is new widget
+// ListView News Content Widget
+  Widget buildListViewNewsContent(
+      String imageUrl, String labelText, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(18),
+          bottom: Radius.circular(18),
+        ),
+        child: Container(
+          height: 90,
+          width: 290,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                    Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) =>
+                    Center(child: Icon(Icons.error)),
+              ),
+              Center(
+                child: Text(
+                  labelText,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white, // White text to stand out
+                    shadows: [
+                      Shadow(
+                        offset:
+                            Offset(1.5, 1.5), // Slight shadow for visibility
+                        color: Colors.black.withOpacity(0.5),
+                        blurRadius: 3,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      child: icon,
     );
   }
 }
