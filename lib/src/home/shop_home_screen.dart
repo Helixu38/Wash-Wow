@@ -16,6 +16,10 @@ class ShopOwnerHomeScreen extends StatefulWidget {
 class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
   final AuthService authService = AuthService('https://10.0.2.2:7276');
 
+  int order = 0; // Define instance variable
+  double shopRating = 0.0; // Define instance variable
+  double shopPastRating = 0.0; // Define instance variable
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +49,11 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
           } else {
             String shopName = snapshot.data?['fullName'] ?? 'Unknown Shop';
             String shopLocation = "Lê Văn Việt, Hiệp Phú";
+
+            // Assign values to instance variables
+            order = 10; // Example value
+            shopRating = 4.9; // Example value
+            shopPastRating = 4.5; // Example value
 
             return AppBar(
               title: buildShopProfile(shopName, shopLocation),
@@ -96,6 +105,10 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
             buildShopBalance(10000),
             const SizedBox(height: 20),
             buildShopRevenue(1500000, 1250000),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: buildShopOrderAndRating(order, shopRating, shopPastRating),
+            ),
             buildContentShop(
               card1: buildContentCard(
                 height: 65,
@@ -542,6 +555,45 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildShopOrderAndRating(
+      int order, double shopRating, double shopPastRating) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        RichText(
+          text: TextSpan(
+            text: "$order",
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 12,
+              color: Colors.black,
+            ),
+            children: <TextSpan>[
+              TextSpan(
+                text: " ", 
+              ),
+              TextSpan(
+                text: "đơn hàng",
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                  color: Colors.black,
+                ),
+              )
+            ],
+          ),
+        ),
+        SizedBox(width: 10), 
+        Container(
+          height: 19, 
+          width: 0.5, 
+          color: Colors.black, 
+        ),
+        SizedBox(width: 10), 
+      ],
     );
   }
 }
