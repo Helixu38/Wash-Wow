@@ -5,76 +5,80 @@ import 'package:wash_wow/src/service/services_screen.dart';
 class Service {
   final String content;
   final IconData icon;
-  final void Function(BuildContext context) onTap; // Change this line
+  final void Function(BuildContext context, String content) onTap;
 
-  Service({required this.content, required this.icon, required this.onTap});
+  Service({
+    required this.content,
+    required this.icon,
+    required this.onTap,
+  });
 }
 
 final List<Service> services = [
   Service(
     content: 'Giặt thường',
     icon: MdiIcons.cupWater,
-    onTap: (context) {
+    onTap: (context, content) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ServicesScreen()),
+        MaterialPageRoute(builder: (context) => ServicesScreen(serviceName: content)),
       );
-      print("Giặt thường is pressed");
+      print("$content is pressed");
     },
   ),
   Service(
     content: 'Giặt sấy',
     icon: MdiIcons.tumbleDryer,
-    onTap: (context) {
+    onTap: (context, content) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ServicesScreen()),
+        MaterialPageRoute(builder: (context) => ServicesScreen(serviceName: content)),
       );
-      print("Giặt sấy is pressed");
+      print("$content is pressed");
     },
   ),
   Service(
     content: 'Giặt giày',
     icon: MdiIcons.shoeFormal,
-    onTap: (context) {
+    onTap: (context, content) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ServicesScreen()),
+        MaterialPageRoute(builder: (context) => ServicesScreen(serviceName: content)),
       );
-      print("Giặt giày is pressed");
+      print("$content is pressed");
     },
   ),
   Service(
     content: 'Giặt chăn',
     icon: MdiIcons.bedEmpty,
-    onTap: (context) {
+    onTap: (context, content) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ServicesScreen()),
+        MaterialPageRoute(builder: (context) => ServicesScreen(serviceName: content)),
       );
-      print("Giặt chăn is pressed");
+      print("$content is pressed");
     },
   ),
   Service(
     content: 'Giặt khô',
     icon: MdiIcons.hairDryerOutline,
-    onTap: (context) {
+    onTap: (context, content) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ServicesScreen()),
+        MaterialPageRoute(builder: (context) => ServicesScreen(serviceName: content)),
       );
-      print("Giặt khô is pressed");
+      print("$content is pressed");
     },
   ),
   Service(
     content: 'Giặt tẩy',
     icon: MdiIcons.washingMachine,
-    onTap: (context) {
+    onTap: (context, content) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ServicesScreen()),
+        MaterialPageRoute(builder: (context) => ServicesScreen(serviceName: content)),
       );
-      print("Giặt tẩy is pressed");
+      print("$content is pressed");
     },
   ),
 ];

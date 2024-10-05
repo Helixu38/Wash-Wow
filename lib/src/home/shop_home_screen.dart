@@ -16,9 +16,9 @@ class ShopOwnerHomeScreen extends StatefulWidget {
 class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
   final AuthService authService = AuthService('https://10.0.2.2:7276');
 
-  int order = 0; // Define instance variable
-  double shopRating = 0.0; // Define instance variable
-  double shopPastRating = 0.0; // Define instance variable
+  int order = 10; // Define instance variable
+  double shopRating = 4.9; // Define instance variable
+  double shopPastRating = 4.5; // Define instance variable
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +49,6 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
           } else {
             String shopName = snapshot.data?['fullName'] ?? 'Unknown Shop';
             String shopLocation = "Lê Văn Việt, Hiệp Phú";
-
-            // Assign values to instance variables
-            order = 10; // Example value
-            shopRating = 4.9; // Example value
-            shopPastRating = 4.5; // Example value
-
             return AppBar(
               title: buildShopProfile(shopName, shopLocation),
               centerTitle: true,

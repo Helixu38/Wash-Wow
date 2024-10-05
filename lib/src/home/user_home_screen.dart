@@ -422,7 +422,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: GestureDetector(
-                  onTap: () => service.onTap(context), 
+                  onTap: () => service.onTap(context , service.content), 
                   child: buildListViewServicesContent(
                       service.content, service.icon, service.onTap),
                 ),
@@ -435,9 +435,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Widget buildListViewServicesContent(
-      String content, IconData icon, void Function(BuildContext) onTap) {
+      String content, IconData icon, void Function(BuildContext , String) onTap) {
     return GestureDetector(
-      onTap: () => onTap(context),
+      onTap: () => onTap(context , content),
       child: Column(
         children: [
           Container(
