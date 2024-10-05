@@ -1,10 +1,10 @@
-import 'package:blur/blur.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'dart:math' as math;
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/extension/string_extension.dart';
+import 'package:flutter_pannable_rating_bar/flutter_pannable_rating_bar.dart';
 
 class ShopOwnerHomeScreen extends StatefulWidget {
   const ShopOwnerHomeScreen({super.key});
@@ -568,12 +568,12 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
             text: "$order",
             style: TextStyle(
               fontWeight: FontWeight.w700,
-              fontSize: 12,
+              fontSize: 13,
               color: Colors.black,
             ),
             children: <TextSpan>[
               TextSpan(
-                text: " ", 
+                text: " ",
               ),
               TextSpan(
                 text: "đơn hàng",
@@ -586,13 +586,74 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
             ],
           ),
         ),
-        SizedBox(width: 10), 
+        SizedBox(width: 10),
         Container(
-          height: 19, 
-          width: 0.5, 
-          color: Colors.black, 
+          height: 19,
+          width: 0.5,
+          color: Colors.black,
         ),
-        SizedBox(width: 10), 
+        SizedBox(width: 10),
+        buildStarRating(shopRating, shopPastRating),
+      ],
+    );
+  }
+
+  Widget buildStarRating(double shopRating, double shopPastRating) {
+    int fullStars = shopRating.floor(); // Number of full stars
+    bool hasHalfStar =
+        (shopRating - fullStars) >= 0.5; // Check if there is a half-star
+    int totalStars = 5;
+
+    // Calculate the difference between current and past rating
+    double ratingDifference = shopRating - shopPastRating;
+    bool isPositive = ratingDifference > 0;
+
+    // Format the rating difference to 1 decimal place
+    String ratingDifferenceText = ratingDifference.toStringAsFixed(1);
+    String displayDifference =
+        isPositive ? "+$ratingDifferenceText" : "$ratingDifferenceText";
+
+    return Row(
+      children: [
+        // The star rating
+        Row(
+          children: List.generate(totalStars, (index) {
+            if (index < fullStars) {
+              // Full star
+              return const Icon(Icons.star, color: Color(0xFFFFD43E), size: 24);
+            } else if (index == fullStars && hasHalfStar) {
+              // Half star
+              return const Icon(Icons.star_half,
+                  color: Color(0xFFFFD43E), size: 24);
+            } else {
+              // Empty star
+              return const Icon(Icons.star_border,
+                  color: Color(0xFFFFD43E), size: 24);
+            }
+          }),
+        ),
+        SizedBox(width: 6),
+        // The rating text
+        Text(
+          "$shopRating",
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 13,
+            color: Colors.black,
+          ),
+        ),
+        SizedBox(width: 6),
+        // Improvement or decline text
+        Text(
+          displayDifference,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 13,
+            color: isPositive
+                ? Colors.green
+                : Colors.red, // Green if positive, red if negative
+          ),
+        ),
       ],
     );
   }
