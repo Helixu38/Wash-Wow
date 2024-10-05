@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/google_map_service.dart';
@@ -15,6 +14,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordAgainController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 
@@ -33,6 +33,7 @@ class _SignupScreenState extends State<SignupScreen> {
     fullNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    passwordAgainController.dispose();
     phoneNumberController.dispose();
     addressController.dispose();
     super.dispose();
@@ -42,6 +43,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String fullNameError = '';
   String emailError = '';
   String passwordError = '';
+  String passwordAgainError = '';
   String phoneNumberError = '';
   String addressError = '';
 
@@ -71,7 +73,7 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(height: 10),
               Text(
                 'ĐĂNG KÝ',
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
                   color: const Color.fromRGBO(4, 90, 208, 1),
@@ -79,17 +81,17 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               Text(
                 'Điền thông tin của quý khách phía bên dưới,',
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w200,
+                  fontWeight: FontWeight.w400,
                   color: const Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
               Text(
                 'hoặc đăng nhập bằng tài khoản mạng xã hội',
-                style: GoogleFonts.lato(
+                style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w300,
+                  fontWeight: FontWeight.w400,
                   color: const Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
@@ -104,7 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       // Full Name Field
                       Text(
                         'Họ và tên',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -143,7 +145,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       // Email Field
                       Text(
                         'Địa chỉ Email',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -182,7 +184,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       // Password Field
                       Text(
                         'Mật khẩu',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -220,10 +222,50 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       const SizedBox(height: 14),
 
+                      // Re-enter Password Field
+                      Text(
+                        'Nhập lại mật khẩu',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: const Color.fromRGBO(4, 90, 208, 1),
+                        ),
+                      ),
+                      if (passwordAgainError.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            passwordAgainError,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: TextFormField(
+                          cursorColor: const Color.fromRGBO(4, 90, 208, 1),
+                          controller: passwordAgainController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Nhập mật khẩu của bạn.',
+                            hintStyle: TextStyle(
+                                color: const Color.fromRGBO(208, 207, 207, 1)),
+                            contentPadding: const EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
                       // Phone Number Field
                       Text(
                         'Số điện thoại',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -262,7 +304,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       // Address Field
                       Text(
                         'Địa Chỉ',
-                        style: GoogleFonts.lato(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: const Color.fromRGBO(4, 90, 208, 1),
@@ -335,6 +377,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               fullNameError = '';
                               emailError = '';
                               passwordError = '';
+                              passwordAgainError = '';
                               phoneNumberError = '';
                               addressError = '';
                             });
@@ -355,6 +398,18 @@ class _SignupScreenState extends State<SignupScreen> {
                                 passwordController.text.length < 6) {
                               passwordError =
                                   'Mật khẩu phải có ít nhất 6 ký tự';
+                              isValid = false;
+                            }
+                            if (passwordAgainController.text.isEmpty ||
+                                passwordAgainController.text.length < 6) {
+                              passwordAgainError =
+                                  'Mật khẩu phải có ít nhất 6 ký tự';
+                              isValid = false;
+                            }
+                            if (passwordAgainController.text !=
+                                passwordController.text) {
+                              passwordAgainError =
+                                  'Mật khẩu phải khớp với nhau';
                               isValid = false;
                             }
                             if (phoneNumberController.text.isEmpty ||
@@ -385,11 +440,37 @@ class _SignupScreenState extends State<SignupScreen> {
                                     builder: (context) => LoginScreen(),
                                   ),
                                 );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(Icons.check_circle,
+                                            color: Colors.white),
+                                        SizedBox(width: 10),
+                                        Text(
+                                            'Đăng ký thành công ! Vui lòng đăng nhập lại'),
+                                      ],
+                                    ),
+                                    backgroundColor: Colors.green,
+                                    duration: const Duration(
+                                        seconds: 3), // Duration of the toast
+                                  ),
+                                );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Đăng ký không thành công, vui lòng thử lại.'),
+                                  SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(Icons.error_outline,
+                                            color: Colors.white),
+                                        SizedBox(width: 10),
+                                        Text(
+                                            'Đăng ký không thành công, vui lòng thử lại.'),
+                                      ],
+                                    ),
+                                    backgroundColor: Colors.red,
+                                    duration: const Duration(
+                                        seconds: 2), // Duration of the toast
                                   ),
                                 );
                               }
@@ -407,7 +488,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           child: Text(
                             'Đăng Ký',
-                            style: GoogleFonts.lato(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
@@ -422,7 +503,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
-                              text: 'Bằng cách nhấp vào đăng kí bạn đồng ý với\n',
+                              text:
+                                  'Bằng cách nhấp vào đăng kí bạn đồng ý với\n',
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14,
@@ -729,7 +811,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           RichText(
                             text: TextSpan(
                               text: 'Bạn đã có tài khoản? ',
-                              style: GoogleFonts.lato(
+                              style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
                                 color: const Color.fromRGBO(119, 119, 119, 1),

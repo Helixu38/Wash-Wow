@@ -21,9 +21,11 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<String?>(
-        future: authService.getUserName(),
-        builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+      // Modify the Future to fetch both userName and userRole
+      body: FutureBuilder<Map<String, String?>>(
+        future: authService.getUserInfo(), // Fetch both userName and userRole
+        builder: (BuildContext context,
+            AsyncSnapshot<Map<String, String?>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // While waiting for data, show a loading spinner
             return Center(child: CircularProgressIndicator());
@@ -32,8 +34,9 @@ class _AccountScreenState extends State<AccountScreen> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             // Data has been fetched successfully
-            String userName =
-                snapshot.data ?? 'Unknown User'; // Fallback to a default value
+            String userName = snapshot.data?['fullName'] ?? 'Unknown User';
+            String userRole = snapshot.data?['role'] ??
+                'Null'; 
 
             return Container(
               width: double.infinity,
@@ -82,18 +85,24 @@ class _AccountScreenState extends State<AccountScreen> {
                           },
                         ),
                         const SizedBox(height: 30),
-                        _buildRowItem(
-                          context,
-                          Icons.local_laundry_service_outlined,
-                          "Đăng ký trở thành đối tác",
-                          () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ShopRegisterForm()));
-                          },
-                        ),
-                        const SizedBox(height: 30),
+
+                        // Conditionally render based on user role
+                        if (userRole == "Customer") ...[
+                          _buildRowItem(
+                            context,
+                            Icons.local_laundry_service_outlined,
+                            "Đăng ký trở thành đối tác",
+                            () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ShopRegisterForm()));
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                        ],
+
                         _buildRowItem(
                           context,
                           Icons.location_on,
@@ -155,18 +164,17 @@ class _AccountScreenState extends State<AccountScreen> {
                           () async {
                             bool success = await authService.logout();
                             if (success) {
-                              // Navigate to the login screen upon successful logout
                               Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => LoginScreen(),
-                                  ));
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()),
+                              );
                             } else {
-                              // Optionally, you could show an error message
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text(
-                                        'Logout failed. Please try again.')),
+                                const SnackBar(
+                                  content:
+                                      Text('Logout failed. Please try again.'),
+                                ),
                               );
                             }
                           },
