@@ -31,7 +31,8 @@ Future<List<dynamic>> fetchLaundryShops(int pageNo, int pageSize) async {
 
       return data['value'];
     } else {
-      throw Exception('Failed to load laundry shops');
+      throw Exception(
+          'Failed to load data. Status code: ${response.statusCode}, Body: ${response.body}');
     }
   } catch (e) {
     throw Exception('Error: $e');
@@ -66,7 +67,8 @@ Future<List<dynamic>> fetchLandryShopServices(
 
       return data['value'];
     } else {
-      throw Exception('Failed to load laundry service');
+      throw Exception(
+          'Failed to load data. Status code: ${response.statusCode}, Body: ${response.body}');
     }
   } catch (e) {
     throw Exception('Error: $e');
@@ -107,7 +109,8 @@ Future<List<dynamic>> fetchLandryShopByOwnerID(int pageNo, int pageSize) async {
 
       return data['data'];
     } else {
-      throw Exception('Failed to load shop');
+      throw Exception(
+          'Failed to load data. Status code: ${response.statusCode}, Body: ${response.body}');
     }
   } catch (e) {
     throw Exception('Error: $e');
@@ -144,7 +147,8 @@ Future<List<dynamic>> fetchBookingByShopID(
       // Ensure to access 'value' before 'data'
       return data['value']['data'];
     } else {
-      throw Exception('Failed to load bookings');
+      throw Exception(
+          'Failed to load data. Status code: ${response.statusCode}, Body: ${response.body}');
     }
   } catch (e) {
     throw Exception('Error: $e');
@@ -190,7 +194,8 @@ Future<Map<String, dynamic>> fetchLaundryShopByID(String id) async {
         'closingHour': data['closingHour'],
       };
     } else {
-      throw Exception('Failed to load laundry shop by ID');
+      throw Exception(
+          'Failed to load data. Status code: ${response.statusCode}, Body: ${response.body}');
     }
   } catch (e) {
     throw Exception('Error: $e');
