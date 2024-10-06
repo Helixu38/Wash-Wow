@@ -30,3 +30,16 @@ class StoreDetails {
         ')';
   }
 }
+
+class BookingItem {
+  final String servicesId;
+
+  BookingItem({required this.servicesId});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'servicesId': servicesId,
+    };
+  }
+}
+

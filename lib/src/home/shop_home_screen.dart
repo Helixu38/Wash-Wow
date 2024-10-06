@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:wash_wow/src/order/shop_order_screen.dart';
 import 'dart:math' as math;
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/extension/string_extension.dart';
@@ -109,36 +110,63 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                 width: 65,
                 icon: MdiIcons.briefcase,
                 text: "Đơn hàng",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ShopOrderScreen()),
+                  );
+                },
               ),
               card2: buildContentCard(
                 height: 65,
                 width: 65,
                 icon: MdiIcons.washingMachine,
                 text: "Tình trạng",
+                onTap: () {
+                  // Navigate to the Order screen or perform an action
+                  print('Tình trạng tapped!');
+                },
               ),
               card3: buildContentCard(
                 height: 65,
                 width: 65,
                 icon: Icons.local_offer,
                 text: "Khuyến mãi",
+                onTap: () {
+                  // Navigate to the Order screen or perform an action
+                  print('Khuyến mãi tapped!');
+                },
               ),
               card4: buildContentCard(
                 height: 65,
                 width: 65,
                 icon: MdiIcons.bullhorn,
                 text: "Quảng cáo",
+                onTap: () {
+                  // Navigate to the Order screen or perform an action
+                  print('Quảng cáo tapped!');
+                },
               ),
               card5: buildContentCard(
                 height: 65,
                 width: 65,
                 icon: MdiIcons.finance,
                 text: "Tài chính",
+                onTap: () {
+                  // Navigate to the Order screen or perform an action
+                  print('Tài chính tapped!');
+                },
               ),
               card6: buildContentCard(
                 height: 65,
                 width: 65,
                 icon: MdiIcons.accountMultiple,
                 text: "Nhân viên",
+                onTap: () {
+                  // Navigate to the Order screen or perform an action
+                  print('Nhân viên tapped!');
+                },
               ),
             ),
             const SizedBox(height: 20),
@@ -356,41 +384,47 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
     required double width,
     required IconData icon,
     required String text,
+    required VoidCallback onTap, // Add onTap callback
   }) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          height: height,
-          width: width,
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color(0X00000040).withOpacity(0.25),
-                spreadRadius: 0,
-                blurRadius: 4,
-                offset: Offset(0, 4),
-              )
-            ],
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
+    return InkWell(
+      onTap: onTap, // Action to trigger when the card is tapped
+      borderRadius:
+          BorderRadius.circular(12), // Ripple effect respects border radius
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: height,
+            width: width,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0X00000040).withOpacity(0.25),
+                  spreadRadius: 0,
+                  blurRadius: 4,
+                  offset: Offset(0, 4),
+                )
+              ],
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Icon(
+              icon,
+              size: 32,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
-          child: Icon(
-            icon,
-            size: 32,
-            color: Theme.of(context).primaryColor,
+          const SizedBox(height: 8), // Spacing between the card and the text
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
           ),
-        ),
-        const SizedBox(height: 8), // Spacing between the card and the text
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
