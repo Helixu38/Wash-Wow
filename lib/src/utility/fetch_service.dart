@@ -7,13 +7,16 @@ import 'package:http/io_client.dart';
 String baseUrlLaundryShop = "https://10.0.2.2:7276/LaundryShop";
 String baseUrl = "https://10.0.2.2:7276";
 
-Future<List<dynamic>> fetchLaundryShops(int pageNo, int pageSize) async {
-  final String url = '$baseUrlLaundryShop?PageNo=$pageNo&PageSize=$pageSize';
+IOClient createIOClient() {
   HttpClient client = HttpClient()
     ..badCertificateCallback =
         (X509Certificate cert, String host, int port) => true;
+  return IOClient(client);
+}
 
-  final ioClient = IOClient(client);
+Future<List<dynamic>> fetchLaundryShops(int pageNo, int pageSize) async {
+  final String url = '$baseUrlLaundryShop?PageNo=$pageNo&PageSize=$pageSize';
+  final ioClient = createIOClient();
 
   try {
     final response = await ioClient.get(
@@ -40,9 +43,6 @@ Future<List<dynamic>> fetchLandryShopServices(
   final FlutterSecureStorage storage = FlutterSecureStorage();
   final String url =
       '$baseUrl/ShopService/services/$shopID?pageNo=$pageNo&pageSize=$pageSize';
-  HttpClient client = HttpClient()
-    ..badCertificateCallback =
-        (X509Certificate cert, String host, int port) => true;
   final token = await storage.read(key: 'token');
   print(token);
 
@@ -50,7 +50,7 @@ Future<List<dynamic>> fetchLandryShopServices(
     print('No token found, please log in again');
   }
 
-  final ioClient = IOClient(client);
+  final ioClient = createIOClient();
 
   try {
     final response = await ioClient.get(
@@ -83,9 +83,6 @@ Future<List<dynamic>> fetchLandryShopByOwnerID(int pageNo, int pageSize) async {
   }
   final String url =
       '$baseUrl/LaundryShop/laundryShops/filter-laundry-shop?PageNumber=$pageNo&PageSize=$pageSize&OwnerID=$id';
-  HttpClient client = HttpClient()
-    ..badCertificateCallback =
-        (X509Certificate cert, String host, int port) => true;
 
   final token = await storage.read(key: 'token');
   print(token);
@@ -94,7 +91,7 @@ Future<List<dynamic>> fetchLandryShopByOwnerID(int pageNo, int pageSize) async {
     print('No token found, please log in again');
   }
 
-  final ioClient = IOClient(client);
+  final ioClient = createIOClient();
 
   try {
     final response = await ioClient.get(
@@ -123,10 +120,6 @@ Future<List<dynamic>> fetchBookingByShopID(
   final String url =
       '$baseUrl/Booking/bookings/$shopId?ShopId=$shopId&PageNumber=$pageNo&PageSize=$pageSize';
 
-  HttpClient client = HttpClient()
-    ..badCertificateCallback =
-        (X509Certificate cert, String host, int port) => true;
-
   final token = await storage.read(key: 'token');
 
   if (token == null) {
@@ -134,7 +127,7 @@ Future<List<dynamic>> fetchBookingByShopID(
     return [];
   }
 
-  final ioClient = IOClient(client);
+  final ioClient = createIOClient();
 
   try {
     final response = await ioClient.get(
@@ -158,13 +151,9 @@ Future<List<dynamic>> fetchBookingByShopID(
   }
 }
 
-
 Future<Map<String, dynamic>> fetchLaundryShopByID(String id) async {
   final FlutterSecureStorage storage = FlutterSecureStorage();
   final String url = '$baseUrlLaundryShop/$id';
-  HttpClient client = HttpClient()
-    ..badCertificateCallback =
-        (X509Certificate cert, String host, int port) => true;
 
   final token = await storage.read(key: 'token');
   print(token);
@@ -173,7 +162,7 @@ Future<Map<String, dynamic>> fetchLaundryShopByID(String id) async {
     print('No token found, please log in again');
   }
 
-  final ioClient = IOClient(client);
+  final ioClient = createIOClient();
 
   try {
     final response = await ioClient.get(

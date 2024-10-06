@@ -26,6 +26,8 @@ class _BookingScreenState extends State<BookingScreen>
   List<BookingItem> bookingItems = [];
   bool? isBookingSuccess;
   final AuthService authService = AuthService('https://10.0.2.2:7276');
+  double? laundryWeight;
+  String notes = "";
 
   String formatPickupDateTime(DateTime date, TimeOfDay time) {
     String formattedDate = "${date.year.toString().padLeft(4, '0')}-"
@@ -367,8 +369,6 @@ class _BookingScreenState extends State<BookingScreen>
   }
 
   Widget _buildConfirmationTab() {
-    double? laundryWeight = 10;
-    String notes = "";
     return Center(
       child: SingleChildScrollView(
         // Wrap the content in a SingleChildScrollView
@@ -486,8 +486,9 @@ class _BookingScreenState extends State<BookingScreen>
                   ),
                   onChanged: (value) {
                     // Save the input value for laundry weight
-                    laundryWeight = double.tryParse(
-                        value); // Replace with your variable to hold the weight
+                    setState(() {
+                      laundryWeight = double.tryParse(value);
+                    });
                   },
                 ),
               ),
@@ -520,8 +521,9 @@ class _BookingScreenState extends State<BookingScreen>
                   ),
                   onChanged: (value) {
                     // Save the input value for notes
-                    notes =
-                        value; // Replace with your variable to hold the notes
+                    setState(() {
+                      notes = value;
+                    });
                   },
                 ),
               ),
@@ -533,7 +535,10 @@ class _BookingScreenState extends State<BookingScreen>
               // Confirm & Proceed Button
               ElevatedButton(
                 onPressed: () async {
-                  if (laundryWeight != null && laundryWeight! > 0) {
+                  if (laundryWeight != null &&
+                      laundryWeight! > 0 &&
+                      selectedDate != null &&
+                      selectedTime != null) {
                     print(
                         "Pick Up Date : $selectedDate \n Pick Up Time : $selectedTime \n Selected Service  : $selectedServiceName \n Selected Serivce ID: $selectedServiceId \n Selected Shop ID : $selectedShopID \n Selected Shop : $selectedShopName \n Note: $notes \n Laundry Weight : $laundryWeight");
                     bool? isSuccess = await authService.booking(
@@ -552,7 +557,7 @@ class _BookingScreenState extends State<BookingScreen>
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                          content: Text('Please enter a valid laundry weight')),
+                          content: Text('Please complete all required fields')),
                     );
                   }
                 },
