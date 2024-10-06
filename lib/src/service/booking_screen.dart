@@ -130,18 +130,21 @@ class _BookingScreenState extends State<BookingScreen>
                 ElevatedButton(
                   onPressed: _nextPage, // Move to the next tab
                   style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(), // Rounded stadium shape
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          8), // Adjust the radius as needed
+                      side: BorderSide(color: Theme.of(context).primaryColor),
+                    ),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 10), // Padding for the button
-                    backgroundColor: const Color.fromRGBO(
-                        4, 90, 208, 1), // Button background color
+                        horizontal: 30, vertical: 15),
+                    backgroundColor: Colors.white,
                   ),
                   child: Text(
                     'Chọn dịch vụ',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
@@ -172,6 +175,7 @@ class _BookingScreenState extends State<BookingScreen>
             itemBuilder: (context, index) {
               var service = services[index];
               return Card(
+                shadowColor: Colors.black,
                 margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ListTile(
                   title: Text(service['name'],
@@ -198,7 +202,17 @@ class _BookingScreenState extends State<BookingScreen>
 
                       _nextPage(); // Move to the next tab
                     },
-                    child: const Text('Select'),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            16), // Adjust the radius as needed
+                        side: BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 10),
+                      backgroundColor: Colors.white,
+                    ),
+                    child: const Text('Chọn'),
                   ),
                 ),
               );
@@ -220,8 +234,11 @@ class _BookingScreenState extends State<BookingScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Select Pickup Time',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Chọn thời gian nhận hàng',
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF045AD1)),
             ),
             const SizedBox(height: 20),
 
@@ -237,14 +254,14 @@ class _BookingScreenState extends State<BookingScreen>
                 children: [
                   Text(
                     selectedDate != null && selectedTime != null
-                        ? 'Selected Pickup Time: ${formatPickupDateTime(selectedDate!, selectedTime!)}'
-                        : 'No time selected',
-                    style: const TextStyle(fontSize: 16),
+                        ? 'Thời gian nhận hàng: ${formatPickupDateTime(selectedDate!, selectedTime!)}'
+                        : 'Chưa chọn thời gian',
+                    style: const TextStyle(fontSize: 14),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 10),
                   const Text(
-                    'Please select a date and time',
+                    'Xin hãy chọn ngày và thời gian nhận hàng',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                 ],
@@ -282,12 +299,16 @@ class _BookingScreenState extends State<BookingScreen>
                 }
               },
               style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)), // Rounded button
+                  borderRadius:
+                      BorderRadius.circular(8), // Adjust the radius as needed
+                  side: BorderSide(color: Theme.of(context).primaryColor),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                backgroundColor: Colors.white,
               ),
-              child: const Text('Select Date'),
+              child: const Text('Chọn Ngày'),
             ),
 
             const SizedBox(height: 10),
@@ -319,12 +340,16 @@ class _BookingScreenState extends State<BookingScreen>
                 }
               },
               style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)), // Rounded button
+                  borderRadius:
+                      BorderRadius.circular(8), // Adjust the radius as needed
+                  side: BorderSide(color: Theme.of(context).primaryColor),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                backgroundColor: Colors.white,
               ),
-              child: const Text('Select Time'),
+              child: const Text('Chọn Thời Gian'),
             ),
 
             const SizedBox(height: 20),
@@ -349,18 +374,32 @@ class _BookingScreenState extends State<BookingScreen>
                 } else {
                   // Show a message if date or time is not selected
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Please select both date and time')),
+                    SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(Icons.error_outline, color: Colors.white),
+                          SizedBox(width: 10),
+                          Text("Xin hãy chọn ngày và thời gian nhận hàng"),
+                        ],
+                      ),
+                      backgroundColor: Colors.red,
+                      duration:
+                          const Duration(seconds: 2), // Duration of the toast
+                    ),
                   );
                 }
               },
               style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)), // Rounded button
+                  borderRadius:
+                      BorderRadius.circular(8), // Adjust the radius as needed
+                  side: BorderSide(color: Theme.of(context).primaryColor),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                backgroundColor: Colors.white,
               ),
-              child: const Text('Next: Xác nhận'),
+              child: const Text('Tiếp Theo'),
             ),
           ],
         ),
@@ -379,15 +418,18 @@ class _BookingScreenState extends State<BookingScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Confirm Booking',
+                'Xác nhận thông tin',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF045AD1)),
               ),
               const SizedBox(height: 20),
 
               // Display Selected Pickup Time
               Text(
-                'Pickup Time:',
+                'Thời gian nhận hàng',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -403,7 +445,7 @@ class _BookingScreenState extends State<BookingScreen>
                 child: Text(
                   selectedDate != null && selectedTime != null
                       ? formatPickupDateTime(selectedDate!, selectedTime!)
-                      : 'Not selected',
+                      : 'Chưa chọn thời gian',
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
@@ -412,7 +454,7 @@ class _BookingScreenState extends State<BookingScreen>
 
 // Display Laundry Shop Name
               Text(
-                'Laundry Shop:',
+                'Tên tiệm giặt',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -428,7 +470,7 @@ class _BookingScreenState extends State<BookingScreen>
                 child: Text(
                   selectedShopName.isNotEmpty
                       ? selectedShopName
-                      : 'Not selected', // Replace with actual shop name
+                      : 'Chưa chọn', // Replace with actual shop name
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
@@ -437,7 +479,7 @@ class _BookingScreenState extends State<BookingScreen>
 
 // Display Selected Service Name
               Text(
-                'Service:',
+                'Dịch vụ',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -452,7 +494,7 @@ class _BookingScreenState extends State<BookingScreen>
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
                   selectedServiceName ??
-                      'Not selected', // Replace with actual service name
+                      'Chưa chọn', // Replace with actual service name
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
@@ -462,7 +504,7 @@ class _BookingScreenState extends State<BookingScreen>
               const SizedBox(height: 20),
 
               Text(
-                'Laundry Weight',
+                'Trọng lượng đồ giặt',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -497,7 +539,7 @@ class _BookingScreenState extends State<BookingScreen>
 
               // Input Field for Notes
               Text(
-                'Notes',
+                'Ghi chú',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -514,7 +556,7 @@ class _BookingScreenState extends State<BookingScreen>
                   cursorColor: const Color.fromRGBO(4, 90, 208, 1),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Enter your notes here.',
+                    hintText: 'Nhập ghi chú của bạn.',
                     hintStyle: TextStyle(
                         color: const Color.fromRGBO(208, 207, 207, 1)),
                     contentPadding: const EdgeInsets.all(10),
@@ -556,18 +598,32 @@ class _BookingScreenState extends State<BookingScreen>
                     _nextPage(); // Navigate to the result tab
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Please complete all required fields')),
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            Icon(Icons.error_outline, color: Colors.white),
+                            SizedBox(width: 10),
+                            Text("Xin hãy điền hết thông tin"),
+                          ],
+                        ),
+                        backgroundColor: Colors.red,
+                        duration:
+                            const Duration(seconds: 2), // Duration of the toast
+                      ),
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
+                    borderRadius:
+                        BorderRadius.circular(8), // Adjust the radius as needed
+                    side: BorderSide(color: Theme.of(context).primaryColor),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  backgroundColor: Colors.white,
                 ),
-                child: const Text('Confirm & Next'),
+                child: const Text('Xác nhận'),
               )
             ],
           ),
