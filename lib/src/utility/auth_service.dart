@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/io_client.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wash_wow/src/utility/model/store_details.dart';
 
 class AuthService {
   final String baseUrl;
@@ -76,8 +77,9 @@ class AuthService {
           await storage.write(key: 'token', value: token);
           await storage.write(key: 'fullName', value: fullName);
           await storage.write(key: 'id', value: id);
-          await storage.write(key: 'role', value:  role);
-          print('Login Successfully !! id: $id role: $role'); // Debugging line
+          await storage.write(key: 'role', value: role);
+          print(
+              'Login Successfully !! id: $id role: $role token: $token'); // Debugging line
           return role;
         } else {
           print('Token or role is missing in the response: $data');
@@ -186,7 +188,6 @@ class AuthService {
           (X509Certificate cert, String host, int port) => true;
 
     final token = await storage.read(key: 'token');
-    print(token);
 
     if (token == null) {
       print('No token found, please log in again');
@@ -219,6 +220,103 @@ class AuthService {
       }
     } catch (error) {
       print('Error during form submission: $error');
+      return false;
+    }
+  }
+
+  Future<bool> postShopService(
+      String? name, String? description, double? pricePerKg, String? shopId) async {
+    HttpClient client = HttpClient()
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+
+    final token = await storage.read(key: 'token');
+
+    if (token == null) {
+      print('No token found, please log in again');
+      return false;
+    }
+
+    final ioClient = IOClient(client);
+
+    try {
+      final response = await ioClient.post(
+        Uri.parse('$baseUrl/ShopService'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'name': name,
+          'description': description,
+          'pricePerKg': pricePerKg,
+          'shopId': shopId,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Add service successful');
+        return true;
+      } else {
+        print('Add service failed: ${response.body}');
+        throw Exception(
+            'Add service with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error during registration: $error');
+      return false;
+    }
+  }
+
+  Future<bool> booking(
+    double? laundryWeight,
+    String? note,
+    String? shopPickupTime,
+    String? laundryShopId,
+    String voucherId,
+    List<BookingItem> bookingItems, // Add this parameter
+  ) async {
+    HttpClient client = HttpClient()
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+
+    final token = await storage.read(key: 'token');
+
+    if (token == null) {
+      print('No token found, please log in again');
+      return false;
+    }
+
+    final ioClient = IOClient(client);
+
+    try {
+      final response = await ioClient.post(
+        Uri.parse('$baseUrl/Booking'), // Ensure this URL is correct
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'laundryWeight': laundryWeight,
+          'note': note,
+          'shopPickupTime': shopPickupTime, // Format to ISO 8601
+          'laundryShopId': laundryShopId,
+          'voucherId': voucherId,
+          'bookingItems': bookingItems
+              .map((item) => item.toJson())
+              .toList(), // Convert booking items to JSON
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Booking successful');
+        return true;
+      } else {
+        print('Booking failed: ${response.body}');
+        throw Exception('Booking failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error during Booking: $error');
       return false;
     }
   }

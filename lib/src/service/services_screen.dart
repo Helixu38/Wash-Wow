@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:wash_wow/src/service/booking_screen.dart';
+import 'package:wash_wow/src/utility/fetch_service.dart';
 
 class ServicesScreen extends StatefulWidget {
   final String serviceName;
@@ -17,11 +19,25 @@ class ServicesScreen extends StatefulWidget {
 
 class _ServicesScreenState extends State<ServicesScreen> {
   String locationName = "Getting location...";
+  List<dynamic> laundryShops = []; // List to store the fetched shops
 
   @override
   void initState() {
     super.initState();
-    _getLocationAndAddress(); // Fetch location on init
+    _getLocationAndAddress();
+    _fetchLaundryShops(); // Fetch laundry shops when the screen loads
+  }
+
+  // Function to fetch laundry shops
+  Future<void> _fetchLaundryShops() async {
+    try {
+      var shops = await fetchLaundryShops(1, 10);
+      setState(() {
+        laundryShops = shops; // Assuming 'value' holds the shop list
+      });
+    } catch (e) {
+      print("Error fetching laundry shops: $e");
+    }
   }
 
   Future<void> _getLocationAndAddress() async {
@@ -33,8 +49,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
       Placemark place = placemarks[0];
 
       setState(() {
-        locationName =
-            "${place.street}, ${place.administrativeArea}"; 
+        locationName = "${place.street}, ${place.administrativeArea}";
       });
       print(locationName);
     } catch (e) {
@@ -71,11 +86,22 @@ class _ServicesScreenState extends State<ServicesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: buildBody(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            child: buildLocation("Địa chỉ gần bạn", MdiIcons.map),
+          ),
+          Expanded(
+            child: buildLaundryShopList(), // ListView for displaying shops
+          ),
+        ],
+      ),
     );
   }
 
-  //Widget for top app bar
+  // Widget to build the app bar
   PreferredSizeWidget buildAppBar() {
     return PreferredSize(
         preferredSize: const Size.fromHeight(80.0),
@@ -94,21 +120,41 @@ class _ServicesScreenState extends State<ServicesScreen> {
         ));
   }
 
-  Widget buildBody() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-          child: buildLocation("Địa chỉ gần bạn", MdiIcons.map),
-        ),
-      ],
+  // ListView builder for laundry shops
+  Widget buildLaundryShopList() {
+    return ListView.builder(
+      itemCount: laundryShops.length,
+      itemBuilder: (context, index) {
+        var shop = laundryShops[index];
+        return Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: ListTile(
+            leading: Icon(MdiIcons.washingMachine,
+                color: Theme.of(context).primaryColor),
+            title: Text(shop['name']),
+            subtitle: Text(shop['address']),
+            trailing: Text(shop['status']),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BookingScreen(
+                          serviceId: widget.serviceName,
+                          laundryShopId: shop['id'].toString(),
+                        )),
+              );
+              // print('Selected Shop: ${shop['id']}');
+            },
+          ),
+        );
+      },
     );
   }
 
   Widget buildLocation(String title, IconData icon) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start, // Align to start
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,7 +166,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   color: Theme.of(context).primaryColor,
                   size: 24,
                 ),
-                const SizedBox(width: 8), // Optional spacing
+                const SizedBox(width: 8),
                 Text(
                   title,
                   style: TextStyle(
@@ -162,12 +208,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 8), // Optional spacing between elements
+        const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start, // Align items to start
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 "Địa điểm",
@@ -176,28 +221,22 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(height: 8), // Spacing below "Địa điểm"
+              const SizedBox(height: 8),
               Row(
                 children: [
                   Icon(
-                    MdiIcons.mapMarker, // Marker icon
+                    MdiIcons.mapMarker,
                     size: 16,
                     color: Colors.black54,
                   ),
-                  const SizedBox(width: 4), // Space between icon and text
+                  const SizedBox(width: 4),
                   Text(
-                    locationName, // Display fetched location
+                    locationName,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       color: Colors.black54,
                     ),
-                  ),
-                  const SizedBox(width: 4), // Space between text and icon
-                  Icon(
-                    Icons.expand_more, // Expand-down icon
-                    size: 16,
-                    color: Colors.black54,
                   ),
                 ],
               ),
