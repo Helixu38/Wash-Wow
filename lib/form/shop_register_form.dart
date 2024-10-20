@@ -558,15 +558,15 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
           'value': storeDetails.storeName,
         },
         {
-          'fieldID': 2, // ID for address
+          'fieldID': 3, // ID for address
           'value': storeDetails.address,
         },
         {
-          'fieldID': 3, // ID for storeEmail
+          'fieldID': 4, // ID for storeEmail
           'value': storeDetails.phoneNumber,
         },
         {
-          'fieldID': 4, // ID for phoneNumber
+          'fieldID': 5, // ID for phoneNumber
           'value': storeDetails.email,
         },
       ];

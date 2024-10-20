@@ -71,6 +71,7 @@ class _BookingScreenState extends State<BookingScreen>
             Tab(text: 'Đặt lịch'), // Set Pickup Time
             Tab(text: 'Thông Tin'), // Confirmation
             Tab(text: 'Xác nhận'), // Rating
+            // Tab(text: 'Thanh toán'),
           ],
           onTap: (index) {}, // Disable direct tab clicks by ignoring tap events
         ),
@@ -84,7 +85,8 @@ class _BookingScreenState extends State<BookingScreen>
           _buildServicesTab(widget.laundryShopId), // Services tab
           _buildPickupTimeTab(), // Set Pickup Time tab
           _buildConfirmationTab(), // Confirmation tab
-          _buildResultTab(), // Rating tab
+          _buildResultTab(),
+          // _buildPaymentTab(), // Rating tab
         ],
       ),
     );
@@ -194,7 +196,7 @@ class _BookingScreenState extends State<BookingScreen>
                             .add(BookingItem(servicesId: selectedServiceId!));
                       });
 
-                      print(widget.laundryShopId);
+                      // print(widget.laundryShopId);
                       print(
                           "Service ID : $selectedServiceId , Service Name : $selectedServiceName");
                       print(
@@ -233,173 +235,11 @@ class _BookingScreenState extends State<BookingScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Chọn thời gian nhận hàng',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF045AD1)),
-            ),
-            const SizedBox(height: 20),
-
-            // Display selected date and time
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[200], // Light grey background
-                borderRadius: BorderRadius.circular(8), // Rounded corners
-                border: Border.all(color: Colors.grey, width: 1), // Border
-              ),
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Text(
-                    selectedDate != null && selectedTime != null
-                        ? 'Thời gian nhận hàng: ${formatPickupDateTime(selectedDate!, selectedTime!)}'
-                        : 'Chưa chọn thời gian',
-                    style: const TextStyle(fontSize: 14),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Xin hãy chọn ngày và thời gian nhận hàng',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Button to select date
-            ElevatedButton(
-              onPressed: () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: selectedDate ?? DateTime.now(),
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.now().add(const Duration(days: 30)),
-                  builder: (BuildContext context, Widget? child) {
-                    return Theme(
-                      data: ThemeData.light().copyWith(
-                        primaryColor: Colors
-                            .blue, // Customize the color of the date picker
-                        colorScheme: ColorScheme.light(primary: Colors.blue),
-                        buttonTheme: const ButtonThemeData(
-                            textTheme: ButtonTextTheme.primary),
-                      ),
-                      child: child!,
-                    );
-                  },
-                );
-
-                if (pickedDate != null) {
-                  setState(() {
-                    selectedDate = pickedDate;
-                  });
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(8), // Adjust the radius as needed
-                  side: BorderSide(color: Theme.of(context).primaryColor),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                backgroundColor: Colors.white,
-              ),
-              child: const Text('Chọn Ngày'),
-            ),
-
-            const SizedBox(height: 10),
-
-            // Button to select time
-            ElevatedButton(
-              onPressed: () async {
-                TimeOfDay? pickedTime = await showTimePicker(
-                  context: context,
-                  initialTime: selectedTime ?? TimeOfDay.now(),
-                  builder: (BuildContext context, Widget? child) {
-                    return Theme(
-                      data: ThemeData.light().copyWith(
-                        primaryColor: Colors
-                            .blue, // Customize the color of the time picker
-                        colorScheme: ColorScheme.light(primary: Colors.blue),
-                        buttonTheme: const ButtonThemeData(
-                            textTheme: ButtonTextTheme.primary),
-                      ),
-                      child: child!,
-                    );
-                  },
-                );
-
-                if (pickedTime != null) {
-                  setState(() {
-                    selectedTime = pickedTime;
-                  });
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(8), // Adjust the radius as needed
-                  side: BorderSide(color: Theme.of(context).primaryColor),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                backgroundColor: Colors.white,
-              ),
-              child: const Text('Chọn Thời Gian'),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Proceed to confirmation step
             ElevatedButton(
               onPressed: () {
-                if (selectedDate != null && selectedTime != null) {
-                  // Combine selected date and time
-                  DateTime pickupDateTime = DateTime(
-                    selectedDate!.year,
-                    selectedDate!.month,
-                    selectedDate!.day,
-                    selectedTime!.hour,
-                    selectedTime!.minute,
-                  );
-
-                  // You can now use `pickupDateTime` for backend confirmation
-                  // Example: print(pickupDateTime); or send it to your backend
-
-                  _nextPage(); // Proceed to confirmation step
-                } else {
-                  // Show a message if date or time is not selected
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Row(
-                        children: [
-                          Icon(Icons.error_outline, color: Colors.white),
-                          SizedBox(width: 10),
-                          Text("Xin hãy chọn ngày và thời gian nhận hàng"),
-                        ],
-                      ),
-                      backgroundColor: Colors.red,
-                      duration:
-                          const Duration(seconds: 2), // Duration of the toast
-                    ),
-                  );
-                }
+                dateTimePickerWidget(context);
               },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(8), // Adjust the radius as needed
-                  side: BorderSide(color: Theme.of(context).primaryColor),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                backgroundColor: Colors.white,
-              ),
-              child: const Text('Tiếp Theo'),
+              child: Text('Pick Date-Time'),
             ),
           ],
         ),
@@ -581,12 +421,18 @@ class _BookingScreenState extends State<BookingScreen>
                       laundryWeight! > 0 &&
                       selectedDate != null &&
                       selectedTime != null) {
+                    TimeOfDay adjustedTime = TimeOfDay(
+                      hour: (selectedTime!.hour + 2) %
+                          24, // Ensuring the hour wraps around after 24
+                      minute: selectedTime!.minute,
+                    );
                     print(
-                        "Pick Up Date : $selectedDate \n Pick Up Time : $selectedTime \n Selected Service  : $selectedServiceName \n Selected Serivce ID: $selectedServiceId \n Selected Shop ID : $selectedShopID \n Selected Shop : $selectedShopName \n Note: $notes \n Laundry Weight : $laundryWeight");
+                        "Pick Up Date : $selectedDate \n Pick Up Time : $selectedTime \n Pick Up Time : $adjustedTime \n Selected Service  : $selectedServiceName \n Selected Serivce ID: $selectedServiceId \n Selected Shop ID : $selectedShopID \n Selected Shop : $selectedShopName \n Note: $notes \n Laundry Weight : $laundryWeight");
                     bool? isSuccess = await authService.booking(
                         laundryWeight,
                         notes,
                         formatPickupDateTime(selectedDate!, selectedTime!),
+                        formatPickupDateTime(selectedDate!, adjustedTime),
                         selectedShopID,
                         selectedVoucherID,
                         bookingItems);
@@ -657,9 +503,42 @@ class _BookingScreenState extends State<BookingScreen>
                           fontWeight: FontWeight.bold,
                           color: Colors.red),
                     )
-                  : const CircularProgressIndicator(), // Show a loading indicator before the result
+                  : const CircularProgressIndicator(),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     if (laundryWeight != null &&
+          //         laundryWeight! > 0 &&
+          //         selectedDate != null &&
+          //         selectedTime != null) {
+          //       bool? isSuccess = await authService.pay(
+
+          //           );
+
+          //       setState(() {
+          //         isBookingSuccess = isSuccess; // Update the booking status
+          //       });
+
+          //       _nextPage(); // Navigate to the result tab
+          //     }
+          //   },
+          //   style: ElevatedButton.styleFrom(
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius:
+          //           BorderRadius.circular(8), // Adjust the radius as needed
+          //       side: BorderSide(color: Theme.of(context).primaryColor),
+          //     ),
+          //     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          //     backgroundColor: Colors.white,
+          //   ),
+          //   child: const Text('Thanh toán'),
+          // ) // Show a loading indicator before the result
         ],
       ),
     );
   }
+
+  //Tab 6: Payment Tab
+  // Widget _buildPaymentTab() {
+  //   return Center();
+  // }
 }

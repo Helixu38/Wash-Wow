@@ -10,13 +10,16 @@ class AuthService {
 
   AuthService(this.baseUrl);
 
-  Future<bool> register(String fullName, String email, String password,
-      String phoneNumber, String address) async {
+  IOClient createIOClient() {
     HttpClient client = HttpClient()
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
+    return IOClient(client);
+  }
 
-    final ioClient = IOClient(client);
+  Future<bool> register(String fullName, String email, String password,
+      String phoneNumber, String address) async {
+    final ioClient = createIOClient();
 
     try {
       final response = await ioClient.post(
@@ -46,11 +49,7 @@ class AuthService {
   }
 
   Future<String?> login(String email, String password) async {
-    HttpClient client = HttpClient()
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-
-    final ioClient = IOClient(client);
+    final ioClient = createIOClient();
 
     try {
       final response = await ioClient.post(
@@ -224,8 +223,8 @@ class AuthService {
     }
   }
 
-  Future<bool> postShopService(
-      String? name, String? description, double? pricePerKg, String? shopId) async {
+  Future<bool> postShopService(String? name, String? description,
+      double? pricePerKg, String? shopId, int? minLaundryWeight) async {
     HttpClient client = HttpClient()
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
@@ -250,6 +249,7 @@ class AuthService {
           'name': name,
           'description': description,
           'pricePerKg': pricePerKg,
+          'minLaundryWeight': minLaundryWeight,
           'shopId': shopId,
         }),
       );
@@ -259,8 +259,7 @@ class AuthService {
         return true;
       } else {
         print('Add service failed: ${response.body}');
-        throw Exception(
-            'Add service with status: ${response.statusCode}');
+        throw Exception('Add service with status: ${response.statusCode}');
       }
     } catch (error) {
       print('Error during registration: $error');
@@ -272,6 +271,7 @@ class AuthService {
     double? laundryWeight,
     String? note,
     String? shopPickupTime,
+    String? customerPickupTime,
     String? laundryShopId,
     String voucherId,
     List<BookingItem> bookingItems, // Add this parameter
@@ -299,7 +299,8 @@ class AuthService {
         body: jsonEncode({
           'laundryWeight': laundryWeight,
           'note': note,
-          'shopPickupTime': shopPickupTime, // Format to ISO 8601
+          'shopPickupTime': shopPickupTime,
+          'customerPickupTime': customerPickupTime,
           'laundryShopId': laundryShopId,
           'voucherId': voucherId,
           'bookingItems': bookingItems
@@ -317,6 +318,84 @@ class AuthService {
       }
     } catch (error) {
       print('Error during Booking: $error');
+      return false;
+    }
+  }
+
+  Future<bool> changeBookingStatus(String? bookingID, String? status) async {
+    final ioClient = createIOClient();
+    final token = await storage.read(key: 'token');
+    if (token == null) {
+      print('No token found, please log in again');
+      return false;
+    }
+
+    try {
+      final response = await ioClient.patch(
+        Uri.parse('$baseUrl/Booking/bookings/$bookingID/status'), 
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'bookingId': bookingID,
+          'newStatus': status,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Change status successful');
+        return true;
+      } else {
+        print('Change status failed: ${response.body}');
+        throw Exception('Change status failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error during changing status: $error');
+      return false;
+    }
+  }
+
+  Future<bool> pay(
+    String? bookingID,
+    int paymentID,
+  ) async {
+    final ioClient = createIOClient();
+    final token = await storage.read(key: 'token');
+    final id = await storage.read(key: 'id');
+
+    if (token == null) {
+      print('No token found, please log in again');
+      return false;
+    }
+    if (id == null) {
+      print('No id found, please log in again');
+      return false;
+    }
+
+    try {
+      final response = await ioClient.post(
+        Uri.parse('$baseUrl/payOS'), // Ensure this URL is correct
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'buyerID': id,
+          'bookingID': bookingID,
+          'paymentID': paymentID,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Payment successful');
+        return true;
+      } else {
+        print('Payment failed: ${response.body}');
+        throw Exception('Payment failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error during Payment: $error');
       return false;
     }
   }

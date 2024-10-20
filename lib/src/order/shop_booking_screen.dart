@@ -93,6 +93,7 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
     final TextEditingController nameController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
     final TextEditingController priceController = TextEditingController();
+    final TextEditingController weightController = TextEditingController();
 
     return Column(
       children: [
@@ -122,7 +123,7 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
           child: FloatingActionButton(
             onPressed: () {
               _showAddServiceDialog(context, nameController,
-                  descriptionController, priceController);
+                  descriptionController, priceController, weightController);
             },
             backgroundColor: Theme.of(context).primaryColor,
             child: const Icon(Icons.add),
@@ -133,10 +134,12 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
   }
 
   void _showAddServiceDialog(
-      BuildContext context,
-      TextEditingController nameController,
-      TextEditingController descriptionController,
-      TextEditingController priceController) {
+    BuildContext context,
+    TextEditingController nameController,
+    TextEditingController descriptionController,
+    TextEditingController priceController,
+    TextEditingController weightController,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -244,6 +247,35 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
                     ),
                   ),
                   const SizedBox(height: 16),
+                  Text(
+                    'Cân nặng tối thiểu',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Color.fromRGBO(4, 90, 208, 1),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: TextField(
+                      cursorColor: const Color.fromRGBO(4, 90, 208, 1),
+                      controller: weightController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Enter price per Kg',
+                        hintStyle: TextStyle(
+                          color: const Color.fromRGBO(208, 207, 207, 1),
+                        ),
+                        contentPadding: const EdgeInsets.all(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   // Adding action buttons at the bottom
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -268,11 +300,15 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
                       ElevatedButton(
                         onPressed: () async {
                           double? price = double.tryParse(priceController.text);
+                          int? weight = int.tryParse(weightController.text);
+
                           bool? isSuccess = await authService.postShopService(
-                              nameController.text,
-                              descriptionController.text,
-                              price,
-                              widget.shopID);
+                            nameController.text,
+                            descriptionController.text,
+                            price,
+                            widget.shopID,
+                            weight,
+                          );
                           if (isSuccess) {
                             // After adding the service, fetch the updated list
                             fetchServices(); // Refresh the service list
@@ -328,11 +364,162 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ListTile(
-                  title: Text(booking['customerName'],
+                    title: Text(
+                      booking['customerName'],
                       style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold)),
-                  subtitle: Text('Pickup Time: ${booking['shopPickupTime']}'),
-                ),
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Pickup Time: ${booking['shopPickupTime']}'),
+                        Row(
+                          children: [
+                            const Text(
+                                'Status: '), // The label text stays unchanged
+                            Text(
+                              booking['status'],
+                              style: TextStyle(
+                                color: booking['status'] == 'PENDING'
+                                    ? Colors.orange
+                                    : booking['status'] == 'COMPLETED'
+                                        ? Colors.green
+                                        : booking['status'] == 'CANCELED'
+                                            ? Colors.red
+                                            : booking['status'] == 'CONFIRMED'
+                                                ? Theme.of(context).primaryColor
+                                                : Colors
+                                                    .black, // Default color for other statuses
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      print('Booking clicked: ${booking['id']}');
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(16), // Rounded corners
+                            ),
+                            elevation:
+                                4, // Slight elevation for a shadow effect
+                            child: Container(
+                              width: 400, // Set a custom width
+                              height: 300,
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Close button (X) at the top right
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.close,
+                                          color: Colors.black),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ),
+                                  Text(
+                                    'Booking Details',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text('Customer: ${booking['customerName']}',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.black54)),
+                                  Text(
+                                      'Pickup Time: ${booking['shopPickupTime']}',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.black54)),
+                                  Text('Status: ${booking['status']}',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.black54)),
+                                  const SizedBox(height: 24),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors
+                                              .green, // Accept button color
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          // Handle Accept action
+                                          String? bookingID = booking['id'];
+                                          bool success = await authService
+                                              .changeBookingStatus(
+                                                  bookingID, "1");
+                                          if (success) {
+                                            // Handle success (e.g., show a message or update the UI)
+                                            print(
+                                                'Booking status updated successfully.');
+                                            Navigator.of(context).pop();
+                                          } else {
+                                            // Handle failure (e.g., show an error message)
+                                            print(
+                                                'Failed to update booking status.');
+                                          }
+                                        },
+                                        child: const Text(
+                                          'Accept',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              Colors.red, // Reject button color
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          // Handle Reject action
+                                          // Implement your reject logic here
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text(
+                                          'Reject',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }),
               );
             },
           );
