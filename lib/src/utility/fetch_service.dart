@@ -29,7 +29,7 @@ Future<List<dynamic>> fetchLaundryShops(int pageNo, int pageSize) async {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
-      return data['value'];
+      return data['value']['data'];
     } else {
       throw Exception(
           'Failed to load data. Status code: ${response.statusCode}, Body: ${response.body}');
@@ -41,9 +41,10 @@ Future<List<dynamic>> fetchLaundryShops(int pageNo, int pageSize) async {
 
 Future<List<dynamic>> fetchLandryShopServices(
     String shopID, int pageNo, int pageSize) async {
+      print("Shop ID : $shopID");
   final FlutterSecureStorage storage = FlutterSecureStorage();
   final String url =
-      '$baseUrl/ShopService/services/$shopID?pageNo=$pageNo&pageSize=$pageSize';
+      '$baseUrl/ShopService/by-shop-id/$shopID?pageNo=$pageNo&pageSize=$pageSize';
   final token = await storage.read(key: 'token');
   print(token);
 
