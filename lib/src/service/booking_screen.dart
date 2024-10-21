@@ -752,7 +752,7 @@ class _BookingScreenState extends State<BookingScreen>
             final String checkoutUrlString = paymentResponse['checkoutUrl'];
 
             // Convert the URL string to a Uri object
-            final Uri checkoutUrl = Uri.parse('https://flutter.dev');
+            final Uri checkoutUrl = Uri.parse(checkoutUrlString);
 
             print(checkoutUrl);
 
