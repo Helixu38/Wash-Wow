@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/fetch_service.dart';
 import 'package:wash_wow/src/utility/model/store_details.dart';
@@ -695,7 +696,7 @@ class _BookingScreenState extends State<BookingScreen>
     // Check if booking was successful and start the timer to navigate
     if (isBookingSuccess == true) {
       // Start a timer to navigate to the next page after 15 seconds
-      Future.delayed(const Duration(seconds: 10), () {
+      Future.delayed(const Duration(seconds: 5), () {
         _nextPage(); // Navigate to the next page
       });
     }
@@ -731,23 +732,55 @@ class _BookingScreenState extends State<BookingScreen>
 
   // Tab 6: Payment Tab
   Widget _buildPaymentTab() {
-    return FutureBuilder<bool?>(
+    return FutureBuilder<Map<String, dynamic>?>(
       future: authService.pay(bookingId, paymentId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-              child: CircularProgressIndicator()); // Loading indicator
+          return const Center(
+            child: CircularProgressIndicator(), // Loading indicator
+          );
         } else if (snapshot.hasError) {
           return Center(
-              child: Text("Error: ${snapshot.error}")); // Error handling
+            child: Text("Error: ${snapshot.error}"), // Error handling
+          );
+        } else if (snapshot.hasData) {
+          // Payment response received
+          final paymentResponse = snapshot.data;
+          if (paymentResponse != null &&
+              paymentResponse['checkoutUrl'] != null) {
+            // Extract the checkout URL from the response
+            final String checkoutUrlString = paymentResponse['checkoutUrl'];
+
+            // Convert the URL string to a Uri object
+            final Uri checkoutUrl = Uri.parse('https://flutter.dev');
+
+            print(checkoutUrl);
+
+            // Launch the checkout URL in a web browser
+            _launchUrl(checkoutUrl);
+
+            return const Center(
+              child: Text("Redirecting to payment..."),
+            );
+          } else {
+            // Handle the case where payment failed or URL is missing
+            return const Center(
+              child: Text("Payment failed or URL not available"),
+            );
+          }
         } else {
-          // Payment success or failure
-          bool? success = snapshot.data;
-          return Center(
-            child: Text(success! ? "Payment successful" : "Payment failed"),
+          return const Center(
+            child: Text("Unexpected error occurred"), // Fallback error handling
           );
         }
       },
     );
   }
+
+// Helper function to launch the checkout URL
+  void _launchUrl(Uri url) async {
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  } 
 }
