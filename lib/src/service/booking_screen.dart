@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/fetch_service.dart';
-import 'package:wash_wow/src/utility/model/store_details.dart'; // Assuming this is where your fetchLaundryShopByID function is
+import 'package:wash_wow/src/utility/model/store_details.dart';
+import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
+// Assuming this is where your fetchLaundryShopByID function is
 
 class BookingScreen extends StatefulWidget {
   final String serviceId, laundryShopId;
@@ -28,6 +31,10 @@ class _BookingScreenState extends State<BookingScreen>
   final AuthService authService = AuthService('https://10.0.2.2:7276');
   double? laundryWeight;
   String notes = "";
+  String? customerPickupTime = "";
+  String? shopPickUpTime = "";
+  String? bookingId;
+  int? paymentId;
 
   String formatPickupDateTime(DateTime date, TimeOfDay time) {
     String formattedDate = "${date.year.toString().padLeft(4, '0')}-"
@@ -43,11 +50,11 @@ class _BookingScreenState extends State<BookingScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this); // 5 steps in total
+    _tabController = TabController(length: 6, vsync: this); // 5 steps in total
   }
 
   void _nextPage() {
-    if (_tabController.index < 4) {
+    if (_tabController.index < 5) {
       // Prevent going beyond the last page
       _tabController.animateTo(_tabController.index + 1);
       _pageController.animateToPage(
@@ -71,7 +78,7 @@ class _BookingScreenState extends State<BookingScreen>
             Tab(text: 'Đặt lịch'), // Set Pickup Time
             Tab(text: 'Thông Tin'), // Confirmation
             Tab(text: 'Xác nhận'), // Rating
-            // Tab(text: 'Thanh toán'),
+            Tab(text: 'Thanh toán'),
           ],
           onTap: (index) {}, // Disable direct tab clicks by ignoring tap events
         ),
@@ -86,6 +93,7 @@ class _BookingScreenState extends State<BookingScreen>
           _buildPickupTimeTab(), // Set Pickup Time tab
           _buildConfirmationTab(), // Confirmation tab
           _buildResultTab(),
+          _buildPaymentTab(),
           // _buildPaymentTab(), // Rating tab
         ],
       ),
@@ -235,15 +243,172 @@ class _BookingScreenState extends State<BookingScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              "Thời gian cửa hàng nhận",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: const Color.fromRGBO(4, 90, 208, 1),
+              ),
+            ),
             ElevatedButton(
               onPressed: () {
-                dateTimePickerWidget(context);
+                dateTimePickerWidget(context, (selectedDateTime) {
+                  setState(() {
+                    shopPickUpTime = selectedDateTime;
+                  });
+                });
               },
-              child: Text('Pick Date-Time'),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8), // Adjust the radius as needed
+                  side: BorderSide(color: Theme.of(context).primaryColor),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                backgroundColor: Colors.white,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min, // Keeps button size compact
+                children: [
+                  Icon(Icons.calendar_today,
+                      color: Theme.of(context).primaryColor), // Calendar Icon
+                  SizedBox(width: 10), // Spacing between icon and text
+                  Text(
+                    shopPickUpTime != null ? shopPickUpTime! : 'Pick Date-Time',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor), // Text color
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              "Thời gian khách nhận hàng ",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: const Color.fromRGBO(4, 90, 208, 1),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                dateTimePickerWidget(context, (selectedDateTime) {
+                  setState(() {
+                    customerPickupTime = selectedDateTime;
+                  });
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8), // Adjust the radius as needed
+                  side: BorderSide(color: Theme.of(context).primaryColor),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                backgroundColor: Colors.white,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min, // Keeps button size compact
+                children: [
+                  Icon(Icons.calendar_today,
+                      color: Theme.of(context).primaryColor), // Calendar Icon
+                  SizedBox(width: 10), // Spacing between icon and text
+                  Text(
+                    customerPickupTime != null
+                        ? customerPickupTime!
+                        : 'Pick Date-Time',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor), // Text color
+                  ),
+                ],
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (customerPickupTime != null && shopPickUpTime != null) {
+                  // Parse both times to DateTime objects
+                  DateTime customerTime =
+                      DateFormat('yyyy-MM-dd-HH:mm').parse(customerPickupTime!);
+                  DateTime shopTime =
+                      DateFormat('yyyy-MM-dd-HH:mm').parse(shopPickUpTime!);
+                  print(
+                      "Customer time : $customerTime \n Shop time : $shopTime");
+
+                  // Check if the customer time is at least 2 hours later than shop time
+                  if (customerTime.isBefore(shopTime.add(Duration(hours: 2)))) {
+                    // Show an error message if validation fails
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            Icon(Icons.error_outline, color: Colors.white),
+                            SizedBox(width: 10),
+                            Text(
+                                "Khách nhận hàng phải muộn hơn 2 tiếng so với \nthời gian cửa hàng nhận."),
+                          ],
+                        ),
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  } else {
+                    _nextPage(); // Proceed to confirmation step
+                  }
+                } else {
+                  // Show a message if either date or time is not selected
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(Icons.error_outline, color: Colors.white),
+                          SizedBox(width: 10),
+                          Text("Xin hãy chọn ngày và thời gian nhận hàng"),
+                        ],
+                      ),
+                      backgroundColor: Colors.red,
+                      duration:
+                          const Duration(seconds: 2), // Duration of the toast
+                    ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8), // Adjust the radius as needed
+                  side: BorderSide(color: Theme.of(context).primaryColor),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                backgroundColor: Colors.white,
+              ),
+              child: const Text('Tiếp Theo'),
             ),
           ],
         ),
       ),
+    );
+  }
+
+// dateTimePickerWidget function with a callback
+  dateTimePickerWidget(
+      BuildContext context, Function(String) onDateTimeSelected) {
+    return DatePicker.showDatePicker(
+      context,
+      dateFormat: 'yyyy MMMM dd HH:mm',
+      initialDateTime: DateTime.now(),
+      minDateTime: DateTime(2000),
+      maxDateTime: DateTime(3000),
+      onMonthChangeStartWithFirstDate: true,
+      onConfirm: (dateTime, List<int> index) {
+        String formattedDateTime =
+            DateFormat('yyyy-MM-dd-HH:mm').format(dateTime);
+        onDateTimeSelected(
+            formattedDateTime); // Call the callback to update the correct time
+      },
     );
   }
 
@@ -269,7 +434,7 @@ class _BookingScreenState extends State<BookingScreen>
 
               // Display Selected Pickup Time
               Text(
-                'Thời gian nhận hàng',
+                'Thời gian cửa hàng nhận',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -283,9 +448,29 @@ class _BookingScreenState extends State<BookingScreen>
                 ),
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  selectedDate != null && selectedTime != null
-                      ? formatPickupDateTime(selectedDate!, selectedTime!)
-                      : 'Chưa chọn thời gian',
+                  shopPickUpTime ?? 'Chưa chọn thời gian',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              Text(
+                'Thời gian nhận hàng ',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: const Color.fromRGBO(4, 90, 208, 1),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  customerPickupTime ?? 'Chưa chọn thời gian',
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
@@ -419,27 +604,54 @@ class _BookingScreenState extends State<BookingScreen>
                 onPressed: () async {
                   if (laundryWeight != null &&
                       laundryWeight! > 0 &&
-                      selectedDate != null &&
-                      selectedTime != null) {
-                    TimeOfDay adjustedTime = TimeOfDay(
-                      hour: (selectedTime!.hour + 2) %
-                          24, // Ensuring the hour wraps around after 24
-                      minute: selectedTime!.minute,
-                    );
+                      shopPickUpTime != null &&
+                      customerPickupTime != null) {
                     print(
-                        "Pick Up Date : $selectedDate \n Pick Up Time : $selectedTime \n Pick Up Time : $adjustedTime \n Selected Service  : $selectedServiceName \n Selected Serivce ID: $selectedServiceId \n Selected Shop ID : $selectedShopID \n Selected Shop : $selectedShopName \n Note: $notes \n Laundry Weight : $laundryWeight");
-                    bool? isSuccess = await authService.booking(
-                        laundryWeight,
-                        notes,
-                        formatPickupDateTime(selectedDate!, selectedTime!),
-                        formatPickupDateTime(selectedDate!, adjustedTime),
-                        selectedShopID,
-                        selectedVoucherID,
-                        bookingItems);
+                        "Shop pick time : $shopPickUpTime \n Customer pick time : $customerPickupTime\n Selected Service  : $selectedServiceName \n Selected Serivce ID: $selectedServiceId \n Selected Shop ID : $selectedShopID \n Selected Shop : $selectedShopName \n Note: $notes \n Laundry Weight : $laundryWeight");
+                    Map<String, dynamic>? bookingResult =
+                        await authService.booking(
+                            laundryWeight,
+                            notes,
+                            shopPickUpTime,
+                            customerPickupTime,
+                            selectedShopID,
+                            selectedVoucherID,
+                            bookingItems);
 
-                    setState(() {
-                      isBookingSuccess = isSuccess; // Update the booking status
-                    });
+                    if (bookingResult != null) {
+                      // If booking was successful, update the state
+                      setState(() {
+                        isBookingSuccess = true;
+
+                        print('Booking ID: $bookingId, Payment ID: $paymentId');
+                      });
+
+                      // Optionally, you can access bookingId and paymentId
+                      bookingId = bookingResult['bookingId'];
+                      paymentId = bookingResult[
+                          'paymentId']; // Update the booking status
+                      _nextPage(); // Navigate to the result tab
+                    } else {
+                      // Handle the case where booking was not successful
+                      setState(() {
+                        isBookingSuccess = false; // Update the booking status
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Row(
+                            children: [
+                              Icon(Icons.error_outline, color: Colors.white),
+                              SizedBox(width: 10),
+                              Text("Đặt chỗ không thành công"),
+                            ],
+                          ),
+                          backgroundColor: Colors.red,
+                          duration: const Duration(
+                              seconds: 2), // Duration of the toast
+                        ),
+                      );
+                    }
 
                     _nextPage(); // Navigate to the result tab
                   } else {
@@ -480,6 +692,14 @@ class _BookingScreenState extends State<BookingScreen>
 
   // Tab 5: Success/Failure Tab
   Widget _buildResultTab() {
+    // Check if booking was successful and start the timer to navigate
+    if (isBookingSuccess == true) {
+      // Start a timer to navigate to the next page after 15 seconds
+      Future.delayed(const Duration(seconds: 10), () {
+        _nextPage(); // Navigate to the next page
+      });
+    }
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -504,41 +724,30 @@ class _BookingScreenState extends State<BookingScreen>
                           color: Colors.red),
                     )
                   : const CircularProgressIndicator(),
-          // ElevatedButton(
-          //   onPressed: () async {
-          //     if (laundryWeight != null &&
-          //         laundryWeight! > 0 &&
-          //         selectedDate != null &&
-          //         selectedTime != null) {
-          //       bool? isSuccess = await authService.pay(
-
-          //           );
-
-          //       setState(() {
-          //         isBookingSuccess = isSuccess; // Update the booking status
-          //       });
-
-          //       _nextPage(); // Navigate to the result tab
-          //     }
-          //   },
-          //   style: ElevatedButton.styleFrom(
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius:
-          //           BorderRadius.circular(8), // Adjust the radius as needed
-          //       side: BorderSide(color: Theme.of(context).primaryColor),
-          //     ),
-          //     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-          //     backgroundColor: Colors.white,
-          //   ),
-          //   child: const Text('Thanh toán'),
-          // ) // Show a loading indicator before the result
         ],
       ),
     );
   }
 
-  //Tab 6: Payment Tab
-  // Widget _buildPaymentTab() {
-  //   return Center();
-  // }
+  // Tab 6: Payment Tab
+  Widget _buildPaymentTab() {
+    return FutureBuilder<bool?>(
+      future: authService.pay(bookingId, paymentId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+              child: CircularProgressIndicator()); // Loading indicator
+        } else if (snapshot.hasError) {
+          return Center(
+              child: Text("Error: ${snapshot.error}")); // Error handling
+        } else {
+          // Payment success or failure
+          bool? success = snapshot.data;
+          return Center(
+            child: Text(success! ? "Payment successful" : "Payment failed"),
+          );
+        }
+      },
+    );
+  }
 }

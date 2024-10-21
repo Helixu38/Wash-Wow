@@ -16,12 +16,14 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
   late TabController _tabController;
   final AuthService authService = AuthService('https://10.0.2.2:7276');
   List<dynamic> services = [];
+  List<dynamic> bookings = [];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     fetchServices(); // Fetch services initially
+    fetchBookings();
   }
 
   void fetchServices() async {
@@ -29,6 +31,14 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
         await fetchLandryShopServices(widget.shopID.toString(), 1, 20);
     setState(() {
       services = fetchedServices; // Update the state with fetched services
+    });
+  }
+
+  void fetchBookings() async {
+    final fetchedBookings =
+        await fetchBookingByShopID(widget.shopID.toString(), 1, 20);
+    setState(() {
+      bookings = fetchedBookings; // Update the state with fetched services
     });
   }
 
@@ -61,7 +71,7 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
                 // First tab for "Dịch vụ"
                 buildServiceTab(),
                 // Second tab for "Đơn hàng"
-                buildShopBookingCard(widget.shopID.toString(), 1, 20),
+                buildShopBookingCard(),
               ],
             ),
           ),
@@ -341,191 +351,288 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
     );
   }
 
-  Widget buildShopBookingCard(String shopId, int pageNo, int pageSize) {
-    return FutureBuilder<List<dynamic>>(
-      future: fetchBookingByShopID(
-          shopId, pageNo, pageSize), // Assuming you have this function
-      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (snapshot.hasData) {
-          List<dynamic> bookings = snapshot.data!;
+  Widget buildShopBookingCard() {
+    if (bookings.isEmpty) {
+      return const Center(child: Text('No bookings found'));
+    }
 
-          return ListView.builder(
-            itemCount: bookings.length,
-            itemBuilder: (context, index) {
-              var booking = bookings[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+    return ListView.builder(
+      itemCount: bookings.length,
+      itemBuilder: (context, index) {
+        var booking = bookings[index];
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: ListTile(
+            title: Text(
+              booking['customerName'],
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Thời gian nhận: ${booking['shopPickupTime']}'),
+                Row(
+                  children: [
+                    const Text('Trạng thái: '),
+                    Text(
+                      booking['status'] == 'PENDING'
+                          ? 'Đang chờ'
+                          : booking['status'] == 'COMPLETED'
+                              ? 'Hoàn thành'
+                              : booking['status'] == 'CANCELED'
+                                  ? 'Đã hủy'
+                                  : booking['status'] == 'CONFIRMED'
+                                      ? 'Đã xác nhận'
+                                      : booking[
+                                          'status'], // Fallback to original status if it doesn't match
+                      style: TextStyle(
+                        color: booking['status'] == 'PENDING'
+                            ? Colors.orange
+                            : booking['status'] == 'COMPLETED'
+                                ? Colors.green
+                                : booking['status'] == 'CANCELED'
+                                    ? Colors.red
+                                    : booking['status'] == 'CONFIRMED'
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-                child: ListTile(
-                    title: Text(
-                      booking['customerName'],
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+              ],
+            ),
+            onTap: () {
+              print('Booking clicked: ${booking['id']}');
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Pickup Time: ${booking['shopPickupTime']}'),
-                        Row(
-                          children: [
-                            const Text(
-                                'Status: '), // The label text stays unchanged
-                            Text(
-                              booking['status'],
-                              style: TextStyle(
-                                color: booking['status'] == 'PENDING'
-                                    ? Colors.orange
+                    elevation: 4,
+                    child: Container(
+                      width: 500,
+                      height: 400,
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                              icon:
+                                  const Icon(Icons.close, color: Colors.black),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ),
+                          Text(
+                            'Chi tiết', // Booking Details
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Khách hàng: ${booking['customerName']}', // Customer
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Thời gian lấy hàng: ${booking['shopPickupTime']}', // Pickup Time
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              const Text('Trạng thái: '), // Status Label
+                              Text(
+                                booking['status'] == 'PENDING'
+                                    ? 'Đang chờ' // Pending
                                     : booking['status'] == 'COMPLETED'
-                                        ? Colors.green
+                                        ? 'Hoàn thành' // Completed
                                         : booking['status'] == 'CANCELED'
-                                            ? Colors.red
+                                            ? 'Đã hủy' // Canceled
                                             : booking['status'] == 'CONFIRMED'
-                                                ? Theme.of(context).primaryColor
-                                                : Colors
-                                                    .black, // Default color for other statuses
-                                fontWeight: FontWeight.bold,
+                                                ? 'Đã xác nhận' // Confirmed
+                                                : booking[
+                                                    'status'], // Fallback to original status if it doesn't match
+                                style: TextStyle(
+                                  color: booking['status'] == 'PENDING'
+                                      ? Colors.orange
+                                      : booking['status'] == 'COMPLETED'
+                                          ? Colors.green
+                                          : booking['status'] == 'CANCELED'
+                                              ? Colors.red
+                                              : booking['status'] == 'CONFIRMED'
+                                                  ? Theme.of(context)
+                                                      .primaryColor
+                                                  : Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  String? bookingID = booking['id'];
+                                  String currentStatus = booking[
+                                      'status']; // Get the current status
+
+                                  // Check if the current status allows changing to "ACCEPTED"
+                                  if (currentStatus == 'COMPLETED' ||
+                                      currentStatus == 'CANCELED') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            Icon(Icons.error_outline,
+                                                color: Colors.white),
+                                            SizedBox(width: 10),
+                                            Text(
+                                                "Không thể thay đổi trạng thái từ '$currentStatus' \n sang 'ĐƯỢC CHẤP NHẬN'"), // Cannot change status from 'currentStatus' to 'ACCEPTED'
+                                          ],
+                                        ),
+                                        backgroundColor: Colors.red,
+                                        duration: const Duration(
+                                            seconds:
+                                                2), // Duration of the toast
+                                      ),
+                                    );
+                                    return; // Exit early to prevent further actions
+                                  }
+
+                                  bool success = await authService
+                                      .changeBookingStatus(bookingID, "1");
+                                  if (success) {
+                                    print(
+                                        'Trạng thái đặt hàng đã được cập nhật thành công.'); // Booking status updated successfully.
+                                    Navigator.of(context).pop();
+                                    fetchBookings(); // Refresh bookings
+                                  } else {
+                                    print(
+                                        'Cập nhật trạng thái đặt hàng không thành công.'); // Failed to update booking status.
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            Icon(Icons.error_outline,
+                                                color: Colors.white),
+                                            SizedBox(width: 10),
+                                            Text(
+                                                "Cập nhật trạng thái đặt hàng không thành công."), // Failed to update booking status.
+                                          ],
+                                        ),
+                                        backgroundColor: Colors.red,
+                                        duration: const Duration(
+                                            seconds:
+                                                2), // Duration of the toast
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: const Text(
+                                  'Chấp nhận', // Accept
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  String? bookingID = booking['id'];
+                                  String currentStatus = booking[
+                                      'status']; // Get the current status
+
+                                  // Check if the current status allows changing to "CANCELED"
+                                  if (currentStatus == 'COMPLETED' ||
+                                      currentStatus == 'CANCELED') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            Icon(Icons.error_outline,
+                                                color: Colors.white),
+                                            SizedBox(width: 10),
+                                            Text(
+                                                "Không thể thay đổi trạng thái từ '$currentStatus' \n sang 'ĐÃ HỦY'"), // Cannot change status from 'currentStatus' to 'CANCELED'
+                                          ],
+                                        ),
+                                        backgroundColor: Colors.red,
+                                        duration: const Duration(
+                                            seconds:
+                                                2), // Duration of the toast
+                                      ),
+                                    );
+                                    return; // Exit early to prevent further actions
+                                  }
+
+                                  bool statusUpdated = await authService
+                                      .changeBookingStatus(bookingID, "4");
+                                  if (!statusUpdated) {
+                                    print(
+                                        'Cập nhật trạng thái đặt hàng không thành công.'); // Failed to update booking status.
+                                    return;
+                                  }
+                                  bool bookingDeleted = await authService
+                                      .deleteBooking(bookingID);
+                                  if (!bookingDeleted) {
+                                    print(
+                                        'Xóa đặt hàng không thành công.'); // Failed to delete booking.
+                                    return;
+                                  }
+                                  print(
+                                      'Trạng thái đặt hàng đã được cập nhật và xóa thành công.'); // Booking status updated and deleted successfully.
+                                  Navigator.of(context).pop();
+                                  fetchBookings();
+                                },
+                                child: const Text(
+                                  'Từ chối', // Reject
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    onTap: () {
-                      print('Booking clicked: ${booking['id']}');
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(16), // Rounded corners
-                            ),
-                            elevation:
-                                4, // Slight elevation for a shadow effect
-                            child: Container(
-                              width: 400, // Set a custom width
-                              height: 300,
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Close button (X) at the top right
-                                  Align(
-                                    alignment: Alignment.topRight,
-                                    child: IconButton(
-                                      icon: const Icon(Icons.close,
-                                          color: Colors.black),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ),
-                                  Text(
-                                    'Booking Details',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Text('Customer: ${booking['customerName']}',
-                                      style: TextStyle(
-                                          fontSize: 16, color: Colors.black54)),
-                                  Text(
-                                      'Pickup Time: ${booking['shopPickupTime']}',
-                                      style: TextStyle(
-                                          fontSize: 16, color: Colors.black54)),
-                                  Text('Status: ${booking['status']}',
-                                      style: TextStyle(
-                                          fontSize: 16, color: Colors.black54)),
-                                  const SizedBox(height: 24),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors
-                                              .green, // Accept button color
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 10),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        onPressed: () async {
-                                          // Handle Accept action
-                                          String? bookingID = booking['id'];
-                                          bool success = await authService
-                                              .changeBookingStatus(
-                                                  bookingID, "1");
-                                          if (success) {
-                                            // Handle success (e.g., show a message or update the UI)
-                                            print(
-                                                'Booking status updated successfully.');
-                                            Navigator.of(context).pop();
-                                          } else {
-                                            // Handle failure (e.g., show an error message)
-                                            print(
-                                                'Failed to update booking status.');
-                                          }
-                                        },
-                                        child: const Text(
-                                          'Accept',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              Colors.red, // Reject button color
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 10),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          // Handle Reject action
-                                          // Implement your reject logic here
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text(
-                                          'Reject',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    }),
+                  );
+                },
               );
             },
-          );
-        } else {
-          return const Center(child: Text('No bookings found'));
-        }
+          ),
+        );
       },
     );
   }

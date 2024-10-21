@@ -267,7 +267,7 @@ class AuthService {
     }
   }
 
-  Future<bool> booking(
+  Future<Map<String, dynamic>?> booking(
     double? laundryWeight,
     String? note,
     String? shopPickupTime,
@@ -284,7 +284,7 @@ class AuthService {
 
     if (token == null) {
       print('No token found, please log in again');
-      return false;
+      return null; // Return null instead of false
     }
 
     final ioClient = IOClient(client);
@@ -311,14 +311,17 @@ class AuthService {
 
       if (response.statusCode == 200) {
         print('Booking successful');
-        return true;
+        // Decode the response body
+        final responseBody = jsonDecode(response.body);
+        return responseBody['value'] ??
+            'No value returned'; // Return the 'value' object containing bookingId and paymentId
       } else {
         print('Booking failed: ${response.body}');
         throw Exception('Booking failed with status: ${response.statusCode}');
       }
     } catch (error) {
       print('Error during Booking: $error');
-      return false;
+      return null; // Return null on error
     }
   }
 
@@ -332,7 +335,7 @@ class AuthService {
 
     try {
       final response = await ioClient.patch(
-        Uri.parse('$baseUrl/Booking/bookings/$bookingID/status'), 
+        Uri.parse('$baseUrl/Booking/bookings/$bookingID/status'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -348,7 +351,8 @@ class AuthService {
         return true;
       } else {
         print('Change status failed: ${response.body}');
-        throw Exception('Change status failed with status: ${response.statusCode}');
+        throw Exception(
+            'Change status failed with status: ${response.statusCode}');
       }
     } catch (error) {
       print('Error during changing status: $error');
@@ -356,9 +360,40 @@ class AuthService {
     }
   }
 
-  Future<bool> pay(
+  Future<bool> deleteBooking(String? bookingID) async {
+    final ioClient = createIOClient();
+    final token = await storage.read(key: 'token');
+    if (token == null) {
+      print('No token found, please log in again');
+      return false;
+    }
+
+    try {
+      final response = await ioClient.delete(
+        Uri.parse('$baseUrl/Booking/$bookingID'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Delete booking successful');
+        return true;
+      } else {
+        print('Delete booking failed: ${response.body}');
+        throw Exception(
+            'Delete booking failed with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error during delete booking: $error');
+      return false;
+    }
+  }
+
+  Future<Map<String, dynamic>?> pay(
     String? bookingID,
-    int paymentID,
+    int? paymentID,
   ) async {
     final ioClient = createIOClient();
     final token = await storage.read(key: 'token');
@@ -366,11 +401,11 @@ class AuthService {
 
     if (token == null) {
       print('No token found, please log in again');
-      return false;
+      return null; // Return null if no token is found
     }
     if (id == null) {
       print('No id found, please log in again');
-      return false;
+      return null; // Return null if no id is found
     }
 
     try {
@@ -388,15 +423,29 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
-        print('Payment successful');
-        return true;
+        final Map<String, dynamic> responseBody = jsonDecode(response.body);
+        print('Payment successful: $responseBody');
+
+        // Example: Access specific fields
+        final String bin = responseBody['bin'];
+        final String accountNumber = responseBody['accountNumber'];
+        final int amount = responseBody['amount'];
+        final String checkoutUrl = responseBody['checkoutUrl'];
+        final String qrCode = responseBody['qrCode'];
+
+        // Log specific fields if needed
+        print(
+            'Bin: $bin, Account Number: $accountNumber, Checkout URL: $checkoutUrl');
+
+        // Return the entire response body as a map
+        return responseBody;
       } else {
         print('Payment failed: ${response.body}');
         throw Exception('Payment failed with status: ${response.statusCode}');
       }
     } catch (error) {
       print('Error during Payment: $error');
-      return false;
+      return null; // Return null in case of an error
     }
   }
 }
