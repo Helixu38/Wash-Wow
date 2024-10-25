@@ -5,7 +5,7 @@ import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/fetch_service.dart';
 import 'package:wash_wow/src/utility/model/store_details.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
-// Assuming this is where your fetchLaundryShopByID function is
+import 'package:qr_flutter/qr_flutter.dart';
 
 class BookingScreen extends StatefulWidget {
   final String serviceId, laundryShopId;
@@ -36,6 +36,7 @@ class _BookingScreenState extends State<BookingScreen>
   String? shopPickUpTime = "";
   String? bookingId;
   int? paymentId;
+  bool _isPaymentComplete = false;
 
   String formatPickupDateTime(DateTime date, TimeOfDay time) {
     String formattedDate = "${date.year.toString().padLeft(4, '0')}-"
@@ -327,6 +328,7 @@ class _BookingScreenState extends State<BookingScreen>
                 ],
               ),
             ),
+            const SizedBox(height: 4),
             ElevatedButton(
               onPressed: () {
                 if (customerPickupTime != null && shopPickUpTime != null) {
@@ -730,12 +732,13 @@ class _BookingScreenState extends State<BookingScreen>
     );
   }
 
-  // Tab 6: Payment Tab
+// Tab 6: Payment Tab
   Widget _buildPaymentTab() {
     return FutureBuilder<Map<String, dynamic>?>(
       future: authService.pay(bookingId, paymentId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
+          print("Booking ID : $bookingId \n Payment ID : $paymentId");
           return const Center(
             child: CircularProgressIndicator(), // Loading indicator
           );
@@ -746,41 +749,73 @@ class _BookingScreenState extends State<BookingScreen>
         } else if (snapshot.hasData) {
           // Payment response received
           final paymentResponse = snapshot.data;
-          if (paymentResponse != null &&
-              paymentResponse['checkoutUrl'] != null) {
-            // Extract the checkout URL from the response
-            final String checkoutUrlString = paymentResponse['checkoutUrl'];
+          if (paymentResponse != null && paymentResponse['qrCode'] != null) {
+            // Extract the QR code data from the response
+            final String qrCodeData = paymentResponse['qrCode'];
 
-            // Convert the URL string to a Uri object
-            final Uri checkoutUrl = Uri.parse(checkoutUrlString);
+            // Call changePaymentStatus after 15 seconds to mark payment as complete
+            Future.delayed(const Duration(seconds: 5), () async {
+              bool success = await authService.changePaymentStatus(
+                  paymentId, bookingId, 0);
+              if (success) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      children: [
+                        Icon(Icons.check_circle, color: Colors.white),
+                        SizedBox(width: 10),
+                        Text(
+                            'Thanh toán đã được nhận. \nCảm ơn bạn rất nhiều!'),
+                      ],
+                    ),
+                    backgroundColor: Colors.green,
+                    duration:
+                        const Duration(seconds: 3), // Duration of the toast
+                  ),
+                );
+              }
+            });
 
-            print(checkoutUrl);
-
-            // Launch the checkout URL in a web browser
-            _launchUrl(checkoutUrl);
-
-            return const Center(
-              child: Text("Redirecting to payment..."),
+            // Display the QR code and message in the UI
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Quét mã QR dưới đây để thanh toán:",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 20), // Spacing between text and QR code
+                QrImageView(
+                  data: qrCodeData, // Use the QR code data from the backend
+                  version: QrVersions.auto, // Automatically adjust the version
+                  size: 200.0, // Set the size of the QR code
+                ),
+                const SizedBox(
+                    height: 20), // Additional spacing after the QR code
+                const Text(
+                  "Cảm ơn bạn đã sử dụng dịch vụ!",
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+              ],
             );
           } else {
-            // Handle the case where payment failed or URL is missing
+            // Handle the case where payment failed or QR code is missing
             return const Center(
-              child: Text("Payment failed or URL not available"),
+              child: Text("Thanh toán thất bại hoặc mã QR không khả dụng"),
             );
           }
         } else {
           return const Center(
-            child: Text("Unexpected error occurred"), // Fallback error handling
+            child: Text(
+                "Có lỗi xảy ra, vui lòng thử lại"), // Fallback error handling
           );
         }
       },
     );
   }
-
-// Helper function to launch the checkout URL
-  void _launchUrl(Uri url) async {
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch $url');
-    }
-  } 
 }

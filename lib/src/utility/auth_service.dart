@@ -448,4 +448,41 @@ class AuthService {
       return null; // Return null in case of an error
     }
   }
+
+  Future<bool> changePaymentStatus(
+      int? paymentID, String? bookingID, int? status) async {
+    final ioClient = createIOClient();
+    final token = await storage.read(key: 'token');
+    if (token == null) {
+      print('No token found, please log in again');
+      return false;
+    }
+
+    try {
+      final response = await ioClient.put(
+        Uri.parse('$baseUrl/payments/payment/after-payment/$paymentID'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'paymentID': paymentID,
+          'orderID': bookingID,
+          'status': status,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Change payment status successful : ${response.body}');
+        return true;
+      } else {
+        print('Change payment status failed: ${response.body}');
+        throw Exception(
+            'Change payment status with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error during changing status payment: $error');
+      return false;
+    }
+  }
 }
