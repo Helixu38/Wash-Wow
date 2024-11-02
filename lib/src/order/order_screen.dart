@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:wash_wow/src/utility/auth_service.dart';
+import 'package:wash_wow/src/utility/fetch_service.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
@@ -7,7 +10,10 @@ class OrderScreen extends StatefulWidget {
   State<OrderScreen> createState() => _OrderScreenState();
 }
 
-class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStateMixin {
+class _OrderScreenState extends State<OrderScreen>
+    with SingleTickerProviderStateMixin {
+  final AuthService authService = AuthService('https://10.0.2.2:7276');
+
   late TabController _tabController;
 
   @override
@@ -34,7 +40,7 @@ class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStat
               controller: _tabController,
               children: [
                 Center(child: Text("Đang xử lý")),
-                Center(child: Text("Lịch sử")),
+                buildShopCard(),
                 Center(child: Text("Đánh giá")),
                 Center(child: Text("Đơn nháp")),
               ],
@@ -67,11 +73,11 @@ class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStat
       labelColor: Colors.black,
       unselectedLabelColor: Colors.grey,
       indicator: BoxDecoration(
-        color: Colors.transparent, 
+        color: Colors.transparent,
         border: Border(
           bottom: BorderSide(
-            color: Theme.of(context).primaryColor, 
-            width: 2.0, 
+            color: Theme.of(context).primaryColor,
+            width: 2.0,
           ),
         ),
       ),
@@ -81,6 +87,120 @@ class _OrderScreenState extends State<OrderScreen> with SingleTickerProviderStat
         Tab(text: "Đánh giá"),
         Tab(text: "Đơn nháp"),
       ],
+    );
+  }
+
+  Widget buildShopCard() {
+    return FutureBuilder<List<dynamic>>(
+      future: fetchBookingHistoryById(),
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Lỗi: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          List<dynamic> bookings = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: bookings.length,
+            itemBuilder: (context, index) {
+              var booking = bookings[index];
+              bool isConfirmed = booking['status'] == 'CONFIRMED';
+              return InkWell(
+                onTap: isConfirmed
+                    ? () async {
+                        String bookingId = booking['bookingId'];
+                        int paymentId = 58;
+
+                        try {
+                          final paymentResponse =
+                              await authService.pay(bookingId, paymentId);
+
+                          if (paymentResponse != null &&
+                              paymentResponse['qrCode'] != null) {
+                            final String qrCodeData = paymentResponse['qrCode'];
+
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text("Quét mã QR để thanh toán"),
+                                content: Container(
+                                  width: 200.0, // Set a fixed width
+                                  height: 200.0, // Set a fixed height
+                                  child: QrImageView(
+                                    data: qrCodeData,
+                                    version: QrVersions.auto,
+                                    size: 200.0,
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("Đóng"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        } catch (error) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text('Lỗi khi thanh toán: $error')),
+                          );
+                        }
+                      }
+                    : null,
+                child: Card(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ID: ${booking['bookingId']}',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        Text('Ngày tạo: ${booking['createdAt']}'),
+                        Text('Trạng thái: ${booking['status']}'),
+                        Text('Tổng giá: ${booking['totalPrice']} VND'),
+                        Text('Tổng trọng lượng: ${booking['totalWeight']} kg'),
+                        const SizedBox(height: 8),
+                        Text('Dịch vụ:',
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                        ...booking['bookingItems'].map<Widget>((item) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Tên dịch vụ: ${item['serviceName']}'),
+                                Text('Giá mỗi kg: ${item['pricePerKg']} VND'),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        } else {
+          return const Center(child: Text('Không có đơn hàng nào'));
+        }
+      },
     );
   }
 }

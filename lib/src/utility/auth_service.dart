@@ -485,4 +485,39 @@ class AuthService {
       return false;
     }
   }
+
+  Future<bool> changeNotificationStatus(
+      String? notificationId) async {
+    final ioClient = createIOClient();
+    final token = await storage.read(key: 'token');
+    if (token == null) {
+      print('No token found, please log in again');
+      return false;
+    }
+
+    try {
+      final response = await ioClient.put(
+        Uri.parse('$baseUrl/Notification/notifications/read'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'notificationIds': [notificationId],
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Change notification status successful : ${response.body}');
+        return true;
+      } else {
+        print('Change notification status failed: ${response.body}');
+        throw Exception(
+            'Change notification status with status: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error during changing status notification: $error');
+      return false;
+    }
+  }
 }
