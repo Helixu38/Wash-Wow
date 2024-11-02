@@ -503,7 +503,7 @@ class AuthService {
           'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
-          'notificationIds': notificationId,
+          'notificationIds': [notificationId],
         }),
       );
 

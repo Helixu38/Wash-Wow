@@ -82,12 +82,37 @@ class _NotificationScreenState extends State<NotificationScreen> {
         subtitle: isUnread
             ? const Text(
                 'New!',
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
               )
             : null,
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: () {
-          // Handle the tap event if needed
+        onTap: () async {
+          String? notificationId = notification['id'];
+          if (notificationId != null) {
+            try {
+              bool statusChanged =
+                  await authService.changeNotificationStatus(notificationId);
+              if (statusChanged) {
+                // Optionally, show a snackbar to notify the user
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Notification marked as read.')),
+                );
+                setState(() {
+                  // Optionally update the state to reflect the change in UI
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Failed to mark notification as read.')),
+                );
+              }
+            } catch (error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error: $error')),
+              );
+            }
+          }
         },
       ),
     );
