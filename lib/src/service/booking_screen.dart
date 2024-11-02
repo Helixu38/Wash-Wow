@@ -56,7 +56,7 @@ class _BookingScreenState extends State<BookingScreen>
   }
 
   void _nextPage() {
-    if (_tabController.index < 5) {
+    if (_tabController.index < 4) {
       // Prevent going beyond the last page
       _tabController.animateTo(_tabController.index + 1);
       _pageController.animateToPage(
@@ -80,7 +80,7 @@ class _BookingScreenState extends State<BookingScreen>
             Tab(text: 'Đặt lịch'), // Set Pickup Time
             Tab(text: 'Thông Tin'), // Confirmation
             Tab(text: 'Xác nhận'), // Rating
-            Tab(text: 'Thanh toán'),
+            // Tab(text: 'Thanh toán'),
           ],
           onTap: (index) {}, // Disable direct tab clicks by ignoring tap events
         ),
@@ -95,7 +95,7 @@ class _BookingScreenState extends State<BookingScreen>
           _buildPickupTimeTab(), // Set Pickup Time tab
           _buildConfirmationTab(), // Confirmation tab
           _buildResultTab(),
-          _buildPaymentTab(),
+          // _buildPaymentTab(),
           // _buildPaymentTab(), // Rating tab
         ],
       ),
@@ -733,89 +733,89 @@ class _BookingScreenState extends State<BookingScreen>
   }
 
 // Tab 6: Payment Tab
-  Widget _buildPaymentTab() {
-    return FutureBuilder<Map<String, dynamic>?>(
-      future: authService.pay(bookingId, paymentId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          print("Booking ID : $bookingId \n Payment ID : $paymentId");
-          return const Center(
-            child: CircularProgressIndicator(), // Loading indicator
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text("Error: ${snapshot.error}"), // Error handling
-          );
-        } else if (snapshot.hasData) {
-          // Payment response received
-          final paymentResponse = snapshot.data;
-          if (paymentResponse != null && paymentResponse['qrCode'] != null) {
-            // Extract the QR code data from the response
-            final String qrCodeData = paymentResponse['qrCode'];
+  // Widget _buildPaymentTab() {
+  //   return FutureBuilder<Map<String, dynamic>?>(
+  //     future: authService.pay(bookingId, paymentId),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         print("Booking ID : $bookingId \n Payment ID : $paymentId");
+  //         return const Center(
+  //           child: CircularProgressIndicator(), // Loading indicator
+  //         );
+  //       } else if (snapshot.hasError) {
+  //         return Center(
+  //           child: Text("Error: ${snapshot.error}"), // Error handling
+  //         );
+  //       } else if (snapshot.hasData) {
+  //         // Payment response received
+  //         final paymentResponse = snapshot.data;
+  //         if (paymentResponse != null && paymentResponse['qrCode'] != null) {
+  //           // Extract the QR code data from the response
+  //           final String qrCodeData = paymentResponse['qrCode'];
 
-            // Call changePaymentStatus after 15 seconds to mark payment as complete
-            Future.delayed(const Duration(seconds: 5), () async {
-              bool success = await authService.changePaymentStatus(
-                  paymentId, bookingId, 0);
-              if (success) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Row(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.white),
-                        SizedBox(width: 10),
-                        Text(
-                            'Thanh toán đã được nhận. \nCảm ơn bạn rất nhiều!'),
-                      ],
-                    ),
-                    backgroundColor: Colors.green,
-                    duration:
-                        const Duration(seconds: 3), // Duration of the toast
-                  ),
-                );
-              }
-            });
+  //           // Call changePaymentStatus after 15 seconds to mark payment as complete
+  //           Future.delayed(const Duration(seconds: 5), () async {
+  //             bool success = await authService.changePaymentStatus(
+  //                 paymentId, bookingId, 0);
+  //             if (success) {
+  //               ScaffoldMessenger.of(context).showSnackBar(
+  //                 SnackBar(
+  //                   content: Row(
+  //                     children: [
+  //                       Icon(Icons.check_circle, color: Colors.white),
+  //                       SizedBox(width: 10),
+  //                       Text(
+  //                           'Thanh toán đã được nhận. \nCảm ơn bạn rất nhiều!'),
+  //                     ],
+  //                   ),
+  //                   backgroundColor: Colors.green,
+  //                   duration:
+  //                       const Duration(seconds: 3), // Duration of the toast
+  //                 ),
+  //               );
+  //             }
+  //           });
 
-            // Display the QR code and message in the UI
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "Quét mã QR dưới đây để thanh toán:",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 20), // Spacing between text and QR code
-                QrImageView(
-                  data: qrCodeData, // Use the QR code data from the backend
-                  version: QrVersions.auto, // Automatically adjust the version
-                  size: 200.0, // Set the size of the QR code
-                ),
-                const SizedBox(
-                    height: 20), // Additional spacing after the QR code
-                const Text(
-                  "Cảm ơn bạn đã sử dụng dịch vụ!",
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
-                ),
-              ],
-            );
-          } else {
-            // Handle the case where payment failed or QR code is missing
-            return const Center(
-              child: Text("Thanh toán thất bại hoặc mã QR không khả dụng"),
-            );
-          }
-        } else {
-          return const Center(
-            child: Text(
-                "Có lỗi xảy ra, vui lòng thử lại"), // Fallback error handling
-          );
-        }
-      },
-    );
-  }
+  //           // Display the QR code and message in the UI
+  //           return Column(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: [
+  //               const Text(
+  //                 "Quét mã QR dưới đây để thanh toán:",
+  //                 style: TextStyle(
+  //                   fontSize: 18.0,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 20), // Spacing between text and QR code
+  //               QrImageView(
+  //                 data: qrCodeData, // Use the QR code data from the backend
+  //                 version: QrVersions.auto, // Automatically adjust the version
+  //                 size: 200.0, // Set the size of the QR code
+  //               ),
+  //               const SizedBox(
+  //                   height: 20), // Additional spacing after the QR code
+  //               const Text(
+  //                 "Cảm ơn bạn đã sử dụng dịch vụ!",
+  //                 style: TextStyle(
+  //                   fontSize: 16.0,
+  //                 ),
+  //               ),
+  //             ],
+  //           );
+  //         } else {
+  //           // Handle the case where payment failed or QR code is missing
+  //           return const Center(
+  //             child: Text("Thanh toán thất bại hoặc mã QR không khả dụng"),
+  //           );
+  //         }
+  //       } else {
+  //         return const Center(
+  //           child: Text(
+  //               "Có lỗi xảy ra, vui lòng thử lại"), // Fallback error handling
+  //         );
+  //       }
+  //     },
+  //   );
+  // }
 }

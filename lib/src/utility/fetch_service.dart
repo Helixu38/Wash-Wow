@@ -41,7 +41,7 @@ Future<List<dynamic>> fetchLaundryShops(int pageNo, int pageSize) async {
 
 Future<List<dynamic>> fetchLandryShopServices(
     String shopID, int pageNo, int pageSize) async {
-      print("Shop ID : $shopID");
+  print("Shop ID : $shopID");
   final FlutterSecureStorage storage = FlutterSecureStorage();
   final String url =
       '$baseUrl/ShopService/by-shop-id/$shopID?pageNo=$pageNo&pageSize=$pageSize';
@@ -194,6 +194,62 @@ Future<Map<String, dynamic>> fetchLaundryShopByID(String id) async {
         'openingHour': data['openingHour'],
         'closingHour': data['closingHour'],
       };
+    } else {
+      throw Exception(
+          'Failed to load data. Status code: ${response.statusCode}, Body: ${response.body}');
+    }
+  } catch (e) {
+    throw Exception('Error: $e');
+  }
+}
+
+Future<List<Map<String, dynamic>>> fetchBookingHistoryById() async {
+  final FlutterSecureStorage storage = FlutterSecureStorage();
+  final id = await storage.read(key: 'id');
+  if (id == null) {
+    print('No id found, please log in again');
+  }
+  final String url = '$baseUrl/Booking/history/$id';
+
+  final token = await storage.read(key: 'token');
+  if (token == null) {
+    throw Exception('No token found, please log in again');
+  }
+
+  final ioClient = createIOClient();
+
+  try {
+    final response = await ioClient.get(
+      Uri.parse(url),
+      headers: <String, String>{
+        'accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      // Assuming the response is a map with a 'value' key containing the booking list
+      List<Map<String, dynamic>> bookingHistory = [];
+      for (var booking in data['value']) {
+        // Parse each booking and add to the list
+        bookingHistory.add({
+          'bookingId': booking['bookingId'],
+          'createdAt': booking['createdAt'],
+          'status': booking['status'],
+          'totalPrice': booking['totalPrice'],
+          'totalWeight': booking['totalWeight'],
+          'bookingItems': booking['bookingItems']
+              .map((item) => {
+                    'serviceName': item['serviceName'],
+                    'pricePerKg': item['pricePerKg'],
+                  })
+              .toList(),
+        });
+      }
+
+      return bookingHistory;
     } else {
       throw Exception(
           'Failed to load data. Status code: ${response.statusCode}, Body: ${response.body}');
