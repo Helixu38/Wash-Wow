@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
@@ -13,7 +15,8 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen>
     with SingleTickerProviderStateMixin {
   final AuthService authService = AuthService('https://10.0.2.2:7276');
-
+  Timer? _paymentStatusTimer;
+  String? paymentStatus; // Track the current payment status
   late TabController _tabController;
 
   @override
@@ -26,6 +29,43 @@ class _OrderScreenState extends State<OrderScreen>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+// Function to check the payment status every 5 seconds
+  void checkPaymentStatus(String bookingId, int paymentId) async {
+    try {
+      final paymentResponse = await fetchPayOS(paymentId.toString());
+
+      if (paymentResponse['status'] == "PAID") {
+        setState(() {
+          paymentStatus = "PAID";
+        });
+
+        _paymentStatusTimer?.cancel();
+
+        // Call changePaymentStatus to update the backend
+        bool updateSuccess =
+            await authService.changePaymentStatus(paymentId, bookingId, 0);
+
+        if (updateSuccess) {
+          // Close the dialog when payment status is updated successfully
+          if (context.mounted) {
+            Navigator.of(context).pop();
+          }
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text("Thanh Toán Thành Công!")),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Failed to update payment status.")),
+          );
+        }
+      }
+    } catch (error) {
+      print('Error checking payment status: $error');
+    }
   }
 
   @override
@@ -121,28 +161,51 @@ class _OrderScreenState extends State<OrderScreen>
                               paymentResponse['qrCode'] != null) {
                             final String qrCodeData = paymentResponse['qrCode'];
 
+                            // Show QR code dialog and start status check
                             showDialog(
                               context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text("Quét mã QR để thanh toán"),
-                                content: Container(
-                                  width: 200.0, // Set a fixed width
-                                  height: 200.0, // Set a fixed height
-                                  child: QrImageView(
-                                    data: qrCodeData,
-                                    version: QrVersions.auto,
-                                    size: 200.0,
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text("Đóng"),
-                                  ),
-                                ],
-                              ),
+                              builder: (context) {
+                                return StatefulBuilder(
+                                  builder: (context, setState) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                          "Quét mã QR để thanh toán"),
+                                      content: Container(
+                                        width: 200.0,
+                                        height: 200.0,
+                                        child: paymentStatus == "PAID"
+                                            ? const Text(
+                                                "Thanh toán thành công!",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold))
+                                            : QrImageView(
+                                                data: qrCodeData,
+                                                version: QrVersions.auto,
+                                                size: 200.0,
+                                              ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            _paymentStatusTimer?.cancel();
+                                          },
+                                          child: const Text("Đóng"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            );
+
+                            // Start a timer to check the payment status every 5 seconds
+                            _paymentStatusTimer = Timer.periodic(
+                              const Duration(seconds: 5),
+                              (timer) =>
+                                  checkPaymentStatus(bookingId, paymentId),
                             );
                           }
                         } catch (error) {

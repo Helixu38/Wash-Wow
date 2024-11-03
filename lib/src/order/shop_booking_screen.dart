@@ -36,7 +36,7 @@ class _ShopBookingScreenState extends State<ShopBookingsScreen>
 
   void fetchBookings() async {
     final fetchedBookings =
-        await fetchBookingByShopID(widget.shopID.toString(), 1, 20);
+        await fetchBookingByShopID(widget.shopID.toString(), 1, 30);
     setState(() {
       bookings = fetchedBookings; // Update the state with fetched services
     });

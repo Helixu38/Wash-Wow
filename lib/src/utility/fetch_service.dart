@@ -261,8 +261,14 @@ Future<List<Map<String, dynamic>>> fetchBookingHistoryById() async {
 }
 
 Future<List<Map<String, dynamic>>> fetchNotifications(
-    String? id, int? pageNo, int? pageSize) async {
+    int? pageNo, int? pageSize) async {
   final FlutterSecureStorage storage = FlutterSecureStorage();
+  final id = await storage.read(key: 'id');
+  print(id);
+
+  if (id == null) {
+    print('No id found, please log in again');
+  }
   final String url =
       '$baseUrl/Notification/$id/notifications?pageNo=$pageNo&pageSize=$pageSize';
 
@@ -309,4 +315,71 @@ Future<List<Map<String, dynamic>>> fetchNotifications(
   }
 }
 
+Future<Map<String, dynamic>> fetchPayOS(String? id) async {
+  final FlutterSecureStorage storage = FlutterSecureStorage();
+  final String url = '$baseUrl/payOS/$id';
 
+  final token = await storage.read(key: 'token');
+  if (token == null) {
+    throw Exception('No token found, please log in again');
+  }
+
+  final ioClient = createIOClient();
+
+  try {
+    final response = await ioClient.get(
+      Uri.parse(url),
+      headers: <String, String>{
+        'accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      // Extract main order details
+      Map<String, dynamic> orderDetails = {
+        'id': data['id'],
+        'orderCode': data['orderCode'],
+        'amount': data['amount'],
+        'amountPaid': data['amountPaid'],
+        'amountRemaining': data['amountRemaining'],
+        'status': data['status'],
+        'createdAt': data['createdAt'],
+        'canceledAt': data['canceledAt'],
+        'cancellationReason': data['cancellationReason'],
+      };
+
+      // Parse transactions
+      List<Map<String, dynamic>> transactions = [];
+      if (data['transactions'] != null) {
+        for (var transaction in data['transactions']) {
+          transactions.add({
+            'reference': transaction['reference'],
+            'amount': transaction['amount'],
+            'accountNumber': transaction['accountNumber'],
+            'description': transaction['description'],
+            'transactionDateTime': transaction['transactionDateTime'],
+            'virtualAccountName': transaction['virtualAccountName'],
+            'virtualAccountNumber': transaction['virtualAccountNumber'],
+            'counterAccountBankId': transaction['counterAccountBankId'],
+            'counterAccountBankName': transaction['counterAccountBankName'],
+            'counterAccountName': transaction['counterAccountName'],
+            'counterAccountNumber': transaction['counterAccountNumber'],
+          });
+        }
+      }
+
+      // Combine order details with transactions
+      orderDetails['transactions'] = transactions;
+
+      return orderDetails;
+    } else {
+      throw Exception(
+          'Failed to load data. Status code: ${response.statusCode}, Body: ${response.body}');
+    }
+  } catch (e) {
+    throw Exception('Error: $e');
+  }
+}
