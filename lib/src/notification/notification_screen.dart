@@ -24,7 +24,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   Widget buildNotificationList() {
     return FutureBuilder<List<dynamic>>(
-      future: fetchNotifications("1", 1, 20),
+      future: fetchNotifications(1, 20),
       builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());

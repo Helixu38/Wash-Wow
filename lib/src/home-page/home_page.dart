@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
         ),
         const NavigationDestination(
           icon: Badge(child: Icon(Icons.mail, color: Colors.white)),
-          label: 'Hộp thư',
+          label: 'Thông báo',
         ),
         const NavigationDestination(
           selectedIcon:

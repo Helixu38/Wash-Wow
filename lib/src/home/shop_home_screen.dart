@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'package:wash_wow/src/utility/auth_service.dart';
 import 'package:wash_wow/src/utility/extension/string_extension.dart';
 import 'package:flutter_pannable_rating_bar/flutter_pannable_rating_bar.dart';
+import 'package:wash_wow/src/utility/fetch_service.dart';
 
 class ShopOwnerHomeScreen extends StatefulWidget {
   const ShopOwnerHomeScreen({super.key});
@@ -91,97 +92,106 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
   }
 
   Widget buildContent() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildShopBalance(10000),
-            const SizedBox(height: 20),
-            buildShopRevenue(1500000, 1250000),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: buildShopOrderAndRating(order, shopRating, shopPastRating),
+    return FutureBuilder<List<dynamic>>(
+      future: fetchLandryShopByOwnerID(1, 20), // Fetch shop data asynchronously
+      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          final walletBalance = snapshot.data![0]
+              ['wallet']; // Get wallet balance from the first shop
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildShopBalance(walletBalance), // Use dynamic wallet balance
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: buildShopOrderAndRating(
+                        order, shopRating, shopPastRating),
+                  ),
+                  buildContentShop(
+                    card1: buildContentCard(
+                      height: 65,
+                      width: 65,
+                      icon: MdiIcons.briefcase,
+                      text: "Đơn hàng",
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ShopOrderScreen()),
+                        );
+                      },
+                    ),
+                    card2: buildContentCard(
+                      height: 65,
+                      width: 65,
+                      icon: MdiIcons.washingMachine,
+                      text: "Tình trạng",
+                      onTap: () {
+                        print('Tình trạng tapped!');
+                      },
+                    ),
+                    card3: buildContentCard(
+                      height: 65,
+                      width: 65,
+                      icon: Icons.local_offer,
+                      text: "Khuyến mãi",
+                      onTap: () {
+                        print('Khuyến mãi tapped!');
+                      },
+                    ),
+                    card4: buildContentCard(
+                      height: 65,
+                      width: 65,
+                      icon: MdiIcons.bullhorn,
+                      text: "Quảng cáo",
+                      onTap: () {
+                        print('Quảng cáo tapped!');
+                      },
+                    ),
+                    card5: buildContentCard(
+                      height: 65,
+                      width: 65,
+                      icon: MdiIcons.finance,
+                      text: "Tài chính",
+                      onTap: () {
+                        print('Tài chính tapped!');
+                      },
+                    ),
+                    card6: buildContentCard(
+                      height: 65,
+                      width: 65,
+                      icon: MdiIcons.accountMultiple,
+                      text: "Nhân viên",
+                      onTap: () {
+                        print('Nhân viên tapped!');
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Divider(
+                    height: 20,
+                    thickness: 0.2,
+                    color: Colors.black,
+                  ),
+                  buildListViewNews("Có gì mới?"),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
-            buildContentShop(
-              card1: buildContentCard(
-                height: 65,
-                width: 65,
-                icon: MdiIcons.briefcase,
-                text: "Đơn hàng",
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ShopOrderScreen()),
-                  );
-                },
-              ),
-              card2: buildContentCard(
-                height: 65,
-                width: 65,
-                icon: MdiIcons.washingMachine,
-                text: "Tình trạng",
-                onTap: () {
-                  // Navigate to the Order screen or perform an action
-                  print('Tình trạng tapped!');
-                },
-              ),
-              card3: buildContentCard(
-                height: 65,
-                width: 65,
-                icon: Icons.local_offer,
-                text: "Khuyến mãi",
-                onTap: () {
-                  // Navigate to the Order screen or perform an action
-                  print('Khuyến mãi tapped!');
-                },
-              ),
-              card4: buildContentCard(
-                height: 65,
-                width: 65,
-                icon: MdiIcons.bullhorn,
-                text: "Quảng cáo",
-                onTap: () {
-                  // Navigate to the Order screen or perform an action
-                  print('Quảng cáo tapped!');
-                },
-              ),
-              card5: buildContentCard(
-                height: 65,
-                width: 65,
-                icon: MdiIcons.finance,
-                text: "Tài chính",
-                onTap: () {
-                  // Navigate to the Order screen or perform an action
-                  print('Tài chính tapped!');
-                },
-              ),
-              card6: buildContentCard(
-                height: 65,
-                width: 65,
-                icon: MdiIcons.accountMultiple,
-                text: "Nhân viên",
-                onTap: () {
-                  // Navigate to the Order screen or perform an action
-                  print('Nhân viên tapped!');
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Divider(
-              height: 20,
-              thickness: 0.2,
-              indent: 0,
-              endIndent: 0,
-              color: Colors.black,
-            ),
-            buildListViewNews("Có gì mới?"),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
+          );
+        } else {
+          return const Center(child: Text('No data available'));
+        }
+      },
     );
   }
 
