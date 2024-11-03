@@ -259,6 +259,8 @@ class _BookingScreenState extends State<BookingScreen>
                   setState(() {
                     shopPickUpTime = selectedDateTime;
                   });
+                  print(
+                      "Shop Pick-Up Time Selected: $shopPickUpTime"); // Debug print
                 });
               },
               style: ElevatedButton.styleFrom(
@@ -300,6 +302,8 @@ class _BookingScreenState extends State<BookingScreen>
                   setState(() {
                     customerPickupTime = selectedDateTime;
                   });
+                  print(
+                      "Customer Pickup Time Selected: $customerPickupTime"); // Debug print
                 });
               },
               style: ElevatedButton.styleFrom(
@@ -332,33 +336,40 @@ class _BookingScreenState extends State<BookingScreen>
             ElevatedButton(
               onPressed: () {
                 if (customerPickupTime != null && shopPickUpTime != null) {
-                  // Parse both times to DateTime objects
-                  DateTime customerTime =
-                      DateFormat('yyyy-MM-dd-HH:mm').parse(customerPickupTime!);
-                  DateTime shopTime =
-                      DateFormat('yyyy-MM-dd-HH:mm').parse(shopPickUpTime!);
-                  print(
-                      "Customer time : $customerTime \n Shop time : $shopTime");
+                  try {
+                    // Attempt to parse both times
+                    DateTime customerTime = DateFormat('yyyy-MM-dd HH:mm')
+                        .parseStrict(customerPickupTime!);
+                    DateTime shopTime = DateFormat('yyyy-MM-dd HH:mm')
+                        .parseStrict(shopPickUpTime!);
 
-                  // Check if the customer time is at least 2 hours later than shop time
-                  if (customerTime.isBefore(shopTime.add(Duration(hours: 2)))) {
-                    // Show an error message if validation fails
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Row(
-                          children: [
-                            Icon(Icons.error_outline, color: Colors.white),
-                            SizedBox(width: 10),
-                            Text(
-                                "Khách nhận hàng phải muộn hơn 2 tiếng so với \nthời gian cửa hàng nhận."),
-                          ],
+                    print(
+                        "Parsed Customer Time: $customerTime \nParsed Shop Time: $shopTime"); // Debug print
+
+                    // Check if the customer time is at least 2 hours later than shop time
+                    if (customerTime
+                        .isBefore(shopTime.add(Duration(hours: 2)))) {
+                      // Show an error message if validation fails
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Row(
+                            children: [
+                              Icon(Icons.error_outline, color: Colors.white),
+                              SizedBox(width: 10),
+                              Text(
+                                  "Khách nhận hàng phải muộn hơn 2 tiếng so với \nthời gian cửa hàng nhận."),
+                            ],
+                          ),
+                          backgroundColor: Colors.red,
+                          duration: const Duration(seconds: 2),
                         ),
-                        backgroundColor: Colors.red,
-                        duration: const Duration(seconds: 2),
-                      ),
-                    );
-                  } else {
-                    _nextPage(); // Proceed to confirmation step
+                      );
+                    } else {
+                      _nextPage(); // Proceed to confirmation step
+                    }
+                  } catch (e) {
+                    print(
+                        "Date Parsing Error: $e"); // Debugging for format error
                   }
                 } else {
                   // Show a message if either date or time is not selected
@@ -401,16 +412,17 @@ class _BookingScreenState extends State<BookingScreen>
       BuildContext context, Function(String) onDateTimeSelected) {
     return DatePicker.showDatePicker(
       context,
-      dateFormat: 'yyyy MMMM dd HH:mm',
+      dateFormat: 'yyyy-MM-dd HH:mm', // Ensure consistent format
       initialDateTime: DateTime.now(),
       minDateTime: DateTime(2000),
       maxDateTime: DateTime(3000),
       onMonthChangeStartWithFirstDate: true,
       onConfirm: (dateTime, List<int> index) {
-        String formattedDateTime =
-            DateFormat('yyyy-MM-dd-HH:mm').format(dateTime);
+        String formattedDateTime = DateFormat('yyyy-MM-dd HH:mm')
+            .format(dateTime); // Format with space
         onDateTimeSelected(
             formattedDateTime); // Call the callback to update the correct time
+        print("Selected DateTime: $formattedDateTime"); // Debug print
       },
     );
   }

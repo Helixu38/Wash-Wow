@@ -235,6 +235,7 @@ Future<List<Map<String, dynamic>>> fetchBookingHistoryById() async {
       for (var booking in data['value']) {
         // Parse each booking and add to the list
         bookingHistory.add({
+          'paymentId': booking['paymentId'],
           'bookingId': booking['bookingId'],
           'createdAt': booking['createdAt'],
           'status': booking['status'],

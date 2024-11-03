@@ -110,7 +110,8 @@ class _OrderScreenState extends State<OrderScreen>
                 onTap: isConfirmed
                     ? () async {
                         String bookingId = booking['bookingId'];
-                        int paymentId = 58;
+                        int paymentId = booking['paymentId'];
+                        print("Payment ID: $paymentId");
 
                         try {
                           final paymentResponse =
