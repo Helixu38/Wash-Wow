@@ -103,90 +103,214 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
           final walletBalance = snapshot.data![0]
               ['wallet']; // Get wallet balance from the first shop
 
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  buildShopBalance(walletBalance), // Use dynamic wallet balance
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: buildShopOrderAndRating(
-                        order, shopRating, shopPastRating),
+          // Now fetch the shop rating asynchronously
+          return FutureBuilder<List<dynamic>>(
+            future: fetchShopRating(
+                snapshot.data![0]['id'].toString(), 1, 20), // Fetch shop rating
+            builder: (BuildContext context,
+                AsyncSnapshot<List<dynamic>> ratingSnapshot) {
+              if (ratingSnapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (ratingSnapshot.hasError) {
+                return Center(child: Text('Error: ${ratingSnapshot.error}'));
+              } else if (ratingSnapshot.hasData) {
+                List<dynamic> ratings = ratingSnapshot.data!;
+
+                double shopRating = ratings.isNotEmpty
+                    ? ratings
+                            .map((rating) => rating['rating'])
+                            .reduce((a, b) => a + b) /
+                        ratings.length
+                    : 0; // Default to 0 if no ratings
+                double shopPastRating = ratings.isNotEmpty
+                    ? ratings
+                            .map((rating) => rating['pastRating'])
+                            .reduce((a, b) => a + b) /
+                        ratings.length // Adjust as needed
+                    : 0; // Default to 0 if no past ratings
+
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildShopBalance(
+                            walletBalance), // Use dynamic wallet balance
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: buildShopOrderAndRating(
+                            order, // Assuming `order` is defined somewhere
+                            shopRating,
+                            shopPastRating,
+                          ),
+                        ),
+                        buildContentShop(
+                          card1: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: MdiIcons.briefcase,
+                            text: "Đơn hàng",
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ShopOrderScreen()),
+                              );
+                            },
+                          ),
+                          card2: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: MdiIcons.washingMachine,
+                            text: "Tình trạng",
+                            onTap: () {
+                              print('Tình trạng tapped!');
+                            },
+                          ),
+                          card3: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: Icons.local_offer,
+                            text: "Khuyến mãi",
+                            onTap: () {
+                              print('Khuyến mãi tapped!');
+                            },
+                          ),
+                          card4: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: MdiIcons.bullhorn,
+                            text: "Quảng cáo",
+                            onTap: () {
+                              print('Quảng cáo tapped!');
+                            },
+                          ),
+                          card5: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: MdiIcons.finance,
+                            text: "Tài chính",
+                            onTap: () {
+                              print('Tài chính tapped!');
+                            },
+                          ),
+                          card6: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: MdiIcons.accountMultiple,
+                            text: "Nhân viên",
+                            onTap: () {
+                              print('Nhân viên tapped!');
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        const Divider(
+                          height: 20,
+                          thickness: 0.2,
+                          color: Colors.black,
+                        ),
+                        buildListViewNews("Có gì mới?"),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   ),
-                  buildContentShop(
-                    card1: buildContentCard(
-                      height: 65,
-                      width: 65,
-                      icon: MdiIcons.briefcase,
-                      text: "Đơn hàng",
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ShopOrderScreen()),
-                        );
-                      },
-                    ),
-                    card2: buildContentCard(
-                      height: 65,
-                      width: 65,
-                      icon: MdiIcons.washingMachine,
-                      text: "Tình trạng",
-                      onTap: () {
-                        print('Tình trạng tapped!');
-                      },
-                    ),
-                    card3: buildContentCard(
-                      height: 65,
-                      width: 65,
-                      icon: Icons.local_offer,
-                      text: "Khuyến mãi",
-                      onTap: () {
-                        print('Khuyến mãi tapped!');
-                      },
-                    ),
-                    card4: buildContentCard(
-                      height: 65,
-                      width: 65,
-                      icon: MdiIcons.bullhorn,
-                      text: "Quảng cáo",
-                      onTap: () {
-                        print('Quảng cáo tapped!');
-                      },
-                    ),
-                    card5: buildContentCard(
-                      height: 65,
-                      width: 65,
-                      icon: MdiIcons.finance,
-                      text: "Tài chính",
-                      onTap: () {
-                        print('Tài chính tapped!');
-                      },
-                    ),
-                    card6: buildContentCard(
-                      height: 65,
-                      width: 65,
-                      icon: MdiIcons.accountMultiple,
-                      text: "Nhân viên",
-                      onTap: () {
-                        print('Nhân viên tapped!');
-                      },
+                );
+              } else {
+                // If we reach here, it means ratings is not available
+                double defaultRating = 0; // Set to 0 as default
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildShopBalance(walletBalance),
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: buildShopOrderAndRating(
+                            order, // Assuming `order` is defined somewhere
+                            defaultRating,
+                            defaultRating,
+                          ),
+                        ),
+                        buildContentShop(
+                          card1: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: MdiIcons.briefcase,
+                            text: "Đơn hàng",
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ShopOrderScreen()),
+                              );
+                            },
+                          ),
+                          card2: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: MdiIcons.washingMachine,
+                            text: "Tình trạng",
+                            onTap: () {
+                              print('Tình trạng tapped!');
+                            },
+                          ),
+                          card3: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: Icons.local_offer,
+                            text: "Khuyến mãi",
+                            onTap: () {
+                              print('Khuyến mãi tapped!');
+                            },
+                          ),
+                          card4: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: MdiIcons.bullhorn,
+                            text: "Quảng cáo",
+                            onTap: () {
+                              print('Quảng cáo tapped!');
+                            },
+                          ),
+                          card5: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: MdiIcons.finance,
+                            text: "Tài chính",
+                            onTap: () {
+                              print('Tài chính tapped!');
+                            },
+                          ),
+                          card6: buildContentCard(
+                            height: 65,
+                            width: 65,
+                            icon: MdiIcons.accountMultiple,
+                            text: "Nhân viên",
+                            onTap: () {
+                              print('Nhân viên tapped!');
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        const Divider(
+                          height: 20,
+                          thickness: 0.2,
+                          color: Colors.black,
+                        ),
+                        buildListViewNews("Có gì mới?"),
+                        const SizedBox(height: 20),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  const Divider(
-                    height: 20,
-                    thickness: 0.2,
-                    color: Colors.black,
-                  ),
-                  buildListViewNews("Có gì mới?"),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
+                );
+              }
+            },
           );
         } else {
           return const Center(child: Text('No data available'));
@@ -601,36 +725,6 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        RichText(
-          text: TextSpan(
-            text: "$order",
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
-              color: Colors.black,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: " ",
-              ),
-              TextSpan(
-                text: "đơn hàng",
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 12,
-                  color: Colors.black,
-                ),
-              )
-            ],
-          ),
-        ),
-        SizedBox(width: 10),
-        Container(
-          height: 19,
-          width: 0.5,
-          color: Colors.black,
-        ),
-        SizedBox(width: 10),
         buildStarRating(shopRating, shopPastRating),
       ],
     );

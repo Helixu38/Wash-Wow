@@ -383,3 +383,37 @@ Future<Map<String, dynamic>> fetchPayOS(String? id) async {
     throw Exception('Error: $e');
   }
 }
+
+Future<List<dynamic>> fetchShopRating(
+    String? id, int? pageNo, int? pageSize) async {
+  final FlutterSecureStorage storage = FlutterSecureStorage();
+  final String url =
+      '$baseUrl/Rating?shopId=$id&pageNo=$pageNo&pageSize=$pageSize';
+
+  final token = await storage.read(key: 'token');
+  if (token == null) {
+    throw Exception('No token found, please log in again');
+  }
+
+  final ioClient = createIOClient();
+
+  try {
+    final response = await ioClient.get(
+      Uri.parse(url),
+      headers: <String, String>{
+        'accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['value']; // Return the array directly
+    } else {
+      throw Exception(
+          'Failed to load data. Status code: ${response.statusCode}, Body: ${response.body}');
+    }
+  } catch (e) {
+    throw Exception('Error: $e');
+  }
+}
