@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:profile_photo/profile_photo.dart';
 import 'dart:math' as math;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wash_wow/form/shop_register_form.dart';
 import 'package:wash_wow/src/account/Profile/profile.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
@@ -36,8 +37,7 @@ class _AccountScreenState extends State<AccountScreen> {
           } else {
             // Data has been fetched successfully
             String userName = snapshot.data?['fullName'] ?? 'Unknown User';
-            String userRole = snapshot.data?['role'] ??
-                'Null'; 
+            String userRole = snapshot.data?['role'] ?? 'Null';
 
             return Container(
               width: double.infinity,
@@ -83,10 +83,9 @@ class _AccountScreenState extends State<AccountScreen> {
                           "Profile",
                           () {
                             Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          Profile()));
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Profile()));
                           },
                         ),
                         const SizedBox(height: 30),
@@ -129,8 +128,11 @@ class _AccountScreenState extends State<AccountScreen> {
                           context,
                           CupertinoIcons.exclamationmark_circle,
                           "Customer support",
-                          () {
-                            print("Customer support tapped");
+                          () async {
+                            final Uri url = Uri.parse('https://www.washnwow.store');
+                            if (!await launchUrl(url)) {
+                              throw Exception('Could not launch $url');
+                            }
                           },
                         ),
                         const SizedBox(height: 30),
