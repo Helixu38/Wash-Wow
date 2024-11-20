@@ -5,6 +5,7 @@ import 'package:profile_photo/profile_photo.dart';
 import 'dart:math' as math;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wash_wow/form/shop_register_form.dart';
+import 'package:wash_wow/src/account/Profile/profile.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
 
@@ -79,9 +80,13 @@ class _AccountScreenState extends State<AccountScreen> {
                         _buildRowItem(
                           context,
                           Icons.manage_accounts,
-                          "Personal information",
+                          "Profile",
                           () {
-                            print("Personal information tapped");
+                            Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Profile()));
                           },
                         ),
                         const SizedBox(height: 30),
