@@ -16,7 +16,7 @@ class ShopOwnerHomeScreen extends StatefulWidget {
 }
 
 class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
-  final AuthService authService = AuthService('https://10.0.2.2:7276');
+  final AuthService authService = AuthService('https://washwowbe.onrender.com');
 
   int order = 10; // Define instance variable
   double shopRating = 4.9; // Define instance variable

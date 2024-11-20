@@ -14,7 +14,7 @@ class ShopBookingsScreen extends StatefulWidget {
 class _ShopBookingScreenState extends State<ShopBookingsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final AuthService authService = AuthService('https://10.0.2.2:7276');
+  final AuthService authService = AuthService('https://washwowbe.onrender.com');
   List<dynamic> services = [];
   List<dynamic> bookings = [];
 

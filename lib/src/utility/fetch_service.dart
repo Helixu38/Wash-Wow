@@ -4,8 +4,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 
-String baseUrlLaundryShop = "https://10.0.2.2:7276/LaundryShop";
-String baseUrl = "https://10.0.2.2:7276";
+String baseUrlLaundryShop = "https://washwowbe.onrender.com/LaundryShop";
+String baseUrl = "https://washwowbe.onrender.com";
 
 IOClient createIOClient() {
   HttpClient client = HttpClient()

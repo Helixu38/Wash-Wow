@@ -26,7 +26,7 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {});
   }
 
-  final AuthService authService = AuthService('https://10.0.2.2:7276');
+  final AuthService authService = AuthService('https://washwowbe.onrender.com');
 
   @override
   void dispose() {

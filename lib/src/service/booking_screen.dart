@@ -29,7 +29,7 @@ class _BookingScreenState extends State<BookingScreen>
   String selectedVoucherID = '';
   List<BookingItem> bookingItems = [];
   bool? isBookingSuccess;
-  final AuthService authService = AuthService('https://10.0.2.2:7276');
+  final AuthService authService = AuthService('https://washwowbe.onrender.com');
   double? laundryWeight;
   String notes = "";
   String? customerPickupTime = "";

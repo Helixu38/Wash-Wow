@@ -18,7 +18,7 @@ class _ShopOrderScreenState extends State<ShopOrderScreen> {
       appBar: buildAppBar(),
       body: Column(
         children: [
-          buildShopCard(1, 30),
+          buildShopCard(1, 40),
         ],
       ),
     );

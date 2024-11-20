@@ -17,7 +17,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   final FlutterSecureStorage storage = FlutterSecureStorage();
-  final AuthService authService = AuthService('https://10.0.2.2:7276');
+  final AuthService authService = AuthService('https://washwowbe.onrender.com');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
