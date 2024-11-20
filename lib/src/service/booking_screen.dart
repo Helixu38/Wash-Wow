@@ -75,12 +75,11 @@ class _BookingScreenState extends State<BookingScreen>
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
-            Tab(text: 'Thông tin Shop'), // Shop Info
-            Tab(text: 'Dịch vụ'), // Services
-            Tab(text: 'Đặt lịch'), // Set Pickup Time
-            Tab(text: 'Thông Tin'), // Confirmation
-            Tab(text: 'Xác nhận'), // Rating
-            // Tab(text: 'Thanh toán'),
+            Tab(text: 'Shop Information'), // Shop Info
+            Tab(text: 'Services'), // Services
+            Tab(text: 'Schedule'), // Set Pickup Time
+            Tab(text: 'Finalized Information'), // Confirmation
+            Tab(text: 'Confirmation'), // Rating
           ],
           onTap: (index) {}, // Disable direct tab clicks by ignoring tap events
         ),
@@ -152,7 +151,7 @@ class _BookingScreenState extends State<BookingScreen>
                     backgroundColor: Colors.white,
                   ),
                   child: Text(
-                    'Chọn dịch vụ',
+                    'Choose service',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -224,7 +223,7 @@ class _BookingScreenState extends State<BookingScreen>
                           horizontal: 30, vertical: 10),
                       backgroundColor: Colors.white,
                     ),
-                    child: const Text('Chọn'),
+                    child: const Text('Choose'),
                   ),
                 ),
               );
@@ -246,7 +245,7 @@ class _BookingScreenState extends State<BookingScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Thời gian cửa hàng nhận",
+              "Store pick-up time",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -289,7 +288,7 @@ class _BookingScreenState extends State<BookingScreen>
             ),
             const SizedBox(height: 4),
             Text(
-              "Thời gian khách nhận hàng ",
+              "Customer pick-up time",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -357,7 +356,7 @@ class _BookingScreenState extends State<BookingScreen>
                               Icon(Icons.error_outline, color: Colors.white),
                               SizedBox(width: 10),
                               Text(
-                                  "Khách nhận hàng phải muộn hơn 2 tiếng so với \nthời gian cửa hàng nhận."),
+                                  "The customer pick-up time has to be 2 hours \nlater than store pick-up time."),
                             ],
                           ),
                           backgroundColor: Colors.red,
@@ -379,7 +378,7 @@ class _BookingScreenState extends State<BookingScreen>
                         children: [
                           Icon(Icons.error_outline, color: Colors.white),
                           SizedBox(width: 10),
-                          Text("Xin hãy chọn ngày và thời gian nhận hàng"),
+                          Text("Please choose a time and date for the pick-up time"),
                         ],
                       ),
                       backgroundColor: Colors.red,
@@ -399,7 +398,7 @@ class _BookingScreenState extends State<BookingScreen>
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                 backgroundColor: Colors.white,
               ),
-              child: const Text('Tiếp Theo'),
+              child: const Text('Next'),
             ),
           ],
         ),
@@ -438,7 +437,7 @@ class _BookingScreenState extends State<BookingScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Xác nhận thông tin',
+                'Confirm information',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 24,
@@ -449,7 +448,7 @@ class _BookingScreenState extends State<BookingScreen>
 
               // Display Selected Pickup Time
               Text(
-                'Thời gian cửa hàng nhận',
+                'Store pick-up time',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -463,7 +462,7 @@ class _BookingScreenState extends State<BookingScreen>
                 ),
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  shopPickUpTime ?? 'Chưa chọn thời gian',
+                  shopPickUpTime ?? 'No time have been chosen',
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
@@ -471,7 +470,7 @@ class _BookingScreenState extends State<BookingScreen>
               const SizedBox(height: 20),
 
               Text(
-                'Thời gian nhận hàng ',
+                'Customer pick-up time',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -485,7 +484,7 @@ class _BookingScreenState extends State<BookingScreen>
                 ),
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  customerPickupTime ?? 'Chưa chọn thời gian',
+                  customerPickupTime ?? 'No time have been chosen',
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
@@ -494,7 +493,7 @@ class _BookingScreenState extends State<BookingScreen>
 
 // Display Laundry Shop Name
               Text(
-                'Tên tiệm giặt',
+                'Shop name',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -519,7 +518,7 @@ class _BookingScreenState extends State<BookingScreen>
 
 // Display Selected Service Name
               Text(
-                'Dịch vụ',
+                'Service',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -544,7 +543,7 @@ class _BookingScreenState extends State<BookingScreen>
               const SizedBox(height: 20),
 
               Text(
-                'Trọng lượng đồ giặt',
+                'Laundry weight',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -561,7 +560,7 @@ class _BookingScreenState extends State<BookingScreen>
                   cursorColor: const Color.fromRGBO(4, 90, 208, 1),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Nhập khối lượng giặt của bạn (kg).',
+                    hintText: 'Enter your laundry weight (kg).',
                     hintStyle: TextStyle(
                         color: const Color.fromRGBO(208, 207, 207, 1)),
                     contentPadding: const EdgeInsets.all(10),
@@ -579,7 +578,7 @@ class _BookingScreenState extends State<BookingScreen>
 
               // Input Field for Notes
               Text(
-                'Ghi chú',
+                'Note',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -596,7 +595,7 @@ class _BookingScreenState extends State<BookingScreen>
                   cursorColor: const Color.fromRGBO(4, 90, 208, 1),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Nhập ghi chú của bạn.',
+                    hintText: 'Enter your note for the laundry shop.',
                     hintStyle: TextStyle(
                         color: const Color.fromRGBO(208, 207, 207, 1)),
                     contentPadding: const EdgeInsets.all(10),
@@ -658,7 +657,7 @@ class _BookingScreenState extends State<BookingScreen>
                             children: [
                               Icon(Icons.error_outline, color: Colors.white),
                               SizedBox(width: 10),
-                              Text("Đặt chỗ không thành công"),
+                              Text("Booking unsuccessful"),
                             ],
                           ),
                           backgroundColor: Colors.red,
@@ -676,7 +675,7 @@ class _BookingScreenState extends State<BookingScreen>
                           children: [
                             Icon(Icons.error_outline, color: Colors.white),
                             SizedBox(width: 10),
-                            Text("Xin hãy điền hết thông tin"),
+                            Text("Please enter all the information"),
                           ],
                         ),
                         backgroundColor: Colors.red,
@@ -696,7 +695,7 @@ class _BookingScreenState extends State<BookingScreen>
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   backgroundColor: Colors.white,
                 ),
-                child: const Text('Xác nhận'),
+                child: const Text('Confirm'),
               )
             ],
           ),
@@ -722,7 +721,7 @@ class _BookingScreenState extends State<BookingScreen>
         children: [
           isBookingSuccess == true
               ? const Text(
-                  'CẢM ƠN BẠN ĐÃ SỬ DỤNG DỊCH VỤ',
+                  'THANK YOU FOR USING THE SERVICE',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -743,91 +742,4 @@ class _BookingScreenState extends State<BookingScreen>
       ),
     );
   }
-
-// Tab 6: Payment Tab
-  // Widget _buildPaymentTab() {
-  //   return FutureBuilder<Map<String, dynamic>?>(
-  //     future: authService.pay(bookingId, paymentId),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.connectionState == ConnectionState.waiting) {
-  //         print("Booking ID : $bookingId \n Payment ID : $paymentId");
-  //         return const Center(
-  //           child: CircularProgressIndicator(), // Loading indicator
-  //         );
-  //       } else if (snapshot.hasError) {
-  //         return Center(
-  //           child: Text("Error: ${snapshot.error}"), // Error handling
-  //         );
-  //       } else if (snapshot.hasData) {
-  //         // Payment response received
-  //         final paymentResponse = snapshot.data;
-  //         if (paymentResponse != null && paymentResponse['qrCode'] != null) {
-  //           // Extract the QR code data from the response
-  //           final String qrCodeData = paymentResponse['qrCode'];
-
-  //           // Call changePaymentStatus after 15 seconds to mark payment as complete
-  //           Future.delayed(const Duration(seconds: 5), () async {
-  //             bool success = await authService.changePaymentStatus(
-  //                 paymentId, bookingId, 0);
-  //             if (success) {
-  //               ScaffoldMessenger.of(context).showSnackBar(
-  //                 SnackBar(
-  //                   content: Row(
-  //                     children: [
-  //                       Icon(Icons.check_circle, color: Colors.white),
-  //                       SizedBox(width: 10),
-  //                       Text(
-  //                           'Thanh toán đã được nhận. \nCảm ơn bạn rất nhiều!'),
-  //                     ],
-  //                   ),
-  //                   backgroundColor: Colors.green,
-  //                   duration:
-  //                       const Duration(seconds: 3), // Duration of the toast
-  //                 ),
-  //               );
-  //             }
-  //           });
-
-  //           // Display the QR code and message in the UI
-  //           return Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: [
-  //               const Text(
-  //                 "Quét mã QR dưới đây để thanh toán:",
-  //                 style: TextStyle(
-  //                   fontSize: 18.0,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //               const SizedBox(height: 20), // Spacing between text and QR code
-  //               QrImageView(
-  //                 data: qrCodeData, // Use the QR code data from the backend
-  //                 version: QrVersions.auto, // Automatically adjust the version
-  //                 size: 200.0, // Set the size of the QR code
-  //               ),
-  //               const SizedBox(
-  //                   height: 20), // Additional spacing after the QR code
-  //               const Text(
-  //                 "Cảm ơn bạn đã sử dụng dịch vụ!",
-  //                 style: TextStyle(
-  //                   fontSize: 16.0,
-  //                 ),
-  //               ),
-  //             ],
-  //           );
-  //         } else {
-  //           // Handle the case where payment failed or QR code is missing
-  //           return const Center(
-  //             child: Text("Thanh toán thất bại hoặc mã QR không khả dụng"),
-  //           );
-  //         }
-  //       } else {
-  //         return const Center(
-  //           child: Text(
-  //               "Có lỗi xảy ra, vui lòng thử lại"), // Fallback error handling
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
 }
