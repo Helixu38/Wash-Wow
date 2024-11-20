@@ -254,23 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 56), // Spacing
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Text(
-                  //       'or sign in with',
-                  //       textAlign: TextAlign.right,
-                  //       style: TextStyle(
-                  //         fontSize: 12,
-                  //         fontWeight: FontWeight.w400,
-                  //         color: const Color.fromRGBO(4, 90, 208, 1),
-                  //         fontStyle: FontStyle.italic,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  const SizedBox(height: 37), // Spacing
+                  SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
