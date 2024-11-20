@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 10),
             Text(
-              'ĐĂNG NHẬP',
+              'SIGN IN',
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w800,
@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Text(
-              'Xin chào quý khách',
+              'Hello customer !',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Địa chỉ Email',
+                    'Email',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: emailController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'nguyenvana@gmail.com',
+                        hintText: 'johndoe@gmail.com',
                         hintStyle: TextStyle(
                             color: const Color.fromRGBO(208, 207, 207, 1)),
                         contentPadding: const EdgeInsets.all(10),
@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 34), // Spacing
                   Text(
-                    'Mật khẩu',
+                    'Password',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: true,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Nhập mật khẩu của bạn.',
+                        hintText: 'Re-enter your password.',
                         hintStyle: TextStyle(
                             color: const Color.fromRGBO(208, 207, 207, 1)),
                         contentPadding: const EdgeInsets.all(10),
@@ -139,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       RichText(
                         textAlign: TextAlign.right,
                         text: TextSpan(
-                          text: 'Quên mật khẩu?',
+                          text: 'Forget password?',
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
@@ -177,14 +177,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (emailController.text.isEmpty ||
                             !RegExp(r'^[^@]+@[^@]+\.[^@]+')
                                 .hasMatch(emailController.text)) {
-                          emailError = 'Vui lòng nhập địa chỉ email hợp lệ';
+                          emailError = 'Please enter a valid email';
                           isValid = false;
                         }
 
                         // Validate password
                         if (passwordController.text.isEmpty ||
                             passwordController.text.length < 6) {
-                          passwordError = 'Vui lòng nhập mật khẩu hợp lệ';
+                          passwordError = 'Please enter a valid password';
                           isValid = false;
                         }
 
@@ -218,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: Colors.white),
                                     SizedBox(width: 10),
                                     Text(
-                                        'Chào mừng trở lại, ${emailController.text}!'),
+                                        'Welcome back, ${emailController.text}!'),
                                   ],
                                 ),
                                 backgroundColor: Colors.green,
@@ -230,7 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text(
-                                      'Đăng nhập không thành công, vui lòng thử lại.')),
+                                      'Login unsuccessful, please try again!.')),
                             );
                           }
                         } else {
@@ -245,7 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         backgroundColor: const Color.fromRGBO(4, 90, 208, 1),
                       ),
                       child: Text(
-                        'Đăng Nhập',
+                        'Sign In',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -255,28 +255,28 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 56), // Spacing
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'hoặc đăng nhập bằng',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: const Color.fromRGBO(4, 90, 208, 1),
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Text(
+                  //       'or sign in with',
+                  //       textAlign: TextAlign.right,
+                  //       style: TextStyle(
+                  //         fontSize: 12,
+                  //         fontWeight: FontWeight.w400,
+                  //         color: const Color.fromRGBO(4, 90, 208, 1),
+                  //         fontStyle: FontStyle.italic,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   const SizedBox(height: 37), // Spacing
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       RichText(
                         text: TextSpan(
-                          text: 'Bạn chưa có tài khoản? ',
+                          text: "Don't have an account? ",
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
@@ -285,7 +285,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: 'Đăng ký ngay',
+                              text: 'Sign up now',
                               style: const TextStyle(
                                 color: Color.fromRGBO(4, 90, 208, 1),
                                 decoration: TextDecoration.underline,

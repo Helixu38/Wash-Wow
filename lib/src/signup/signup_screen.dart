@@ -72,7 +72,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: 10),
               Text(
-                'ĐĂNG KÝ',
+                'Sign Up',
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.w800,
@@ -80,21 +80,21 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               Text(
-                'Điền thông tin của quý khách phía bên dưới,',
+                'Enter your information below',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   color: const Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
-              Text(
-                'hoặc đăng nhập bằng tài khoản mạng xã hội',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: const Color.fromARGB(255, 0, 0, 0),
-                ),
-              ),
+              // Text(
+              //   'hoặc đăng nhập bằng tài khoản mạng xã hội',
+              //   style: TextStyle(
+              //     fontSize: 16,
+              //     fontWeight: FontWeight.w400,
+              //     color: const Color.fromARGB(255, 0, 0, 0),
+              //   ),
+              // ),
               const SizedBox(height: 50),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -105,7 +105,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     children: [
                       // Full Name Field
                       Text(
-                        'Họ và tên',
+                        'Full name',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -133,7 +133,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: fullNameController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Nguyễn Văn A',
+                            hintText: 'John Doe',
                             hintStyle: TextStyle(
                                 color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
@@ -144,7 +144,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                       // Email Field
                       Text(
-                        'Địa chỉ Email',
+                        'Email',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -172,7 +172,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: emailController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'nguyenvana@gmail.com',
+                            hintText: 'johndoe@gmail.com',
                             hintStyle: TextStyle(
                                 color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
@@ -183,7 +183,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                       // Password Field
                       Text(
-                        'Mật khẩu',
+                        'Password',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -213,7 +213,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           obscureText: true,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Nhập mật khẩu của bạn.',
+                            hintText: 'Enter your password.',
                             hintStyle: TextStyle(
                                 color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
@@ -224,7 +224,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                       // Re-enter Password Field
                       Text(
-                        'Nhập lại mật khẩu',
+                        'Re-enter your password',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -253,7 +253,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           obscureText: true,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Nhập mật khẩu của bạn.',
+                            hintText: 'Re-enter your password.',
                             hintStyle: TextStyle(
                                 color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
@@ -264,7 +264,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                       // Phone Number Field
                       Text(
-                        'Số điện thoại',
+                        'Phone number',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -292,7 +292,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: phoneNumberController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Nhập số điện thoại của bạn.',
+                            hintText: 'Enter your phone number.',
                             hintStyle: TextStyle(
                                 color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
@@ -303,7 +303,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                       // Address Field
                       Text(
-                        'Địa Chỉ',
+                        'Address',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -340,7 +340,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           },
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Nhập địa chỉ của bạn.',
+                            hintText: 'Enter your address.',
                             hintStyle: TextStyle(
                                 color: const Color.fromRGBO(208, 207, 207, 1)),
                             contentPadding: const EdgeInsets.all(10),
@@ -385,42 +385,42 @@ class _SignupScreenState extends State<SignupScreen> {
                             // Validate and set error messages
                             bool isValid = true;
                             if (fullNameController.text.isEmpty) {
-                              fullNameError = 'Vui lòng nhập họ và tên';
+                              fullNameError = 'Please enter your fullname';
                               isValid = false;
                             }
                             if (emailController.text.isEmpty ||
                                 !RegExp(r'^[^@]+@[^@]+\.[^@]+')
                                     .hasMatch(emailController.text)) {
-                              emailError = 'Vui lòng nhập địa chỉ email hợp lệ';
+                              emailError = 'Please enter a valid email address';
                               isValid = false;
                             }
                             if (passwordController.text.isEmpty ||
                                 passwordController.text.length < 6) {
                               passwordError =
-                                  'Mật khẩu phải có ít nhất 6 ký tự';
+                                  'Password must have at least 6 characters';
                               isValid = false;
                             }
                             if (passwordAgainController.text.isEmpty ||
                                 passwordAgainController.text.length < 6) {
                               passwordAgainError =
-                                  'Mật khẩu phải có ít nhất 6 ký tự';
+                                  'Password must have at least 6 characters';
                               isValid = false;
                             }
                             if (passwordAgainController.text !=
                                 passwordController.text) {
                               passwordAgainError =
-                                  'Mật khẩu phải khớp với nhau';
+                                  'Password must match with each other';
                               isValid = false;
                             }
                             if (phoneNumberController.text.isEmpty ||
                                 !RegExp(r'^\d{10}$')
                                     .hasMatch(phoneNumberController.text)) {
                               phoneNumberError =
-                                  'Vui lòng nhập số điện thoại hợp lệ (10 chữ số)';
+                                  'Please enter a valid phone number';
                               isValid = false;
                             }
                             if (addressController.text.isEmpty) {
-                              addressError = 'Vui lòng nhập địa chỉ';
+                              addressError = 'Please enter your address';
                               isValid = false;
                             }
 
@@ -448,7 +448,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                             color: Colors.white),
                                         SizedBox(width: 10),
                                         Text(
-                                            'Đăng ký thành công ! Vui lòng đăng nhập lại'),
+                                            'Sign up successfully ! Please sign in again'),
                                       ],
                                     ),
                                     backgroundColor: Colors.green,
@@ -504,7 +504,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             textAlign: TextAlign.center,
                             text: TextSpan(
                               text:
-                                  'Bằng cách nhấp vào đăng kí bạn đồng ý với\n',
+                                  "By signing up you are agreeing with\n",
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: 14,
@@ -512,7 +512,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               ),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: 'Điều khoản & Điều kiện',
+                                  text: 'Terms & Agreement',
                                   style: const TextStyle(
                                     color: Color.fromRGBO(4, 90, 208, 1),
                                     decoration: TextDecoration.underline,
@@ -543,7 +543,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                                   CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 const Text(
-                                                  'Điều khoản & Điều kiện',
+                                                  'Terms & Agreement',
                                                   style: TextStyle(
                                                     fontSize: 24,
                                                     fontWeight: FontWeight.bold,
@@ -560,22 +560,22 @@ class _SignupScreenState extends State<SignupScreen> {
                                                               .start,
                                                       children: const [
                                                         Text(
-                                                          'Chào mừng bạn đến với Wash&Wow! Khi bạn sử dụng dịch vụ của chúng tôi, bạn đồng ý với các điều khoản sử dụng dưới đây. Chúng tôi khuyến khích bạn đọc kỹ trước khi sử dụng để đảm bảo quyền lợi của bạn.',
+                                                          'Welcome to Wash&Wow! By using our services, you agree to the terms of use below. We encourage you to read them carefully before using to ensure your rights.',
                                                           style: TextStyle(
                                                               fontSize: 16,
                                                               height: 1.5),
                                                         ),
                                                         TermSection(
                                                           title:
-                                                              '1. Trách Nhiệm Của Wash&Wow',
+                                                              '1. Responsibilities of Wash&Wow',
                                                           content: [
                                                             SubSection(
                                                                 title:
-                                                                    '1.1 Cam Kết Cung Cấp Dịch Vụ'),
+                                                                    '1.1 Commitment to Provide Services'),
                                                             SizedBox(
                                                                 height: 10),
                                                             Text(
-                                                              'Wash&Wow cam kết cung cấp nền tảng đặt lịch giặt sấy và các dịch vụ liên quan đúng hạn và đảm bảo chất lượng. Chúng tôi cố gắng hết sức để đảm bảo sự chính xác trong thông tin dịch vụ và cửa hàng.',
+                                                              'Wash&Wow is committed to providing the scheduling platform for laundry and related services on time and ensuring quality. We strive to maintain accuracy in service information and store details.',
                                                               style: TextStyle(
                                                                   fontSize: 16,
                                                                   height: 1.5),
@@ -584,11 +584,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 height: 10),
                                                             SubSection(
                                                                 title:
-                                                                    '1.2 Không Chịu Trách Nhiệm Về Hành Vi Của Các Đối Tác'),
+                                                                    '1.2 No Responsibility for Partner Actions'),
                                                             SizedBox(
                                                                 height: 10),
                                                             Text(
-                                                              'Chúng tôi không can thiệp vào quá trình vận hành và chất lượng dịch vụ của các cửa hàng giặt sấy đối tác. Wash&Wow không chịu trách nhiệm cho các vấn đề phát sinh do cửa hàng đối tác cung cấp dịch vụ không đạt yêu cầu.',
+                                                              'We do not interfere with the operations or service quality of partner laundry stores. Wash&Wow is not responsible for issues arising from partner stores not providing the required service quality.',
                                                               style: TextStyle(
                                                                   fontSize: 16,
                                                                   height: 1.5),
@@ -597,11 +597,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 height: 10),
                                                             SubSection(
                                                                 title:
-                                                                    '1.3 Hỗ Trợ Khách Hàng'),
+                                                                    '1.3 Customer Support'),
                                                             SizedBox(
                                                                 height: 10),
                                                             Text(
-                                                              'Chúng tôi cung cấp kênh hỗ trợ thông qua ứng dụng và trang web để giải đáp mọi thắc mắc và hỗ trợ kịp thời cho người dùng.',
+                                                              'We provide a support channel through the app and website to answer inquiries and assist users in a timely manner.',
                                                               style: TextStyle(
                                                                   fontSize: 16,
                                                                   height: 1.5),
@@ -612,15 +612,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                                         ),
                                                         TermSection(
                                                           title:
-                                                              '2. Trách Nhiệm Của Khách Hàng',
+                                                              '2. Responsibilities of Customers',
                                                           content: [
                                                             SubSection(
                                                                 title:
-                                                                    '2.1 Tuân Thủ Pháp Luật'),
+                                                                    '2.1 Compliance with the Law'),
                                                             SizedBox(
                                                                 height: 10),
                                                             Text(
-                                                              'Khách hàng phải tuân thủ các quy định của pháp luật Việt Nam trong suốt quá trình sử dụng dịch vụ của Wash&Wow.',
+                                                              'Customers must comply with the laws of Vietnam while using Wash&Wow services.',
                                                               style: TextStyle(
                                                                   fontSize: 16,
                                                                   height: 1.5),
@@ -629,11 +629,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 height: 10),
                                                             SubSection(
                                                                 title:
-                                                                    '2.2 Cung Cấp Thông Tin Chính Xác'),
+                                                                    '2.2 Providing Accurate Information'),
                                                             SizedBox(
                                                                 height: 10),
                                                             Text(
-                                                              'Khách hàng có trách nhiệm cung cấp thông tin chính xác khi đăng ký tài khoản và đặt dịch vụ, bao gồm họ tên, địa chỉ, và thông tin liên lạc. Nếu có sự thay đổi, khách hàng cần cập nhật kịp thời để đảm bảo không gián đoạn dịch vụ.',
+                                                              'Customers are responsible for providing accurate information when registering an account and placing a service order, including full name, address, and contact details. If any changes occur, customers must update their information promptly to ensure no service disruption.',
                                                               style: TextStyle(
                                                                   fontSize: 16,
                                                                   height: 1.5),
@@ -642,11 +642,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                                                 height: 10),
                                                             SubSection(
                                                                 title:
-                                                                    '2.3 Bảo Quản Dữ Liệu Và Bảo Mật Thông Tin'),
+                                                                    '2.3 Data Security and Confidentiality'),
                                                             SizedBox(
                                                                 height: 10),
                                                             Text(
-                                                              'Khách hàng chịu trách nhiệm bảo mật thông tin đăng nhập và tài khoản của mình. Nếu phát hiện có truy cập trái phép, vui lòng thông báo ngay cho chúng tôi để được hỗ trợ kịp thời.',
+                                                              'Customers are responsible for securing their login and account information. If unauthorized access is detected, please notify us immediately for timely assistance.',
                                                               style: TextStyle(
                                                                   fontSize: 16,
                                                                   height: 1.5),
@@ -657,10 +657,10 @@ class _SignupScreenState extends State<SignupScreen> {
                                                         ),
                                                         TermSection(
                                                           title:
-                                                              '3. Các Hình Thức Sử Dụng Không Được Chấp Nhận',
+                                                              '3. Unacceptable Uses',
                                                           content: [
                                                             Text(
-                                                              'Khách hàng không được phép:\nSử dụng dịch vụ của Wash&Wow để gây tổn hại, xâm nhập trái phép hệ thống của chúng tôi hoặc các đối tác.\nPhát tán các mã độc, virus hay thực hiện các hành vi phá hoại khác.\nCung cấp hoặc phát tán nội dung vi phạm pháp luật.',
+                                                              'Customers are not allowed to:\nUse Wash&Wow services to cause harm or illegally access our systems or those of our partners.\nSpread malware, viruses, or engage in other destructive actions.\nCung cấp hoặc phát tán nội dung vi phạm pháp luật.',
                                                               style: TextStyle(
                                                                   fontSize: 16,
                                                                   height: 1.5),
