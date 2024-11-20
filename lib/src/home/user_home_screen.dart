@@ -107,11 +107,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Column(
         children: [
-          const SizedBox(height: 15),
+          const SizedBox(height: 35),
           buildListViewDiscount("Discount"),
-          const SizedBox(height: 25),
+          const SizedBox(height: 35),
           buildListServices("Services"),
-          const SizedBox(height: 25),
+          const SizedBox(height: 35),
           buildListViewStore("Store near you"),
         ],
       ),
