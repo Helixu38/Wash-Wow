@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: true,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Re-enter your password.',
+                        hintText: 'Enter your password.',
                         hintStyle: TextStyle(
                             color: const Color.fromRGBO(208, 207, 207, 1)),
                         contentPadding: const EdgeInsets.all(10),
