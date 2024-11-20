@@ -16,7 +16,7 @@ class Service {
 
 final List<Service> services = [
   Service(
-    content: 'Giặt thường',
+    content: 'Regular Laundry',  // "Giặt thường"
     icon: MdiIcons.cupWater,
     onTap: (context, content) {
       Navigator.push(
@@ -27,7 +27,7 @@ final List<Service> services = [
     },
   ),
   Service(
-    content: 'Giặt sấy',
+    content: 'Dry Laundry',  // "Giặt sấy"
     icon: MdiIcons.tumbleDryer,
     onTap: (context, content) {
       Navigator.push(
@@ -38,7 +38,7 @@ final List<Service> services = [
     },
   ),
   Service(
-    content: 'Giặt giày',
+    content: 'Shoe Cleaning',  // "Giặt giày"
     icon: MdiIcons.shoeFormal,
     onTap: (context, content) {
       Navigator.push(
@@ -49,7 +49,7 @@ final List<Service> services = [
     },
   ),
   Service(
-    content: 'Giặt chăn',
+    content: 'Bedding Laundry',  // "Giặt chăn"
     icon: MdiIcons.bedEmpty,
     onTap: (context, content) {
       Navigator.push(
@@ -60,7 +60,7 @@ final List<Service> services = [
     },
   ),
   Service(
-    content: 'Giặt khô',
+    content: 'Dry Cleaning',  // "Giặt khô"
     icon: MdiIcons.hairDryerOutline,
     onTap: (context, content) {
       Navigator.push(
@@ -71,7 +71,7 @@ final List<Service> services = [
     },
   ),
   Service(
-    content: 'Giặt tẩy',
+    content: 'Stain Removal',  // "Giặt tẩy"
     icon: MdiIcons.washingMachine,
     onTap: (context, content) {
       Navigator.push(
@@ -82,3 +82,4 @@ final List<Service> services = [
     },
   ),
 ];
+
