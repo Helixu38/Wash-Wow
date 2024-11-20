@@ -14,7 +14,7 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen>
     with SingleTickerProviderStateMixin {
-  final AuthService authService = AuthService('https://10.0.2.2:7276');
+  final AuthService authService = AuthService('https://washwowbe.onrender.com');
   Timer? _paymentStatusTimer;
   String? paymentStatus; // Track the current payment status
   late TabController _tabController;
@@ -245,7 +245,7 @@ class _OrderScreenState extends State<OrderScreen>
                         ...booking['bookingItems'].map<Widget>((item) {
                           return Padding(
                             padding: const EdgeInsets.only(top: 4.0),
-                            child: Row(
+                            child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Tên dịch vụ: ${item['serviceName']}'),

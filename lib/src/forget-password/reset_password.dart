@@ -15,7 +15,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController tokenController = TextEditingController();
   final TextEditingController passwordAgainController = TextEditingController();
 
-  final AuthService authService = AuthService('https://10.0.2.2:7276');
+  final AuthService authService = AuthService('https://washwowbe.onrender.com');
 
   @override
   void dispose() {

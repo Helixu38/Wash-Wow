@@ -19,7 +19,7 @@ class ShopRegisterForm extends StatefulWidget {
 }
 
 class _ShopRegisterFormState extends State<ShopRegisterForm> {
-  final AuthService authService = AuthService('https://10.0.2.2:7276');
+  final AuthService authService = AuthService('https://washwowbe.onrender.com');
   final PageController _pageController = PageController();
   int activeIndex = 0;
   List<bool> isChecked = [false, false, false, false, false, false, false];
@@ -558,15 +558,15 @@ class _ShopRegisterFormState extends State<ShopRegisterForm> {
           'value': storeDetails.storeName,
         },
         {
-          'fieldID': 3, // ID for address
+          'fieldID': 2, // ID for address
           'value': storeDetails.address,
         },
         {
-          'fieldID': 4, // ID for storeEmail
+          'fieldID': 3, // ID for storeEmail
           'value': storeDetails.phoneNumber,
         },
         {
-          'fieldID': 5, // ID for phoneNumber
+          'fieldID': 4, // ID for phoneNumber
           'value': storeDetails.email,
         },
       ];
