@@ -47,9 +47,9 @@ class _HomePageState extends State<HomePage> {
         if (widget.role == 'Customer') {
           currentScreen = NotificationScreen();
         } else if (widget.role == 'ShopOwner') {
-          currentScreen = ChatScreen();
+          currentScreen = NotificationScreen();
         } else {
-          currentScreen = ChatScreen(); // Fallback
+          currentScreen = NotificationScreen(); // Fallback
         }
         break;
       case 3:

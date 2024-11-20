@@ -71,7 +71,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Chào, ${shopName.capitalize()}",
+                "Hello, ${shopName.capitalize()}",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
@@ -151,7 +151,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                             height: 65,
                             width: 65,
                             icon: MdiIcons.briefcase,
-                            text: "Đơn hàng",
+                            text: "Order",
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -164,45 +164,45 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                             height: 65,
                             width: 65,
                             icon: MdiIcons.washingMachine,
-                            text: "Tình trạng",
+                            text: "Status",
                             onTap: () {
-                              print('Tình trạng tapped!');
+                              print('Status tapped!');
                             },
                           ),
                           card3: buildContentCard(
                             height: 65,
                             width: 65,
                             icon: Icons.local_offer,
-                            text: "Khuyến mãi",
+                            text: "Discount",
                             onTap: () {
-                              print('Khuyến mãi tapped!');
+                              print('Discount tapped!');
                             },
                           ),
                           card4: buildContentCard(
                             height: 65,
                             width: 65,
                             icon: MdiIcons.bullhorn,
-                            text: "Quảng cáo",
+                            text: "Adds",
                             onTap: () {
-                              print('Quảng cáo tapped!');
+                              print('Advertisement tapped!');
                             },
                           ),
                           card5: buildContentCard(
                             height: 65,
                             width: 65,
                             icon: MdiIcons.finance,
-                            text: "Tài chính",
+                            text: "Finance",
                             onTap: () {
-                              print('Tài chính tapped!');
+                              print('Finance tapped!');
                             },
                           ),
                           card6: buildContentCard(
                             height: 65,
                             width: 65,
                             icon: MdiIcons.accountMultiple,
-                            text: "Nhân viên",
+                            text: "Employee",
                             onTap: () {
-                              print('Nhân viên tapped!');
+                              print('Employee tapped!');
                             },
                           ),
                         ),
@@ -212,7 +212,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                           thickness: 0.2,
                           color: Colors.black,
                         ),
-                        buildListViewNews("Có gì mới?"),
+                        buildListViewNews("News?"),
                         const SizedBox(height: 20),
                       ],
                     ),
@@ -242,7 +242,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                             height: 65,
                             width: 65,
                             icon: MdiIcons.briefcase,
-                            text: "Đơn hàng",
+                            text: "Order",
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -255,45 +255,45 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                             height: 65,
                             width: 65,
                             icon: MdiIcons.washingMachine,
-                            text: "Tình trạng",
+                            text: "Status",
                             onTap: () {
-                              print('Tình trạng tapped!');
+                              print('Status tapped!');
                             },
                           ),
                           card3: buildContentCard(
                             height: 65,
                             width: 65,
                             icon: Icons.local_offer,
-                            text: "Khuyến mãi",
+                            text: "Discount",
                             onTap: () {
-                              print('Khuyến mãi tapped!');
+                              print('Discount tapped!');
                             },
                           ),
                           card4: buildContentCard(
                             height: 65,
                             width: 65,
                             icon: MdiIcons.bullhorn,
-                            text: "Quảng cáo",
+                            text: "Advertisement",
                             onTap: () {
-                              print('Quảng cáo tapped!');
+                              print('Advertisement tapped!');
                             },
                           ),
                           card5: buildContentCard(
                             height: 65,
                             width: 65,
                             icon: MdiIcons.finance,
-                            text: "Tài chính",
+                            text: "Finance",
                             onTap: () {
-                              print('Tài chính tapped!');
+                              print('Finance tapped!');
                             },
                           ),
                           card6: buildContentCard(
                             height: 65,
                             width: 65,
                             icon: MdiIcons.accountMultiple,
-                            text: "Nhân viên",
+                            text: "Employee",
                             onTap: () {
-                              print('Nhân viên tapped!');
+                              print('Employee tapped!');
                             },
                           ),
                         ),
@@ -303,7 +303,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                           thickness: 0.2,
                           color: Colors.black,
                         ),
-                        buildListViewNews("Có gì mới?"),
+                        buildListViewNews("News?"),
                         const SizedBox(height: 20),
                       ],
                     ),
@@ -467,7 +467,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hôm qua",
+                "Yesterday",
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -596,7 +596,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                   child: Row(
                     children: [
                       Text(
-                        "xem thêm",
+                        "More",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
