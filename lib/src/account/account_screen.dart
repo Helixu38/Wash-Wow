@@ -48,7 +48,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   children: [
                     const SizedBox(height: 42),
                     Text(
-                      'Tài khoản',
+                      'Account',
                       style: GoogleFonts.lato(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
@@ -79,9 +79,9 @@ class _AccountScreenState extends State<AccountScreen> {
                         _buildRowItem(
                           context,
                           Icons.manage_accounts,
-                          "Thông tin cá nhân",
+                          "Personal information",
                           () {
-                            print("Thông tin cá nhân tapped");
+                            print("Personal information tapped");
                           },
                         ),
                         const SizedBox(height: 30),
@@ -91,7 +91,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           _buildRowItem(
                             context,
                             Icons.local_laundry_service_outlined,
-                            "Đăng ký trở thành đối tác",
+                            "Register to become a partner",
                             () {
                               Navigator.push(
                                   context,
@@ -102,16 +102,6 @@ class _AccountScreenState extends State<AccountScreen> {
                           ),
                           const SizedBox(height: 30),
                         ],
-
-                        _buildRowItem(
-                          context,
-                          Icons.location_on,
-                          "Quản lý địa chỉ",
-                          () {
-                            print("Quản lý địa chỉ tapped");
-                          },
-                        ),
-                        const SizedBox(height: 30),
                         _buildRowItem(
                           context,
                           Icons.wallet,
@@ -123,35 +113,26 @@ class _AccountScreenState extends State<AccountScreen> {
                         const SizedBox(height: 30),
                         _buildRowItem(
                           context,
-                          Icons.calendar_month,
-                          "Đơn hàng của tôi",
-                          () {
-                            print("Đơn hàng của tôi tapped");
-                          },
-                        ),
-                        const SizedBox(height: 30),
-                        _buildRowItem(
-                          context,
                           Icons.settings,
-                          "Cài đặt",
+                          "Setting",
                           () {
-                            print("Cài đặt tapped");
+                            print("Setting tapped");
                           },
                         ),
                         const SizedBox(height: 30),
                         _buildRowItem(
                           context,
                           CupertinoIcons.exclamationmark_circle,
-                          "Trung tâm trợ giúp",
+                          "Customer support",
                           () {
-                            print("Trung tâm trợ giúp tapped");
+                            print("Customer support tapped");
                           },
                         ),
                         const SizedBox(height: 30),
                         _buildRowItem(
                           context,
                           CupertinoIcons.lock,
-                          "Quyền riêng tư",
+                          "Privacy",
                           () {
                             print("Quyền riêng tư tapped");
                           },
@@ -160,7 +141,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         _buildRowItem(
                           context,
                           Icons.logout,
-                          "Đăng xuất",
+                          "Logout",
                           () async {
                             bool success = await authService.logout();
                             if (success) {
