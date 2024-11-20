@@ -29,7 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(child: Text('No notifications found'));
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           List<dynamic> notifications = snapshot.data!;
 

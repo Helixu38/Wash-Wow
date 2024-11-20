@@ -22,7 +22,7 @@ class _OrderScreenState extends State<OrderScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -79,10 +79,8 @@ class _OrderScreenState extends State<OrderScreen>
             child: TabBarView(
               controller: _tabController,
               children: [
-                Center(child: Text("Đang xử lý")),
                 buildShopCard(),
-                Center(child: Text("Đánh giá")),
-                Center(child: Text("Đơn nháp")),
+                Center(child: Text("Rate")),
               ],
             ),
           ),
@@ -96,7 +94,7 @@ class _OrderScreenState extends State<OrderScreen>
       preferredSize: const Size.fromHeight(40.0),
       child: AppBar(
         title: Text(
-          "Đơn hàng",
+          "Orders",
           style: TextStyle(
             fontWeight: FontWeight.w700,
             color: Colors.black,
@@ -122,10 +120,8 @@ class _OrderScreenState extends State<OrderScreen>
         ),
       ),
       tabs: const [
-        Tab(text: "Đang xử lý"),
-        Tab(text: "Lịch sử"),
-        Tab(text: "Đánh giá"),
-        Tab(text: "Đơn nháp"),
+        Tab(text: "History"),
+        Tab(text: "Review"),
       ],
     );
   }
@@ -169,13 +165,13 @@ class _OrderScreenState extends State<OrderScreen>
                                   builder: (context, setState) {
                                     return AlertDialog(
                                       title: const Text(
-                                          "Quét mã QR để thanh toán"),
+                                          "Scan the QR for payment"),
                                       content: Container(
                                         width: 200.0,
                                         height: 200.0,
                                         child: paymentStatus == "PAID"
                                             ? const Text(
-                                                "Thanh toán thành công!",
+                                                "Payment successfully!",
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight:
@@ -192,7 +188,7 @@ class _OrderScreenState extends State<OrderScreen>
                                             Navigator.of(context).pop();
                                             _paymentStatusTimer?.cancel();
                                           },
-                                          child: const Text("Đóng"),
+                                          child: const Text("Close"),
                                         ),
                                       ],
                                     );
@@ -211,7 +207,7 @@ class _OrderScreenState extends State<OrderScreen>
                         } catch (error) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text('Lỗi khi thanh toán: $error')),
+                                content: Text('Payment error: $error')),
                           );
                         }
                       }
@@ -234,12 +230,12 @@ class _OrderScreenState extends State<OrderScreen>
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        Text('Ngày tạo: ${booking['createdAt']}'),
-                        Text('Trạng thái: ${booking['status']}'),
-                        Text('Tổng giá: ${booking['totalPrice']} VND'),
-                        Text('Tổng trọng lượng: ${booking['totalWeight']} kg'),
+                        Text('Date created: ${booking['createdAt']}'),
+                        Text('Status: ${booking['status']}'),
+                        Text('Price: ${booking['totalPrice']} VND'),
+                        Text('Weight: ${booking['totalWeight']} kg'),
                         const SizedBox(height: 8),
-                        Text('Dịch vụ:',
+                        Text('Service:',
                             style:
                                 const TextStyle(fontWeight: FontWeight.bold)),
                         ...booking['bookingItems'].map<Widget>((item) {
@@ -248,8 +244,8 @@ class _OrderScreenState extends State<OrderScreen>
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Tên dịch vụ: ${item['serviceName']}'),
-                                Text('Giá mỗi kg: ${item['pricePerKg']} VND'),
+                                Text('Service name: ${item['serviceName']}'),
+                                Text('Price per kg: ${item['pricePerKg']} VND'),
                               ],
                             ),
                           );
@@ -262,7 +258,7 @@ class _OrderScreenState extends State<OrderScreen>
             },
           );
         } else {
-          return const Center(child: Text('Không có đơn hàng nào'));
+          return const Center(child: Text('No order found'));
         }
       },
     );
