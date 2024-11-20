@@ -356,7 +356,7 @@ class _BookingScreenState extends State<BookingScreen>
                               Icon(Icons.error_outline, color: Colors.white),
                               SizedBox(width: 10),
                               Text(
-                                  "The customer pick-up time has to be 2 hours \nlater than store pick-up time."),
+                                  "Pick-up time must be at least 2 hours after store time"),
                             ],
                           ),
                           backgroundColor: Colors.red,
@@ -378,7 +378,7 @@ class _BookingScreenState extends State<BookingScreen>
                         children: [
                           Icon(Icons.error_outline, color: Colors.white),
                           SizedBox(width: 10),
-                          Text("Please choose a time and date for the pick-up time"),
+                          Text("Please select pick-up date and time"),
                         ],
                       ),
                       backgroundColor: Colors.red,
@@ -462,7 +462,7 @@ class _BookingScreenState extends State<BookingScreen>
                 ),
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  shopPickUpTime ?? 'No time have been chosen',
+                  shopPickUpTime ?? 'No time has been chosen',
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
@@ -484,7 +484,7 @@ class _BookingScreenState extends State<BookingScreen>
                 ),
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  customerPickupTime ?? 'No time have been chosen',
+                  customerPickupTime ?? 'No time has been chosen',
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
@@ -657,7 +657,7 @@ class _BookingScreenState extends State<BookingScreen>
                             children: [
                               Icon(Icons.error_outline, color: Colors.white),
                               SizedBox(width: 10),
-                              Text("Booking unsuccessful"),
+                              Text("Booking failed"),
                             ],
                           ),
                           backgroundColor: Colors.red,
@@ -675,7 +675,7 @@ class _BookingScreenState extends State<BookingScreen>
                           children: [
                             Icon(Icons.error_outline, color: Colors.white),
                             SizedBox(width: 10),
-                            Text("Please enter all the information"),
+                            Text("Please fill in all required fields"),
                           ],
                         ),
                         backgroundColor: Colors.red,

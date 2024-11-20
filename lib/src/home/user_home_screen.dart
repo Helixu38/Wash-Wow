@@ -170,11 +170,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               const SizedBox(width: 15),
-              buildListViewContentImage(146, 214, "Test"),
+              buildListViewContentImage(146, 214, "Special Offer"),
               const SizedBox(width: 15),
-              buildListViewContentImage(46, 214, "Test"),
+              buildListViewContentImage(46, 214, "Season Sale"),
               const SizedBox(width: 15),
-              buildListViewContentImage(146, 214, "Test"),
+              buildListViewContentImage(146, 214, "New Services"),
             ],
           ),
         ),
@@ -220,12 +220,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    print('Xem thêm clicked');
+                    print('More clicked');
                   },
                   child: Row(
                     children: [
                       Text(
-                        "xem thêm",
+                        "More",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
@@ -385,12 +385,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    print('Xem thêm clicked');
+                    print('More clicked');
                   },
                   child: Row(
                     children: [
                       Text(
-                        "xem thêm",
+                        "More",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,

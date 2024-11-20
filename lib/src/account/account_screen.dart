@@ -9,6 +9,7 @@ import 'package:wash_wow/form/shop_register_form.dart';
 import 'package:wash_wow/src/account/Profile/profile.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
+import 'package:wash_wow/src/utility/config/config.dart';
 
 class AccountScreen extends StatefulWidget {
   AccountScreen({super.key});
@@ -129,9 +130,22 @@ class _AccountScreenState extends State<AccountScreen> {
                           CupertinoIcons.exclamationmark_circle,
                           "Customer support",
                           () async {
-                            final Uri url = Uri.parse('https://www.washnwow.store');
-                            if (!await launchUrl(url)) {
-                              throw Exception('Could not launch $url');
+                            final Uri url =
+                                Uri.parse(Config.CUSTOMER_SUPPORT_URL);
+                            try {
+                              if (!await launchUrl(url)) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'Could not open customer support. Please try again later.')),
+                                );
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        'Failed to open customer support')),
+                              );
                             }
                           },
                         ),

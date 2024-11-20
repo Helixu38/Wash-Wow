@@ -11,6 +11,11 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final AuthService authService = AuthService('https://washwowbe.onrender.com');
+  final _labelStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: const Color.fromRGBO(4, 90, 208, 1),
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,11 +29,27 @@ class _ProfileState extends State<Profile> {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               // Handle error state
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Unable to load profile information',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () =>
+                          setState(() {}), // Trigger rebuild to retry
+                      child: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              );
             } else {
               // Data has been fetched successfully
               String userName = snapshot.data?['fullName'] ?? 'Unknown User';
-              String userRole = snapshot.data?['role'] ?? 'Null';
+              String userRole = snapshot.data?['role'] ?? 'Not Specified';
 
               return Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -40,11 +61,7 @@ class _ProfileState extends State<Profile> {
                       const SizedBox(height: 42),
                       Text(
                         "Full Name",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: const Color.fromRGBO(4, 90, 208, 1),
-                        ),
+                        style: _labelStyle,
                       ),
                       SizedBox(height: 10),
                       Container(
@@ -63,11 +80,7 @@ class _ProfileState extends State<Profile> {
                       const SizedBox(height: 10),
                       Text(
                         "Role",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: const Color.fromRGBO(4, 90, 208, 1),
-                        ),
+                        style: _labelStyle,
                       ),
                       SizedBox(height: 10),
                       Container(

@@ -182,7 +182,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
                             height: 65,
                             width: 65,
                             icon: MdiIcons.bullhorn,
-                            text: "Adds",
+                            text: "Advertisement",
                             onTap: () {
                               print('Advertisement tapped!');
                             },
@@ -552,7 +552,7 @@ class _ShopOwnerHomeScreenState extends State<ShopOwnerHomeScreen> {
           Text(
             text,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
               color: Colors.black,
             ),
