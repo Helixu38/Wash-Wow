@@ -105,7 +105,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         _buildRowItem(
                           context,
                           Icons.wallet,
-                          "Phương thức thanh toán",
+                          "Payment",
                           () {
                             print("Phương thức thanh toán tapped");
                           },
