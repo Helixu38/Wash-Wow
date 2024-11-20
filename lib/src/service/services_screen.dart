@@ -91,7 +91,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-            child: buildLocation("Địa chỉ gần bạn", MdiIcons.map),
+            child: buildLocation("Store near you", MdiIcons.map),
           ),
           Expanded(
             child: buildLaundryShopList(), // ListView for displaying shops
@@ -186,7 +186,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   child: Row(
                     children: [
                       Text(
-                        "xem thêm",
+                        "More",
                         style: const TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
@@ -215,7 +215,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Địa điểm",
+                "Location",
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
