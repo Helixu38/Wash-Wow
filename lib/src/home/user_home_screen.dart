@@ -47,7 +47,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               centerTitle: true,
             );
           } else {
-            String userName = snapshot.data?['fullName'] ?? 'Unknown Shop';
+            String userName = snapshot.data?['fullName'] ?? 'Unknown User';
             double userPoint = 2.222;
 
             return AppBar(
@@ -88,7 +88,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 ),
               ),
               Text(
-                'Điểm: $userPoint',
+                'Point: $userPoint',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
@@ -107,12 +107,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Column(
         children: [
-          const SizedBox(height: 15),
-          buildListViewDiscount("Khuyến Mãi"),
-          const SizedBox(height: 25),
-          buildListServices("Dịch vụ"),
-          const SizedBox(height: 25),
-          buildListViewStore("Cửa hàng gần bạn"),
+          const SizedBox(height: 35),
+          buildListViewDiscount("Discount"),
+          const SizedBox(height: 35),
+          buildListServices("Services"),
+          const SizedBox(height: 35),
+          buildListViewStore("Store near you"),
         ],
       ),
     );
@@ -136,12 +136,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    print('Xem thêm clicked');
+                    print('more clicked');
                   },
                   child: Row(
                     children: [
                       Text(
-                        "xem thêm",
+                        "More",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
@@ -170,11 +170,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               const SizedBox(width: 15),
-              buildListViewContentImage(146, 214, "test"),
+              buildListViewContentImage(146, 214, "Special Offer"),
               const SizedBox(width: 15),
-              buildListViewContentImage(46, 214, "test"),
+              buildListViewContentImage(46, 214, "Season Sale"),
               const SizedBox(width: 15),
-              buildListViewContentImage(146, 214, "test"),
+              buildListViewContentImage(146, 214, "New Services"),
             ],
           ),
         ),
@@ -220,12 +220,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    print('Xem thêm clicked');
+                    print('More clicked');
                   },
                   child: Row(
                     children: [
                       Text(
-                        "xem thêm",
+                        "More",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,
@@ -385,12 +385,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    print('Xem thêm clicked');
+                    print('More clicked');
                   },
                   child: Row(
                     children: [
                       Text(
-                        "xem thêm",
+                        "More",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 14,

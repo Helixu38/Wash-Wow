@@ -47,9 +47,9 @@ class _HomePageState extends State<HomePage> {
         if (widget.role == 'Customer') {
           currentScreen = NotificationScreen();
         } else if (widget.role == 'ShopOwner') {
-          currentScreen = ChatScreen();
+          currentScreen = NotificationScreen();
         } else {
-          currentScreen = ChatScreen(); // Fallback
+          currentScreen = NotificationScreen(); // Fallback
         }
         break;
       case 3:
@@ -94,23 +94,23 @@ class _HomePageState extends State<HomePage> {
         NavigationDestination(
           selectedIcon: Icon(Icons.home),
           icon: Icon(Icons.home_outlined, color: Colors.white),
-          label: 'Trang chủ',
+          label: 'Home',
         ),
         NavigationDestination(
           icon: Icon(Icons.notes, color: Colors.white),
           selectedIcon: Icon(Icons.notes_outlined, color: Colors.white),
-          label: 'Đơn hàng',
+          label: 'Orders',
         ),
         NavigationDestination(
           icon: Badge(
               child: Icon(Icons.notifications_sharp, color: Colors.white)),
-          label: 'Thông báo',
+          label: 'Notifications',
         ),
         NavigationDestination(
           selectedIcon:
               Icon(Icons.account_circle_outlined, color: Colors.white),
           icon: Icon(Icons.account_circle_outlined, color: Colors.white),
-          label: 'Tài khoản',
+          label: 'Account',
         ),
       ];
     } else if (role == 'ShopOwner') {
@@ -118,21 +118,21 @@ class _HomePageState extends State<HomePage> {
         const NavigationDestination(
           selectedIcon: Icon(Icons.store),
           icon: Icon(Icons.store_outlined, color: Colors.white),
-          label: 'Cửa hàng',
+          label: 'Store',
         ),
         NavigationDestination(
           icon: Icon(MdiIcons.finance, color: Colors.white),
-          label: 'Tài chính',
+          label: 'Finance',
         ),
         const NavigationDestination(
           icon: Badge(child: Icon(Icons.mail, color: Colors.white)),
-          label: 'Thông báo',
+          label: 'Notifications',
         ),
         const NavigationDestination(
           selectedIcon:
               Icon(Icons.account_circle_outlined, color: Colors.white),
           icon: Icon(Icons.account_circle_outlined, color: Colors.white),
-          label: 'Tài khoản',
+          label: 'Account',
         ),
       ];
     }

@@ -4,9 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:profile_photo/profile_photo.dart';
 import 'dart:math' as math;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wash_wow/form/shop_register_form.dart';
+import 'package:wash_wow/src/account/Profile/profile.dart';
 import 'package:wash_wow/src/login/login_screen.dart';
 import 'package:wash_wow/src/utility/auth_service.dart';
+import 'package:wash_wow/src/utility/config/config.dart';
 
 class AccountScreen extends StatefulWidget {
   AccountScreen({super.key});
@@ -35,8 +38,7 @@ class _AccountScreenState extends State<AccountScreen> {
           } else {
             // Data has been fetched successfully
             String userName = snapshot.data?['fullName'] ?? 'Unknown User';
-            String userRole = snapshot.data?['role'] ??
-                'Null'; 
+            String userRole = snapshot.data?['role'] ?? 'Null';
 
             return Container(
               width: double.infinity,
@@ -48,7 +50,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   children: [
                     const SizedBox(height: 42),
                     Text(
-                      'Tài khoản',
+                      'Account',
                       style: GoogleFonts.lato(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
@@ -79,9 +81,12 @@ class _AccountScreenState extends State<AccountScreen> {
                         _buildRowItem(
                           context,
                           Icons.manage_accounts,
-                          "Thông tin cá nhân",
+                          "Profile",
                           () {
-                            print("Thông tin cá nhân tapped");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Profile()));
                           },
                         ),
                         const SizedBox(height: 30),
@@ -91,7 +96,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           _buildRowItem(
                             context,
                             Icons.local_laundry_service_outlined,
-                            "Đăng ký trở thành đối tác",
+                            "Register to become a partner",
                             () {
                               Navigator.push(
                                   context,
@@ -102,20 +107,10 @@ class _AccountScreenState extends State<AccountScreen> {
                           ),
                           const SizedBox(height: 30),
                         ],
-
-                        _buildRowItem(
-                          context,
-                          Icons.location_on,
-                          "Quản lý địa chỉ",
-                          () {
-                            print("Quản lý địa chỉ tapped");
-                          },
-                        ),
-                        const SizedBox(height: 30),
                         _buildRowItem(
                           context,
                           Icons.wallet,
-                          "Phương thức thanh toán",
+                          "Payment",
                           () {
                             print("Phương thức thanh toán tapped");
                           },
@@ -123,35 +118,42 @@ class _AccountScreenState extends State<AccountScreen> {
                         const SizedBox(height: 30),
                         _buildRowItem(
                           context,
-                          Icons.calendar_month,
-                          "Đơn hàng của tôi",
-                          () {
-                            print("Đơn hàng của tôi tapped");
-                          },
-                        ),
-                        const SizedBox(height: 30),
-                        _buildRowItem(
-                          context,
                           Icons.settings,
-                          "Cài đặt",
+                          "Setting",
                           () {
-                            print("Cài đặt tapped");
+                            print("Setting tapped");
                           },
                         ),
                         const SizedBox(height: 30),
                         _buildRowItem(
                           context,
                           CupertinoIcons.exclamationmark_circle,
-                          "Trung tâm trợ giúp",
-                          () {
-                            print("Trung tâm trợ giúp tapped");
+                          "Customer support",
+                          () async {
+                            final Uri url =
+                                Uri.parse(Config.CUSTOMER_SUPPORT_URL);
+                            try {
+                              if (!await launchUrl(url)) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'Could not open customer support. Please try again later.')),
+                                );
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        'Failed to open customer support')),
+                              );
+                            }
                           },
                         ),
                         const SizedBox(height: 30),
                         _buildRowItem(
                           context,
                           CupertinoIcons.lock,
-                          "Quyền riêng tư",
+                          "Privacy",
                           () {
                             print("Quyền riêng tư tapped");
                           },
@@ -160,7 +162,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         _buildRowItem(
                           context,
                           Icons.logout,
-                          "Đăng xuất",
+                          "Logout",
                           () async {
                             bool success = await authService.logout();
                             if (success) {

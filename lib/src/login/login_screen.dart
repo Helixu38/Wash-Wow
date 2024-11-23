@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: true,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Re-enter your password.',
+                        hintText: 'Enter your password.',
                         hintStyle: TextStyle(
                             color: const Color.fromRGBO(208, 207, 207, 1)),
                         contentPadding: const EdgeInsets.all(10),
@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
@@ -254,23 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 56), // Spacing
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Text(
-                  //       'or sign in with',
-                  //       textAlign: TextAlign.right,
-                  //       style: TextStyle(
-                  //         fontSize: 12,
-                  //         fontWeight: FontWeight.w400,
-                  //         color: const Color.fromRGBO(4, 90, 208, 1),
-                  //         fontStyle: FontStyle.italic,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  const SizedBox(height: 37), // Spacing
+                  SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
